@@ -4,3 +4,7 @@ pandas
 spacy
 transformers
 torch
+neo4j
+networkx
+fastapi
+uvicorn[standard]
