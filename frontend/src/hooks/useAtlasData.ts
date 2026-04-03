@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { api, DashboardMetrics, APIEvent, SimulationResult, DataSource } from "../services/api";
+import { api, DashboardMetrics, APIEvent, SimulationResult, DataSource, APINode } from "../services/api";
 
 // ─── useMetrics ───────────────────────────────────────────────────────────────
 export function useMetrics(pollMs = 30000) {
@@ -53,6 +53,33 @@ export function useEvents(pollMs = 15000) {
   }, [fetch, pollMs]);
 
   return { events, loading, refresh: fetch, source };  // Fix #10
+}
+
+// ─── useGraphNodes ────────────────────────────────────────────────────────────
+export function useGraphNodes(pollMs = 30000) {
+  const [nodes, setNodes] = useState<APINode[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [source, setSource] = useState<DataSource | null>(null);
+
+  const fetch = useCallback(async () => {
+    try {
+      const data = await api.getGraphNodes();
+      setNodes(data.nodes);
+      setSource(data.source ?? null);
+    } catch (e) {
+      console.warn("Graph nodes fetch failed", e);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetch();
+    const id = setInterval(fetch, pollMs);
+    return () => clearInterval(id);
+  }, [fetch, pollMs]);
+
+  return { nodes, loading, refresh: fetch, source };
 }
 
 // ─── useSimulation ───────────────────────────────────────────────────────────

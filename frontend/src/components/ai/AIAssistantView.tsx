@@ -1,20 +1,50 @@
-import React, { useState } from "react";
-import { useEvents, useSimulation, useRecommendation, useFeedback } from "../../hooks/useAtlasData";
+import React, { useEffect, useMemo, useState } from "react";
+import { useEvents, useGraphNodes, useSimulation, useRecommendation, useFeedback } from "../../hooks/useAtlasData";
 import { Bot, Play, ChevronRight, CheckCircle, ThumbsUp, ThumbsDown, MessageSquare, AlertTriangle, ArrowRight, RefreshCw } from "lucide-react";
 import { cn } from "../../lib/utils";
 
 export const AIAssistantView = () => {
   const { events, loading: eventsLoading } = useEvents(30000);
+  const { nodes, loading: nodesLoading, source: nodesSource } = useGraphNodes(30000);
   const simul = useSimulation();
   const recomm = useRecommendation();
   const feedb = useFeedback();
 
   const [step, setStep] = useState(1);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
-  const [sourceNode, setSourceNode] = useState("NODE_LOC_SHANGHAI");
-  const [targetNode, setTargetNode] = useState("NODE_LOC_LOS_ANGELES");
+  const [sourceNode, setSourceNode] = useState("");
+  const [targetNode, setTargetNode] = useState("");
 
   const selectedEvent = events.find(e => e.id === selectedEventId);
+  const routeNodes = useMemo(
+    () => nodes.filter(node => !node.labels.includes("Event")),
+    [nodes]
+  );
+
+  useEffect(() => {
+    if (routeNodes.length === 0) return;
+
+    const ids = new Set(routeNodes.map(node => node.id));
+    const preferredSource =
+      routeNodes.find(node => node.id === "PORT_SHANGHAI")?.id ??
+      routeNodes.find(node => node.id === "NODE_LOC_SHANGHAI")?.id ??
+      routeNodes[0]?.id ??
+      "";
+    const preferredTarget =
+      routeNodes.find(node => node.id === "PORT_LA")?.id ??
+      routeNodes.find(node => node.id === "NODE_LOC_LOS_ANGELES")?.id ??
+      routeNodes.find(node => node.id !== preferredSource)?.id ??
+      routeNodes[0]?.id ??
+      "";
+
+    if (!sourceNode || !ids.has(sourceNode)) {
+      setSourceNode(preferredSource);
+    }
+
+    if (!targetNode || !ids.has(targetNode) || targetNode === preferredSource) {
+      setTargetNode(preferredTarget);
+    }
+  }, [routeNodes, sourceNode, targetNode]);
 
   // Extract simulation display data from either flat or nested structure
   const getSimData = () => {
@@ -30,6 +60,7 @@ export const AIAssistantView = () => {
 
   const handleRunSimulation = async () => {
     if (!selectedEvent) return;
+    if (!sourceNode || !targetNode) return;
     setStep(2);
     const res = await simul.run(sourceNode, targetNode, selectedEvent.locations);
     if (res) setStep(3);
@@ -129,24 +160,49 @@ export const AIAssistantView = () => {
             </div>
           )}
           
-          <div className="mt-6 flex flex-wrap gap-4 items-end border-t border-white/10 pt-6">
+            <div className="mt-6 flex flex-wrap gap-4 items-end border-t border-white/10 pt-6">
             <div className="flex-1 min-w-[150px]">
               <label className="text-xs text-on-surface-variant uppercase mb-2 block font-semibold">Route Source Node</label>
-              <input type="text" value={sourceNode} onChange={e => setSourceNode(e.target.value)} className="w-full bg-surface border border-white/10 rounded-lg p-2.5 text-sm focus:border-primary focus:outline-none text-on-surface" />
+              <select value={sourceNode} onChange={e => setSourceNode(e.target.value)} className="w-full bg-surface border border-white/10 rounded-lg p-2.5 text-sm focus:border-primary focus:outline-none text-on-surface" disabled={nodesLoading || routeNodes.length === 0}>
+                {routeNodes.length === 0 ? (
+                  <option value="">{nodesLoading ? "Loading nodes..." : "No nodes available"}</option>
+                ) : (
+                  routeNodes.map(node => (
+                    <option key={node.id} value={node.id}>
+                      {node.name} ({node.id})
+                    </option>
+                  ))
+                )}
+              </select>
             </div>
             <ArrowRight className="w-5 h-5 text-on-surface-variant mb-3 hidden md:block" />
             <div className="flex-1 min-w-[150px]">
               <label className="text-xs text-on-surface-variant uppercase mb-2 block font-semibold">Route Target Node</label>
-              <input type="text" value={targetNode} onChange={e => setTargetNode(e.target.value)} className="w-full bg-surface border border-white/10 rounded-lg p-2.5 text-sm focus:border-primary focus:outline-none text-on-surface" />
+              <select value={targetNode} onChange={e => setTargetNode(e.target.value)} className="w-full bg-surface border border-white/10 rounded-lg p-2.5 text-sm focus:border-primary focus:outline-none text-on-surface" disabled={nodesLoading || routeNodes.length === 0}>
+                {routeNodes.length === 0 ? (
+                  <option value="">{nodesLoading ? "Loading nodes..." : "No nodes available"}</option>
+                ) : (
+                  routeNodes.map(node => (
+                    <option key={node.id} value={node.id}>
+                      {node.name} ({node.id})
+                    </option>
+                  ))
+                )}
+              </select>
             </div>
             <button 
-              disabled={!selectedEventId}
+              disabled={!selectedEventId || !sourceNode || !targetNode || nodesLoading || routeNodes.length === 0}
               onClick={handleRunSimulation}
               className="bg-primary text-white px-6 py-2.5 rounded-lg font-bold flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-primary/80 transition shadow-lg shadow-primary/20"
             >
               Analyze Route Impact <ChevronRight className="w-4 h-4" />
             </button>
           </div>
+          {nodesSource === "live" && (
+            <div className="mt-3 text-xs text-on-surface-variant">
+              Route IDs are loaded from the live supply chain graph, so only valid Neo4j nodes are selectable.
+            </div>
+          )}
         </div>
 
         {/* STEP 2: Simulation Results */}
