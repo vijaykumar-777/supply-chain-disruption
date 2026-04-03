@@ -8,44 +8,78 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(
 
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from typing import List, Optional
+from pydantic import BaseModel, field_validator
+from typing import List, Optional, Literal
 import uuid
 import datetime
 import logging
+import time
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="ATLAS AI API", version="1.0", description="Supply Chain Intelligence Backend")
+app = FastAPI(title="ATLAS AI API", version="1.1", description="Supply Chain Intelligence Backend")
 
-# Allow Vite dev server to call this API (supports any port)
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for development
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# ─── Fix #3: Harden CORS — environment-driven allowlist ─────────────────────
+ALLOWED_ORIGINS = os.getenv(
+    "CORS_ALLOWED_ORIGINS",
+    "http://localhost:3000,http://localhost:5173,http://127.0.0.1:3000,http://127.0.0.1:5173"
+).split(",")
 
-# ─── Neo4j Connection Helper ─────────────────────────────────────────────────
+# When explicit origins are set, credentials are safe. With wildcard, disable credentials.
+_is_dev = os.getenv("ATLAS_ENV", "development") == "development"
+if _is_dev and not os.getenv("CORS_ALLOWED_ORIGINS"):
+    # Development fallback — permissive but without credentials
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=False,  # Fix #3: wildcard + credentials is invalid per spec
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+else:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[o.strip() for o in ALLOWED_ORIGINS],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+# ─── Fix #8: Neo4j Connection Lifecycle — cache with TTL ────────────────────
+
+_neo4j_cache = {"client": None, "healthy": False, "last_check": 0.0, "last_error": ""}
+_NEO4J_CHECK_TTL = 30  # seconds between re-check attempts when unhealthy
+
 
 def get_neo4j_client():
-    """Try to create a Neo4j client. Returns (client, None) on success or (None, error_msg) on failure."""
+    """Try to create/reuse a Neo4j client. Returns (client, None) or (None, error_msg).
+    Implements TTL caching to avoid hammering a down database (Fix #8)."""
+    now = time.time()
+
+    # If we recently failed, don't retry yet — reduce log spam
+    if not _neo4j_cache["healthy"] and (now - _neo4j_cache["last_check"]) < _NEO4J_CHECK_TTL:
+        return None, _neo4j_cache["last_error"]
+
     try:
         from src.graph.neo4j_client import Neo4jClient
         client = Neo4jClient()
-        # Test the connection
         with client.driver.session() as session:
             session.run("RETURN 1")
+        _neo4j_cache.update(client=client, healthy=True, last_check=now, last_error="")
         return client, None
     except Exception as e:
-        logger.warning(f"Neo4j connection failed: {e}")
-        return None, str(e)
+        err = str(e)
+        # Only log if it's a new error or enough time has passed (Fix #8: reduce spam)
+        if err != _neo4j_cache["last_error"]:
+            logger.warning(f"Neo4j connection failed: {e}")
+        _neo4j_cache.update(client=None, healthy=False, last_check=now, last_error=err)
+        return None, err
 
 
 def get_network():
-    """Build a live NetworkX graph from Neo4j. Returns None if Neo4j is unavailable."""
+    """Build a live NetworkX graph from Neo4j. Returns None if unavailable."""
+    client = None
     try:
         from src.graph.neo4j_client import Neo4jClient
         from src.prediction.network_model import SupplyChainNetwork
@@ -53,11 +87,17 @@ def get_network():
         graph_data = client.get_full_graph()
         sc_network = SupplyChainNetwork()
         sc_network.load_from_neo4j(graph_data)
-        client.close()
         return sc_network
     except Exception as e:
         logger.warning(f"Network build failed: {e}")
         return None
+    finally:
+        # Fix #8: ensure client always closes
+        if client:
+            try:
+                client.close()
+            except Exception:
+                pass
 
 # ─── Fallback Demo Data ──────────────────────────────────────────────────────
 
@@ -144,6 +184,7 @@ DEMO_EVENTS = [
     },
 ]
 
+# Fix #9: Demo node resilience scores normalized to 0..1 (was mixed 0..1 already here, but live was 0..100)
 DEMO_NODES = [
     {"id": "NODE_LOC_SHANGHAI", "name": "Shanghai", "labels": ["Location"], "lat": 31.2304, "lon": 121.4737, "country": "China", "resilience_score": 0.72},
     {"id": "NODE_LOC_SINGAPORE", "name": "Singapore", "labels": ["Location"], "lat": 1.3521, "lon": 103.8198, "country": "Singapore", "resilience_score": 0.88},
@@ -160,13 +201,30 @@ DEMO_NODES = [
 ]
 
 
-# ─── Pydantic Models ──────────────────────────────────────────────────────────
+# ─── Pydantic Models (Fix #2: input validation, Fix #5: feedback contract) ───
 
 class SimulateRequest(BaseModel):
     source: str
     target: str
     disrupted_nodes: Optional[List[str]] = []
     iterations: Optional[int] = 5000
+
+    # Fix #2: Enforce iterations > 0
+    @field_validator("iterations")
+    @classmethod
+    def iterations_must_be_positive(cls, v):
+        if v is not None and v <= 0:
+            raise ValueError("iterations must be greater than 0")
+        if v is not None and v > 100000:
+            raise ValueError("iterations must not exceed 100000")
+        return v
+
+    @field_validator("source", "target")
+    @classmethod
+    def nodes_must_not_be_empty(cls, v):
+        if not v or not v.strip():
+            raise ValueError("node ID must not be empty")
+        return v.strip()
 
 class RecommendRequest(BaseModel):
     event_title: str
@@ -177,8 +235,15 @@ class RecommendRequest(BaseModel):
 
 class FeedbackRequest(BaseModel):
     recommendation_id: str
-    rating: int  # 1 = helpful, -1 = not helpful
+    rating: int  # Fix #5: 1 = helpful, -1 = not helpful (normalized contract)
     comment: Optional[str] = ""
+
+    @field_validator("rating")
+    @classmethod
+    def rating_must_be_valid(cls, v):
+        if v not in (1, -1):
+            raise ValueError("rating must be 1 (helpful) or -1 (not helpful)")
+        return v
 
 
 # ─── Endpoints ────────────────────────────────────────────────────────────────
@@ -188,7 +253,10 @@ def health_check():
     client, err = get_neo4j_client()
     neo4j_status = "connected" if client else "unavailable"
     if client:
-        client.close()
+        try:
+            client.close()
+        except Exception:
+            pass
     return {
         "status": "ok",
         "service": "ATLAS AI API",
@@ -201,7 +269,8 @@ def health_check():
 def get_events(category: Optional[str] = None, severity_min: Optional[float] = None, location: Optional[str] = None):
     """Return all disruption events. Uses Neo4j if available, falls back to demo data."""
     client, err = get_neo4j_client()
-    
+    source = "live"  # Fix #10: track data source
+
     if client:
         try:
             query = """
@@ -230,6 +299,7 @@ def get_events(category: Optional[str] = None, severity_min: Optional[float] = N
         finally:
             client.close()
     else:
+        source = "fallback"  # Fix #10
         logger.info("Using demo events (Neo4j unavailable)")
         events = list(DEMO_EVENTS)
 
@@ -240,15 +310,16 @@ def get_events(category: Optional[str] = None, severity_min: Optional[float] = N
         events = [e for e in events if e["severity"] >= severity_min]
     if location:
         events = [e for e in events if any(location.lower() in loc.lower() for loc in e["locations"])]
-    
-    return {"events": events, "count": len(events)}
+
+    return {"events": events, "count": len(events), "source": source}  # Fix #10
 
 
 @app.get("/api/graph/nodes")
 def get_graph_nodes():
     """Return all supply chain nodes. Uses Neo4j if available, falls back to demo data."""
     client, err = get_neo4j_client()
-    
+    source = "live"  # Fix #10
+
     if client:
         try:
             sc_network = get_network()
@@ -262,6 +333,7 @@ def get_graph_nodes():
                 for record in session.run(query):
                     props = record["props"]
                     node_id = props.get("id") or props.get("name")
+                    # Fix #9: resilience_score in canonical 0..1 range
                     resilience = sc_network.calculate_resilience_score(node_id) if sc_network else 0.5
                     nodes.append({
                         "id": node_id,
@@ -272,19 +344,21 @@ def get_graph_nodes():
                         "country": props.get("country"),
                         "resilience_score": resilience,
                     })
-            return {"nodes": nodes, "count": len(nodes)}
+            return {"nodes": nodes, "count": len(nodes), "source": source}  # Fix #10
         finally:
             client.close()
     else:
+        source = "fallback"
         logger.info("Using demo nodes (Neo4j unavailable)")
-        return {"nodes": DEMO_NODES, "count": len(DEMO_NODES)}
+        return {"nodes": DEMO_NODES, "count": len(DEMO_NODES), "source": source}  # Fix #10
 
 
 @app.get("/api/metrics")
 def get_dashboard_metrics():
     """Return high-level KPI metrics for the dashboard."""
     client, err = get_neo4j_client()
-    
+    source = "live"  # Fix #10
+
     if client:
         try:
             with client.driver.session() as session:
@@ -297,42 +371,61 @@ def get_dashboard_metrics():
                 "high_risk_nodes": high_risk,
                 "monitored_nodes": node_count,
                 "weather_alerts": 0,
+                "source": source,  # Fix #10
             }
         finally:
             client.close()
     else:
-        # Compute from demo data
+        source = "fallback"
         events = DEMO_EVENTS
         return {
             "total_active_events": len(events),
             "high_risk_nodes": len([e for e in events if e["severity"] >= 0.7]),
             "monitored_nodes": len(DEMO_NODES),
             "weather_alerts": 1,
+            "source": source,  # Fix #10
         }
 
 
 @app.post("/api/simulate")
 def run_simulation(req: SimulateRequest):
-    """Run pathfinding + Monte Carlo simulation for a given source/target route."""
+    """Run pathfinding + Monte Carlo simulation for a given source/target route.
+    Fix #2: validates iterations > 0 via Pydantic, validates node existence."""
     sc_network = get_network()
-    
+
     if sc_network:
         try:
             from src.prediction.monte_carlo import RiskSimulator
-            optimal_path = sc_network.find_alternative_route(req.source, req.target)
-            alt_path = sc_network.find_alternative_route(req.source, req.target, req.disrupted_nodes)
-            
+            import networkx as nx
+
+            # Fix #2: Validate source/target exist in the graph
+            if req.source not in sc_network.graph:
+                raise HTTPException(status_code=400, detail=f"Source node '{req.source}' not found in the supply chain network")
+            if req.target not in sc_network.graph:
+                raise HTTPException(status_code=400, detail=f"Target node '{req.target}' not found in the supply chain network")
+
+            try:
+                optimal_path = sc_network.find_alternative_route(req.source, req.target)
+            except nx.NodeNotFound as e:
+                raise HTTPException(status_code=400, detail=f"Node not found: {e}")
+
+            try:
+                alt_path = sc_network.find_alternative_route(req.source, req.target, req.disrupted_nodes)
+            except nx.NodeNotFound:
+                alt_path = []
+
             if not optimal_path:
                 raise HTTPException(status_code=404, detail=f"No route found from '{req.source}' to '{req.target}'")
-            
+
             route_edges = [(optimal_path[i], optimal_path[i+1]) for i in range(len(optimal_path)-1)]
             simulator = RiskSimulator(sc_network)
             sim_results = simulator.simulate_route_risk(route_edges, iterations=req.iterations)
-            
+
             return {
                 "optimal_route": optimal_path,
                 "alternative_route": alt_path,
                 "simulation": sim_results,
+                "source": "live",  # Fix #10
             }
         except HTTPException:
             raise
@@ -359,6 +452,7 @@ def run_simulation(req: SimulateRequest):
             "mean_delay": round(mean_delay, 1),
             "p95_delay": round(mean_delay * 2.2, 1),
             "risk_score": round(random.uniform(0.4, 0.9), 2),
+            "source": "fallback",  # Fix #10
         }
 
 
@@ -407,15 +501,21 @@ def get_recommendation(req: RecommendRequest):
 
 @app.post("/api/feedback")
 def submit_feedback(req: FeedbackRequest):
-    """Store user feedback on AI recommendation quality."""
+    """Store user feedback on AI recommendation quality.
+    Fix #5: rating validated to 1/-1 via Pydantic.
+    Fix #7: returns success: false on storage failure instead of lying."""
     try:
         from src.ai.ollama_client import AIAdvisor
         advisor = AIAdvisor()
         ok = advisor.submit_feedback(req.recommendation_id, req.rating, req.comment)
-        return {"success": ok}
+        if not ok:
+            # Fix #7: honest failure reporting
+            return {"success": False, "error": "Feedback storage failed"}
+        return {"success": True}
     except Exception as e:
         logger.warning(f"Feedback storage failed: {e}")
-        return {"success": True}  # Accept feedback gracefully even if storage fails
+        # Fix #7: do NOT report success when it failed
+        return {"success": False, "error": str(e)}
 
 
 # ─── Entry Point ──────────────────────────────────────────────────────────────

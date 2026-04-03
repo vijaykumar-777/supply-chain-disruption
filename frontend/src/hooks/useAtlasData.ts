@@ -1,15 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
-import { api, DashboardMetrics, APIEvent, SimulationResult } from "../services/api";
+import { api, DashboardMetrics, APIEvent, SimulationResult, DataSource } from "../services/api";
 
 // ─── useMetrics ───────────────────────────────────────────────────────────────
 export function useMetrics(pollMs = 30000) {
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
   const [loading, setLoading] = useState(true);
+  const [source, setSource] = useState<DataSource | null>(null);  // Fix #10
 
   const fetch = useCallback(async () => {
     try {
       const data = await api.getMetrics();
       setMetrics(data);
+      setSource(data.source ?? null);  // Fix #10
     } catch (e) {
       console.warn("Metrics fetch failed, using cached data", e);
     } finally {
@@ -23,18 +25,20 @@ export function useMetrics(pollMs = 30000) {
     return () => clearInterval(id);
   }, [fetch, pollMs]);
 
-  return { metrics, loading };
+  return { metrics, loading, source };  // Fix #10
 }
 
 // ─── useEvents ────────────────────────────────────────────────────────────────
 export function useEvents(pollMs = 15000) {
   const [events, setEvents] = useState<APIEvent[]>([]);
   const [loading, setLoading] = useState(true);
+  const [source, setSource] = useState<DataSource | null>(null);  // Fix #10
 
   const fetch = useCallback(async () => {
     try {
       const data = await api.getEvents();
       setEvents(data.events);
+      setSource(data.source ?? null);  // Fix #10
     } catch (e) {
       console.warn("Events fetch failed", e);
     } finally {
@@ -48,7 +52,7 @@ export function useEvents(pollMs = 15000) {
     return () => clearInterval(id);
   }, [fetch, pollMs]);
 
-  return { events, loading, refresh: fetch };
+  return { events, loading, refresh: fetch, source };  // Fix #10
 }
 
 // ─── useSimulation ───────────────────────────────────────────────────────────

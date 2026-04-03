@@ -2,6 +2,9 @@ import os
 import io
 import zipfile
 import requests
+import logging
+
+logger = logging.getLogger(__name__)
 
 try:
     from src.config import RAW_DATA_DIR
@@ -14,11 +17,20 @@ class GDELTClient:
     def __init__(self):
         self.lastupdate_url = "http://data.gdeltproject.org/gdeltv2/lastupdate.txt"
 
+    @staticmethod
+    def _is_safe_path(member_name: str, target_dir: str) -> bool:
+        """Fix #4: Validate that a zip member path stays within the target directory (prevents Zip Slip)."""
+        # Resolve the full destination path
+        target_path = os.path.realpath(os.path.join(target_dir, member_name))
+        target_dir_resolved = os.path.realpath(target_dir)
+        # Ensure the resolved path is within the target directory
+        return target_path.startswith(target_dir_resolved + os.sep) or target_path == target_dir_resolved
+
     def fetch_latest_events(self, output_dir=RAW_DATA_DIR):
         """Fetches the latest events from GDELT 2.0 API, downloads the zip, and extracts the CSV."""
         try:
             # 1. Fetch lastupdate.txt to get the URL of the most recent export
-            print(f"Fetching GDELT lastupdate.txt from {self.lastupdate_url}...")
+            logger.info(f"Fetching GDELT lastupdate.txt from {self.lastupdate_url}...")
             res = requests.get(self.lastupdate_url, timeout=10)
             res.raise_for_status()
 
@@ -36,24 +48,29 @@ class GDELTClient:
             export_url = parts[2]
             
             # 2. Download the zip file
-            print(f"Downloading latest GDELT export from: {export_url}")
+            logger.info(f"Downloading latest GDELT export from: {export_url}")
             zip_res = requests.get(export_url, timeout=30)
             zip_res.raise_for_status()
 
-            # 3. Extract the contents
+            # 3. Extract the contents — with Zip Slip protection (Fix #4)
             os.makedirs(output_dir, exist_ok=True)
+            extracted_files = []
             with zipfile.ZipFile(io.BytesIO(zip_res.content)) as zip_ref:
-                zip_ref.extractall(output_dir)
-                extracted_files = zip_ref.namelist()
-                print(f"Successfully extracted {len(extracted_files)} files to {output_dir}")
+                for member in zip_ref.namelist():
+                    if not self._is_safe_path(member, output_dir):
+                        logger.warning(f"Skipping unsafe zip entry (path traversal): {member}")
+                        continue
+                    zip_ref.extract(member, output_dir)
+                    extracted_files.append(member)
+                logger.info(f"Successfully extracted {len(extracted_files)} files to {output_dir}")
                 
             return [os.path.join(output_dir, f) for f in extracted_files]
             
         except requests.RequestException as e:
-            print(f"Error communicating with GDELT API: {e}")
+            logger.error(f"Error communicating with GDELT API: {e}")
             raise
         except Exception as e:
-            print(f"Error processing GDELT data: {e}")
+            logger.error(f"Error processing GDELT data: {e}")
             raise
 
 if __name__ == "__main__":

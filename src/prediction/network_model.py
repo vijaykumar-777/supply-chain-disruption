@@ -28,17 +28,18 @@ class SupplyChainNetwork:
         logger.info(f"Loaded graph with {self.graph.number_of_nodes()} nodes and {self.graph.number_of_edges()} edges")
         
     def calculate_resilience_score(self, node_id: str) -> float:
-        """Calculate resilience (0-100) based on connectivity/alternative paths. PREDICT-03."""
+        """Calculate resilience score in canonical 0..1 range (Fix #9).
+        Based on connectivity/alternative paths. PREDICT-03."""
         if node_id not in self.graph:
             return 0.0
             
-        # Very basic structural resilience: Degree centrality based metric
+        # Structural resilience: Degree centrality based metric
         out_degree = self.graph.out_degree(node_id)
         in_degree = self.graph.in_degree(node_id)
         
-        # Scale to max 100 for visual friendliness
-        score = min(((out_degree + in_degree) / 5) * 100, 100.0)
-        return max(score, 10.0) # Base resilience floor
+        # Fix #9: Scale to 0..1 (not 0..100) for API consistency
+        score = min((out_degree + in_degree) / 5, 1.0)
+        return max(score, 0.1)  # Base resilience floor of 10%
 
     def estimate_delay(self, route_edges: List[Tuple[str, str]], event_severity: float) -> float:
         """Estimate added lead time (days) for a route given a disruption event severity. PREDICT-01."""
@@ -67,4 +68,6 @@ class SupplyChainNetwork:
             path = nx.shortest_path(subgraph, source=source, target=target, weight="weight")
             return path
         except nx.NetworkXNoPath:
+            return []
+        except nx.NodeNotFound:
             return []

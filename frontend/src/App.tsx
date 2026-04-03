@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, lazy, Suspense } from "react";
 import { 
   Bell, 
   Search, 
@@ -16,11 +16,12 @@ import { DashboardView } from "./components/dashboard/DashboardView";
 
 // Placeholder imports for other views to be extracted
 import { LIVE_EVENTS, LOGISTICS_VOLUME_DATA } from "./constants/mockData";
-import { GlobalMapView } from "./components/dashboard/GlobalMapView";
+// Fix #11: Lazy-load heavy views to reduce initial bundle size
+const GlobalMapView = lazy(() => import("./components/dashboard/GlobalMapView").then(m => ({ default: m.GlobalMapView })));
+const AIAssistantView = lazy(() => import("./components/ai/AIAssistantView").then(m => ({ default: m.AIAssistantView })));
 
 import { LiveFeedView } from "./components/feed/LiveFeedView";
 import { AnalyticsView } from "./components/analytics/AnalyticsView";
-import { AIAssistantView } from "./components/ai/AIAssistantView";
 
 import { View } from "./types";
 import { cn } from "./lib/utils";
@@ -76,11 +77,13 @@ export default function App() {
               transition={{ duration: 0.3 }}
               className="h-full"
             >
+              <Suspense fallback={<div className="flex items-center justify-center h-full text-on-surface-variant">Loading...</div>}>
               {activeView === "dashboard" && <DashboardView />}
               {activeView === "global-map" && <GlobalMapView />}
               {activeView === "live-feed" && <LiveFeedView />}
               {activeView === "analytics" && <AnalyticsView />}
               {activeView === "ai-assistant" && <AIAssistantView />}
+              </Suspense>
             </motion.div>
           </AnimatePresence>
         </div>

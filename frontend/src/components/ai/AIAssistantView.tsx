@@ -38,12 +38,14 @@ export const AIAssistantView = () => {
   const handleGetRecommendation = async () => {
     if (!selectedEvent || !simul.result) return;
     setStep(4);
+    // Fix #6: Pass actual alternative_route from simulation result
+    const altRoute = (simul.result as any).alternative_route ?? [];
     const res = await recomm.run(
       selectedEvent.title,
       selectedEvent.category,
       selectedEvent.locations,
       simul.result,
-      []
+      altRoute
     );
     if (res) setStep(5);
   };
@@ -208,10 +210,10 @@ export const AIAssistantView = () => {
                        </div>
                     ) : (
                        <div className="flex gap-4">
-                         <button onClick={() => handleSubmitFeedback(5)} className="flex-1 py-3 px-4 bg-surface/50 hover:bg-primary/20 border border-white/10 hover:border-primary/50 rounded-xl transition flex justify-center items-center gap-2 text-primary font-bold">
+                         <button onClick={() => handleSubmitFeedback(1)} className="flex-1 py-3 px-4 bg-surface/50 hover:bg-primary/20 border border-white/10 hover:border-primary/50 rounded-xl transition flex justify-center items-center gap-2 text-primary font-bold">
                            <ThumbsUp className="w-5 h-5" /> Helpful
                          </button>
-                         <button onClick={() => handleSubmitFeedback(1)} className="flex-1 py-3 px-4 bg-surface/50 hover:bg-error/20 border border-white/10 hover:border-error/50 rounded-xl transition flex justify-center items-center gap-2 text-error font-bold">
+                         <button onClick={() => handleSubmitFeedback(-1)} className="flex-1 py-3 px-4 bg-surface/50 hover:bg-error/20 border border-white/10 hover:border-error/50 rounded-xl transition flex justify-center items-center gap-2 text-error font-bold">
                            <ThumbsDown className="w-5 h-5" /> Not Useful
                          </button>
                        </div>

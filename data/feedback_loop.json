@@ -13,5 +13,25 @@
         "id": "rec_test_123",
         "rating": 1,
         "comment": "Provided good actionable steps during testing."
+    },
+    {
+        "id": "abc",
+        "rating": 1,
+        "comment": "ok"
+    },
+    {
+        "id": "x",
+        "rating": 5,
+        "comment": ""
+    },
+    {
+        "id": "x",
+        "rating": 0,
+        "comment": ""
+    },
+    {
+        "id": "x",
+        "rating": -999,
+        "comment": ""
     }
 ]

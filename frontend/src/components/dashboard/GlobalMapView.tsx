@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, CircleMarker, Popup, Tooltip } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { api, APIEvent, APINode } from '../../services/api';
+import { api, APIEvent, APINode, DataSource } from '../../services/api';
 
 const SEVERITY_COLOR = (type: string) =>
   type === 'critical' ? '#ff3366' : type === 'warning' ? '#ffaa00' : '#00dd99';
@@ -11,12 +11,15 @@ export const GlobalMapView = () => {
   const [nodes, setNodes] = useState<APINode[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [dataSource, setDataSource] = useState<DataSource | null>(null);  // Fix #10
+
   useEffect(() => {
     (async () => {
       try {
         const [evRes, nodeRes] = await Promise.all([api.getEvents(), api.getGraphNodes()]);
         setEvents(evRes.events);
         setNodes(nodeRes.nodes);
+        setDataSource(nodeRes.source ?? evRes.source ?? null);  // Fix #10
       } catch (e) {
         console.warn("Failed to fetch map data from API:", e);
       } finally {
@@ -34,7 +37,7 @@ export const GlobalMapView = () => {
         <div>
           <h2 className="text-2xl font-bold text-on-surface">Global Supply Chain Network</h2>
           <p className="text-on-surface-variant text-sm">
-            {loading ? "Loading live data..." : `${nodes.length} nodes · ${events.length} active disruptions — Live from Neo4j`}
+            {loading ? "Loading live data..." : `${nodes.length} nodes · ${events.length} active disruptions — ${dataSource === "live" ? "Live from Neo4j" : "Demo data — Neo4j unavailable"}`}
           </p>
         </div>
       </div>

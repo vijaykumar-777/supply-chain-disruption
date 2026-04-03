@@ -31,13 +31,18 @@ export interface APINode {
   lat?: number;
   lon?: number;
   country?: string;
+  resilience_score?: number;  // Fix #9: canonical 0..1 range
 }
+
+// Fix #10: source metadata type
+export type DataSource = "live" | "fallback";
 
 export interface DashboardMetrics {
   total_active_events: number;
   high_risk_nodes: number;
   monitored_nodes: number;
   weather_alerts: number;
+  source?: DataSource;  // Fix #10
 }
 
 export interface SimulationResult {
@@ -51,6 +56,7 @@ export interface SimulationResult {
     max_risk_days: number;
     std_dev: number;
   };
+  source?: DataSource;  // Fix #10
 }
 
 // ─── API Methods ──────────────────────────────────────────────────────────────
@@ -58,11 +64,12 @@ export interface SimulationResult {
 export const api = {
   health: () => request<{ status: string }>("/health"),
 
+  // Fix #10: response now includes source field
   getEvents: () =>
-    request<{ events: APIEvent[]; count: number }>("/api/events"),
+    request<{ events: APIEvent[]; count: number; source?: DataSource }>("/api/events"),
 
   getGraphNodes: () =>
-    request<{ nodes: APINode[]; count: number }>("/api/graph/nodes"),
+    request<{ nodes: APINode[]; count: number; source?: DataSource }>("/api/graph/nodes"),
 
   getMetrics: () => request<DashboardMetrics>("/api/metrics"),
 
@@ -98,8 +105,9 @@ export const api = {
       }
     ),
 
+  // Fix #5: response type updated to include optional error field
   feedback: (recommendation_id: string, rating: number, comment = "") =>
-    request<{ success: boolean }>("/api/feedback", {
+    request<{ success: boolean; error?: string }>("/api/feedback", {
       method: "POST",
       body: JSON.stringify({ recommendation_id, rating, comment }),
     }),

@@ -13,7 +13,13 @@ class RiskSimulator:
         Run a Monte Carlo simulation. PREDICT-02.
         Calculates the probability distribution of total delivery time across many scenarios,
         assuming normal variance in transit times plus rare high-impact disruption risks.
+        
+        Fix #2: Guard against empty/invalid route stats and iterations <= 0.
         """
+        # Fix #2: Guard against invalid iterations
+        if iterations <= 0:
+            return {"error": "iterations must be greater than 0"}
+        
         total_times = []
         
         # Base stats for edges
@@ -23,7 +29,11 @@ class RiskSimulator:
                 base_lt = self.network.graph[u][v].get("weight", 1.0)
                 route_stats.append(base_lt)
             else:
-                return {"error": "Invalid route graph"}
+                return {"error": f"Invalid route edge: {u} -> {v} does not exist in the network"}
+
+        # Fix #2: Guard against empty route
+        if not route_stats:
+            return {"error": "No valid route edges to simulate"}
 
         for _ in range(iterations):
             run_total = 0.0
@@ -47,9 +57,9 @@ class RiskSimulator:
         
         return {
             "iterations": iterations,
-            "mean_days": float(np.mean(times_array)),
-            "p50_days": float(np.percentile(times_array, 50)),
-            "p95_days": float(np.percentile(times_array, 95)),
-            "max_risk_days": float(np.max(times_array)),
-            "std_dev": float(np.std(times_array))
+            "mean_days": round(float(np.mean(times_array)), 2),
+            "p50_days": round(float(np.percentile(times_array, 50)), 2),
+            "p95_days": round(float(np.percentile(times_array, 95)), 2),
+            "max_risk_days": round(float(np.max(times_array)), 2),
+            "std_dev": round(float(np.std(times_array)), 2)
         }

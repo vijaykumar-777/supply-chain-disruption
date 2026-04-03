@@ -21,14 +21,17 @@ const SEVERITY_CLASSES: Record<string, { color: string; bg: string; border: stri
 };
 
 export const DashboardView = () => {
-  const { metrics, loading: mLoading } = useMetrics();
-  const { events, loading: eLoading, refresh } = useEvents();
+  const { metrics, loading: mLoading, source: metricsSource } = useMetrics();
+  const { events, loading: eLoading, refresh, source: eventsSource } = useEvents();
 
   const totalEvents = mLoading ? "—" : String(metrics?.total_active_events ?? "—");
   const highRisk = mLoading ? "—" : String(metrics?.high_risk_nodes ?? "—");
   const weatherAlerts = mLoading ? "—" : String(metrics?.weather_alerts ?? "0");
   const monitored = mLoading ? "—" : String(metrics?.monitored_nodes ?? "—");
   const isLive = !mLoading && metrics !== null;
+  // Fix #10: Truthful data source indicator
+  const dataSource = metricsSource ?? eventsSource;
+  const isNeo4jLive = dataSource === "live";
 
   return (
     <div className="space-y-6">
@@ -84,7 +87,7 @@ export const DashboardView = () => {
             <div className="space-y-2">
               <div className="flex justify-between text-xs"><span className="text-on-surface-variant">Events:</span><span className="text-on-surface">{events.length} active</span></div>
               <div className="flex justify-between text-xs"><span className="text-on-surface-variant">High Risk:</span><span className="text-on-surface">{events.filter(e => e.type === "critical").length} critical</span></div>
-              <div className="flex justify-between text-xs"><span className="text-on-surface-variant">Source:</span><span className="text-success font-bold">Neo4j Live</span></div>
+              <div className="flex justify-between text-xs"><span className="text-on-surface-variant">Source:</span><span className={cn("font-bold", isNeo4jLive ? "text-success" : "text-tertiary")}>{isNeo4jLive ? "Neo4j Live" : "Demo / Fallback"}</span></div>
             </div>
             <button className="w-full mt-4 py-2 bg-primary/20 hover:bg-primary/30 text-primary text-[10px] font-bold rounded transition-colors uppercase tracking-widest">
               View Full Map
