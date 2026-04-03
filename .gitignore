@@ -1,2 +1,22 @@
-data/raw/
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
 .env
+
+# Node
+node_modules/
+dist/
+build/
+.eslintcache
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project
+data/raw/
+.kilo/
+*.log
