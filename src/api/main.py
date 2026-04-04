@@ -6,7 +6,7 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from fastapi import FastAPI, HTTPException, BackgroundTasks
+from fastapi import FastAPI, HTTPException, BackgroundTasks, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, field_validator
 from typing import List, Optional, Literal
@@ -18,7 +18,10 @@ import time
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+from src.monitoring.supply_chain_monitor import SupplyChainMonitor
+
 app = FastAPI(title="ATLAS AI API", version="1.1", description="Supply Chain Intelligence Backend")
+monitor_service = SupplyChainMonitor()
 
 # ─── Fix #3: Harden CORS — environment-driven allowlist ─────────────────────
 ALLOWED_ORIGINS = os.getenv(
@@ -516,6 +519,50 @@ def submit_feedback(req: FeedbackRequest):
         logger.warning(f"Feedback storage failed: {e}")
         # Fix #7: do NOT report success when it failed
         return {"success": False, "error": str(e)}
+
+
+@app.get("/api/supply-chain/template")
+def get_supply_chain_template():
+    return monitor_service.template()
+
+
+@app.get("/api/supply-chain/snapshots")
+def list_supply_chain_snapshots():
+    return {"snapshots": monitor_service.list_snapshots()}
+
+
+@app.post("/api/supply-chain/upload")
+async def upload_supply_chain_file(request: Request):
+    filename = request.headers.get("x-filename", "")
+    if not filename:
+        raise HTTPException(status_code=400, detail="Uploaded file must have a filename")
+
+    try:
+        content = await request.body()
+        snapshot = monitor_service.parse_upload(filename, content)
+        return monitor_service.build_report(snapshot)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Supply-chain upload failed: {e}")
+        raise HTTPException(status_code=500, detail="Failed to process uploaded supply-chain file")
+
+
+@app.get("/api/supply-chain/snapshots/{snapshot_id}")
+def get_supply_chain_snapshot(snapshot_id: str, refresh: bool = True):
+    try:
+        snapshot = monitor_service.load_snapshot(snapshot_id)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Supply-chain snapshot not found")
+
+    if not refresh and snapshot.get("latest_report"):
+        return snapshot["latest_report"]
+
+    try:
+        return monitor_service.build_report(snapshot)
+    except Exception as e:
+        logger.error(f"Supply-chain refresh failed: {e}")
+        raise HTTPException(status_code=500, detail="Failed to refresh supply-chain monitoring report")
 
 
 # ─── Entry Point ──────────────────────────────────────────────────────────────

@@ -3,6 +3,7 @@ import {
   Bell, 
   Search, 
   LayoutDashboard, 
+  Route,
   Globe, 
   Activity, 
   BarChart3, 
@@ -14,11 +15,10 @@ import { motion, AnimatePresence } from "motion/react";
 import { SidebarItem } from "./components/layout/SidebarItem";
 import { DashboardView } from "./components/dashboard/DashboardView";
 
-// Placeholder imports for other views to be extracted
-import { LIVE_EVENTS, LOGISTICS_VOLUME_DATA } from "./constants/mockData";
 // Fix #11: Lazy-load heavy views to reduce initial bundle size
 const GlobalMapView = lazy(() => import("./components/dashboard/GlobalMapView").then(m => ({ default: m.GlobalMapView })));
 const AIAssistantView = lazy(() => import("./components/ai/AIAssistantView").then(m => ({ default: m.AIAssistantView })));
+const SupplyChainMonitorView = lazy(() => import("./components/monitor/SupplyChainMonitorView").then(m => ({ default: m.SupplyChainMonitorView })));
 
 import { LiveFeedView } from "./components/feed/LiveFeedView";
 import { AnalyticsView } from "./components/analytics/AnalyticsView";
@@ -54,6 +54,7 @@ export default function App() {
       <aside className="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 z-40 glass-elevated border-r border-primary/10 hidden md:flex flex-col justify-between">
         <nav className="py-6 flex flex-col">
           <SidebarItem icon={LayoutDashboard} label="Dashboard" active={activeView === "dashboard"} onClick={() => setActiveView("dashboard")} />
+          <SidebarItem icon={Route} label="My Network" active={activeView === "monitor"} onClick={() => setActiveView("monitor")} />
           <SidebarItem icon={Globe} label="Global Map" active={activeView === "global-map"} onClick={() => setActiveView("global-map")} />
           <SidebarItem icon={Activity} label="Live Feed" active={activeView === "live-feed"} onClick={() => setActiveView("live-feed")} />
           <SidebarItem icon={BarChart3} label="Analytics" active={activeView === "analytics"} onClick={() => setActiveView("analytics")} />
@@ -79,6 +80,7 @@ export default function App() {
             >
               <Suspense fallback={<div className="flex items-center justify-center h-full text-on-surface-variant">Loading...</div>}>
               {activeView === "dashboard" && <DashboardView />}
+              {activeView === "monitor" && <SupplyChainMonitorView />}
               {activeView === "global-map" && <GlobalMapView />}
               {activeView === "live-feed" && <LiveFeedView />}
               {activeView === "analytics" && <AnalyticsView />}

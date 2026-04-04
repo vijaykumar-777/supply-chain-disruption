@@ -1,5 +1,15 @@
-import { useState, useEffect, useCallback } from "react";
-import { api, DashboardMetrics, APIEvent, SimulationResult, DataSource, APINode } from "../services/api";
+import { startTransition, useState, useEffect, useCallback } from "react";
+import {
+  api,
+  DashboardMetrics,
+  APIEvent,
+  SimulationResult,
+  DataSource,
+  APINode,
+  SupplyChainReport,
+  SupplyChainTemplate,
+  SupplyChainSnapshotSummary,
+} from "../services/api";
 
 // ─── useMetrics ───────────────────────────────────────────────────────────────
 export function useMetrics(pollMs = 30000) {
@@ -164,4 +174,119 @@ export function useFeedback() {
   }, []);
 
   return { submit, loading, success };
+}
+
+// ─── useSupplyChainMonitor ────────────────────────────────────────────────────
+export function useSupplyChainMonitor(pollMs = 30000) {
+  const [report, setReport] = useState<SupplyChainReport | null>(null);
+  const [template, setTemplate] = useState<SupplyChainTemplate | null>(null);
+  const [snapshots, setSnapshots] = useState<SupplyChainSnapshotSummary[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [bootLoading, setBootLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const loadTemplateAndSnapshots = useCallback(async () => {
+    try {
+      const [templateData, snapshotsData] = await Promise.all([
+        api.getSupplyChainTemplate(),
+        api.listSupplyChainSnapshots(),
+      ]);
+      startTransition(() => {
+        setTemplate(templateData);
+        setSnapshots(snapshotsData.snapshots);
+      });
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setBootLoading(false);
+    }
+  }, []);
+
+  const refresh = useCallback(async (snapshotId?: string) => {
+    const activeSnapshotId = snapshotId ?? report?.snapshot_id;
+    if (!activeSnapshotId) {
+      return null;
+    }
+
+    try {
+      const data = await api.getSupplyChainSnapshot(activeSnapshotId, true);
+      startTransition(() => {
+        setReport(data);
+      });
+      return data;
+    } catch (e: any) {
+      setError(e.message);
+      return null;
+    }
+  }, [report?.snapshot_id]);
+
+  const uploadFile = useCallback(async (file: File) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await api.uploadSupplyChainFile(file);
+      startTransition(() => {
+        setReport(data);
+        setSnapshots(prev => [
+          {
+            snapshot_id: data.snapshot_id,
+            file_name: data.file_name,
+            uploaded_at: data.uploaded_at,
+            route_count: data.metrics.total_routes,
+            last_checked_at: data.last_checked_at,
+          },
+          ...prev.filter(item => item.snapshot_id !== data.snapshot_id),
+        ]);
+      });
+      return data;
+    } catch (e: any) {
+      setError(e.message);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const loadSnapshot = useCallback(async (snapshotId: string, refreshRemote = false) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await api.getSupplyChainSnapshot(snapshotId, refreshRemote);
+      startTransition(() => {
+        setReport(data);
+      });
+      return data;
+    } catch (e: any) {
+      setError(e.message);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadTemplateAndSnapshots();
+  }, [loadTemplateAndSnapshots]);
+
+  useEffect(() => {
+    if (!report?.snapshot_id) {
+      return;
+    }
+    const id = setInterval(() => {
+      refresh(report.snapshot_id);
+    }, pollMs);
+    return () => clearInterval(id);
+  }, [pollMs, refresh, report?.snapshot_id]);
+
+  return {
+    report,
+    template,
+    snapshots,
+    loading,
+    bootLoading,
+    error,
+    uploadFile,
+    refresh,
+    loadSnapshot,
+  };
 }

@@ -1,9 +1,14 @@
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  const headers = new Headers(options?.headers ?? {});
+  if (!(options?.body instanceof FormData) && !headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
+  }
+
   const res = await fetch(`${BASE_URL}${path}`, {
-    headers: { "Content-Type": "application/json" },
     ...options,
+    headers,
   });
   if (!res.ok) {
     throw new Error(`API error ${res.status}: ${await res.text()}`);
@@ -59,6 +64,124 @@ export interface SimulationResult {
   source?: DataSource;  // Fix #10
 }
 
+export interface SupplyChainSourceStatusItem {
+  enabled: boolean;
+  live: boolean;
+  error?: string;
+}
+
+export interface SupplyChainAlert {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  severity: number;
+  type: "critical" | "warning" | "info";
+  locations: string[];
+  companies: string[];
+  timestamp: string;
+  source: string;
+  url?: string;
+}
+
+export interface SupplyChainMatchedAlert {
+  alert_id: string;
+  alert_title: string;
+  alert_source: string;
+  alert_type: "critical" | "warning" | "info";
+  category: string;
+  severity: number;
+  reasons: string[];
+  url?: string;
+}
+
+export interface SupplyChainImpactLink {
+  route_id: string;
+  route_name: string;
+  source_company: string;
+  target_company: string;
+  material: string;
+  origin: string;
+  destination: string;
+  transport_mode: string;
+  criticality: string;
+  status: "blocked" | "at_risk";
+  risk_score: number;
+  matched_alerts: SupplyChainMatchedAlert[];
+  downstream_companies: string[];
+}
+
+export interface SupplyChainImpactCompany {
+  company: string;
+  status: "blocked" | "at_risk" | "watch";
+  risk_score: number;
+  direct_impacts: number;
+  downstream_exposure: string[];
+}
+
+export interface SupplyChainNetworkNode {
+  id: string;
+  label: string;
+  type: "company" | "location";
+  lat?: number | null;
+  lon?: number | null;
+}
+
+export interface SupplyChainNetworkLink {
+  id: string;
+  source_company: string;
+  target_company: string;
+  relationship_type: string;
+  material: string;
+  origin: string;
+  destination: string;
+  transport_mode: string;
+  criticality: string;
+  route_name: string;
+  origin_lat?: number | null;
+  origin_lon?: number | null;
+  destination_lat?: number | null;
+  destination_lon?: number | null;
+}
+
+export interface SupplyChainTemplate {
+  columns: string[];
+  sample_rows: Record<string, string>[];
+}
+
+export interface SupplyChainSnapshotSummary {
+  snapshot_id: string;
+  file_name: string;
+  uploaded_at: string;
+  route_count: number;
+  last_checked_at?: string;
+}
+
+export interface SupplyChainReport {
+  snapshot_id: string;
+  file_name: string;
+  uploaded_at: string;
+  last_checked_at: string;
+  metrics: {
+    total_routes: number;
+    blocked_routes: number;
+    at_risk_routes: number;
+    healthy_routes: number;
+    monitored_companies: number;
+    watched_locations: number;
+    active_alerts: number;
+  };
+  alerts: SupplyChainAlert[];
+  impacted_links: SupplyChainImpactLink[];
+  impacted_companies: SupplyChainImpactCompany[];
+  network: {
+    nodes: SupplyChainNetworkNode[];
+    links: SupplyChainNetworkLink[];
+  };
+  source_status: Record<string, SupplyChainSourceStatusItem>;
+  watch_terms: string[];
+}
+
 // ─── API Methods ──────────────────────────────────────────────────────────────
 
 export const api = {
@@ -111,4 +234,24 @@ export const api = {
       method: "POST",
       body: JSON.stringify({ recommendation_id, rating, comment }),
     }),
+
+  getSupplyChainTemplate: () =>
+    request<SupplyChainTemplate>("/api/supply-chain/template"),
+
+  listSupplyChainSnapshots: () =>
+    request<{ snapshots: SupplyChainSnapshotSummary[] }>("/api/supply-chain/snapshots"),
+
+  uploadSupplyChainFile: (file: File) => {
+    return request<SupplyChainReport>("/api/supply-chain/upload", {
+      method: "POST",
+      body: file,
+      headers: {
+        "Content-Type": file.type || "application/octet-stream",
+        "X-Filename": file.name,
+      },
+    });
+  },
+
+  getSupplyChainSnapshot: (snapshotId: string, refresh = true) =>
+    request<SupplyChainReport>(`/api/supply-chain/snapshots/${snapshotId}?refresh=${refresh ? "true" : "false"}`),
 };
