@@ -457,12 +457,12 @@
     "target_company",
     "transport_mode"
   ],
-  "last_checked_at": "2026-04-04T09:30:38Z",
+  "last_checked_at": "2026-04-04T09:31:07Z",
   "latest_report": {
     "snapshot_id": "b144483c-3ea2-4c92-b918-807efbd41984",
     "file_name": "real_supply_chain.csv",
     "uploaded_at": "2026-04-04T09:27:50Z",
-    "last_checked_at": "2026-04-04T09:30:38Z",
+    "last_checked_at": "2026-04-04T09:31:07Z",
     "metrics": {
       "total_routes": 12,
       "blocked_routes": 0,
@@ -516,7 +516,7 @@
           "Taichung"
         ],
         "companies": [],
-        "timestamp": "2026-04-04T09:30:33Z",
+        "timestamp": "2026-04-04T09:31:02Z",
         "source": "weather"
       }
     ],
@@ -1228,7 +1228,7 @@
       "gdelt": {
         "enabled": true,
         "live": false,
-        "error": "429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22TSMC%22+OR+%22Foxconn%22+OR+%22Taichung%22+OR+%22Shenzhen%22+OR+%22Semiconductors%22+OR+%22Apple%22+OR+%22Los+Angeles%22+OR+%22Consumer+Electronics%22%29+AND+%28port+OR+shipping+OR+logistics+OR+supplier+OR+factory+OR+strike+OR+storm+OR+export+OR+sanctions+OR+congestion%29&mode=ArtList&maxrecords=12&format=json&sort=DateDesc&timespan=3days"
+        "error": "Expecting value: line 1 column 1 (char 0)"
       },
       "weather": {
         "enabled": true,
