@@ -3,15 +3,17 @@ import datetime as dt
 import io
 import json
 import logging
+import math
 import os
 import re
 import uuid
 from collections import defaultdict, deque
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
+import networkx as nx
 import requests
 
-from src.config import OPENWEATHERMAP_API_KEY, RAW_DATA_DIR
+from src.config import NOMINATIM_USER_AGENT, OPENWEATHERMAP_API_KEY, RAW_DATA_DIR
 
 logger = logging.getLogger(__name__)
 
@@ -139,6 +141,9 @@ CATEGORY_KEYWORDS = {
     "supply": ["shortage", "factory", "supplier", "mine", "refinery", "production"],
 }
 
+GEOCODE_URL = "https://nominatim.openstreetmap.org/search"
+SAFE_ROUTE_RISK_THRESHOLD = 0.45
+
 
 def _utc_now() -> str:
     return dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
@@ -180,7 +185,10 @@ class SupplyChainMonitor:
     def __init__(self, storage_dir: str = SUPPLY_CHAIN_DATA_DIR, weather_api_key: Optional[str] = None):
         self.storage_dir = storage_dir
         self.weather_api_key = weather_api_key or OPENWEATHERMAP_API_KEY
+        self.geocode_cache_path = os.path.join(os.path.dirname(self.storage_dir), "geocode_cache.json")
+        self.geocode_headers = {"User-Agent": NOMINATIM_USER_AGENT}
         os.makedirs(self.storage_dir, exist_ok=True)
+        self.geocode_cache = self._load_geocode_cache()
 
     def parse_upload(self, filename: str, content: bytes) -> Dict[str, Any]:
         extension = os.path.splitext(filename or "")[1].lower()
@@ -378,6 +386,9 @@ class SupplyChainMonitor:
         coords = LOCATION_COORDINATES.get(_norm_lookup(location))
         if coords:
             return coords
+        coords = self._geocode_location(location)
+        if coords:
+            return coords
         return None, None
 
     def _build_nodes(self, routes: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -416,6 +427,7 @@ class SupplyChainMonitor:
                     route["origin"],
                     route["destination"],
                     route["material"],
+                    route["route_name"],
                 )
             ]
         )
@@ -423,17 +435,16 @@ class SupplyChainMonitor:
     def _collect_alerts(self, snapshot: Dict[str, Any]) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
         alerts = []
         source_status = {
-            "fallback": {"enabled": True, "live": True},
+            "fallback": {"enabled": True, "live": False},
             "gdelt": {"enabled": True, "live": False},
             "weather": {"enabled": bool(self.weather_api_key), "live": False},
         }
-
-        fallback_alerts = self._filter_fallback_alerts(snapshot)
-        alerts.extend(fallback_alerts)
+        live_source_connected = False
 
         try:
             gdelt_alerts = self._fetch_gdelt_alerts(snapshot)
             source_status["gdelt"]["live"] = True
+            live_source_connected = True
             if gdelt_alerts:
                 alerts.extend(gdelt_alerts)
         except Exception as exc:
@@ -444,11 +455,18 @@ class SupplyChainMonitor:
             weather_alerts = self._fetch_weather_alerts(snapshot)
             if self.weather_api_key:
                 source_status["weather"]["live"] = True
+                live_source_connected = True
             if weather_alerts:
                 alerts.extend(weather_alerts)
         except Exception as exc:
             source_status["weather"]["error"] = str(exc)
             logger.warning("Weather check failed: %s", exc)
+
+        if not live_source_connected:
+            fallback_alerts = self._filter_fallback_alerts(snapshot)
+            if fallback_alerts:
+                source_status["fallback"]["live"] = True
+                alerts.extend(fallback_alerts)
 
         deduped = []
         seen = set()
@@ -595,35 +613,19 @@ class SupplyChainMonitor:
         for route in routes:
             adjacency[route["source_company"]].append(route["target_company"])
 
+        route_signal_map = self._build_route_signal_map(routes, alerts)
         impacted_links = []
         company_scores: Dict[str, Dict[str, Any]] = {}
         for route in routes:
-            matches = []
-            for alert in alerts:
-                score, reasons = self._route_alert_score(route, alert)
-                if score < 0.38:
-                    continue
-                combined = min(1.0, score * alert["severity"] * (1.15 if route["criticality"] == "high" else 1.0))
-                matches.append(
-                    {
-                        "alert_id": alert["id"],
-                        "alert_title": alert["title"],
-                        "alert_source": alert["source"],
-                        "alert_type": alert["type"],
-                        "category": alert["category"],
-                        "severity": round(combined, 2),
-                        "reasons": reasons,
-                        "url": alert.get("url"),
-                    }
-                )
-
-            if not matches:
+            signal = route_signal_map[route["id"]]
+            matches = signal["matched_alerts"]
+            if signal["risk_score"] < 0.38:
                 continue
 
-            matches.sort(key=lambda item: item["severity"], reverse=True)
-            top_risk = matches[0]["severity"]
-            status = "blocked" if top_risk >= 0.72 else "at_risk"
+            top_risk = signal["risk_score"]
+            status = signal["status"]
             downstream = self._downstream_companies(route["target_company"], adjacency)
+            alternative_route = self._recommend_alternative_route(route, routes, route_signal_map)
             impacted_links.append(
                 {
                     "route_id": route["id"],
@@ -639,6 +641,7 @@ class SupplyChainMonitor:
                     "risk_score": top_risk,
                     "matched_alerts": matches[:3],
                     "downstream_companies": downstream,
+                    "alternative_route": alternative_route,
                 }
             )
 
@@ -676,6 +679,41 @@ class SupplyChainMonitor:
         impacted_links.sort(key=lambda item: item["risk_score"], reverse=True)
         impacted_companies = sorted(company_scores.values(), key=lambda item: item["risk_score"], reverse=True)
         return impacted_links, impacted_companies
+
+    def _build_route_signal_map(
+        self,
+        routes: List[Dict[str, Any]],
+        alerts: List[Dict[str, Any]],
+    ) -> Dict[str, Dict[str, Any]]:
+        route_signal_map: Dict[str, Dict[str, Any]] = {}
+        for route in routes:
+            matches = []
+            for alert in alerts:
+                score, reasons = self._route_alert_score(route, alert)
+                if score < 0.38:
+                    continue
+                combined = min(1.0, score * alert["severity"] * (1.15 if route["criticality"] == "high" else 1.0))
+                matches.append(
+                    {
+                        "alert_id": alert["id"],
+                        "alert_title": alert["title"],
+                        "alert_source": alert["source"],
+                        "alert_type": alert["type"],
+                        "category": alert["category"],
+                        "severity": round(combined, 2),
+                        "reasons": reasons,
+                        "url": alert.get("url"),
+                    }
+                )
+            matches.sort(key=lambda item: item["severity"], reverse=True)
+            top_risk = matches[0]["severity"] if matches else 0.0
+            status = "blocked" if top_risk >= 0.72 else "at_risk" if top_risk >= 0.38 else "healthy"
+            route_signal_map[route["id"]] = {
+                "risk_score": round(top_risk, 2),
+                "status": status,
+                "matched_alerts": matches,
+            }
+        return route_signal_map
 
     def _route_alert_score(self, route: Dict[str, Any], alert: Dict[str, Any]) -> Tuple[float, List[str]]:
         haystack = _norm_lookup(
@@ -723,6 +761,272 @@ class SupplyChainMonitor:
             downstream.append(current)
             queue.extend(adjacency.get(current, []))
         return downstream
+
+    def _recommend_alternative_route(
+        self,
+        route: Dict[str, Any],
+        routes: List[Dict[str, Any]],
+        route_signal_map: Dict[str, Dict[str, Any]],
+    ) -> Optional[Dict[str, Any]]:
+        current_risk = route_signal_map[route["id"]]["risk_score"]
+        supplier_candidate = self._find_supplier_substitute(route, routes, route_signal_map)
+        location_candidate = self._find_location_reroute(route, routes, route_signal_map)
+        company_candidate = self._find_company_reroute(route, routes, route_signal_map)
+
+        candidates = [candidate for candidate in (supplier_candidate, location_candidate, company_candidate) if candidate]
+        if not candidates:
+            return None
+
+        best = min(
+            candidates,
+            key=lambda item: (
+                item["estimated_risk_score"],
+                len(item["route_ids"]),
+                -item["risk_reduction"],
+            ),
+        )
+        best["risk_reduction"] = round(max(current_risk - best["estimated_risk_score"], 0.0), 2)
+        return best
+
+    def _find_supplier_substitute(
+        self,
+        route: Dict[str, Any],
+        routes: List[Dict[str, Any]],
+        route_signal_map: Dict[str, Dict[str, Any]],
+    ) -> Optional[Dict[str, Any]]:
+        candidates = []
+        for candidate in routes:
+            if candidate["id"] == route["id"]:
+                continue
+            if _norm_lookup(candidate["target_company"]) != _norm_lookup(route["target_company"]):
+                continue
+            if not self._route_is_safe(candidate, route_signal_map):
+                continue
+
+            material_penalty = 0.0 if _norm_lookup(candidate["material"]) == _norm_lookup(route["material"]) else 0.12
+            mode_penalty = 0.0 if candidate["transport_mode"] == route["transport_mode"] else 0.06
+            distance_penalty = self._route_distance_penalty(route, candidate)
+            estimated_risk = min(
+                1.0,
+                route_signal_map[candidate["id"]]["risk_score"] + material_penalty + mode_penalty + distance_penalty,
+            )
+            candidates.append((estimated_risk, candidate))
+
+        if not candidates:
+            return None
+
+        estimated_risk, candidate = min(candidates, key=lambda item: item[0])
+        same_material = _norm_lookup(candidate["material"]) == _norm_lookup(route["material"])
+        reason = "same material and same buyer" if same_material else "same buyer with a safer inbound lane"
+        return {
+            "strategy": "supplier_substitution",
+            "summary": f"Shift supply to {candidate['source_company']} -> {candidate['target_company']} via {candidate['route_name']}.",
+            "reason": reason,
+            "estimated_risk_score": round(estimated_risk, 2),
+            "risk_reduction": 0.0,
+            "route_ids": [candidate["id"]],
+            "route_names": [candidate["route_name"]],
+            "company_path": [candidate["source_company"], candidate["target_company"]],
+            "location_path": [candidate["origin"], candidate["destination"]],
+        }
+
+    def _find_location_reroute(
+        self,
+        route: Dict[str, Any],
+        routes: List[Dict[str, Any]],
+        route_signal_map: Dict[str, Dict[str, Any]],
+    ) -> Optional[Dict[str, Any]]:
+        graph = nx.DiGraph()
+        for candidate in routes:
+            if candidate["id"] == route["id"] or not self._route_is_safe(candidate, route_signal_map):
+                continue
+            weight = 1.0 + route_signal_map[candidate["id"]]["risk_score"] * 4
+            if graph.has_edge(candidate["origin"], candidate["destination"]) and graph[candidate["origin"]][candidate["destination"]]["weight"] <= weight:
+                continue
+            graph.add_edge(
+                candidate["origin"],
+                candidate["destination"],
+                weight=weight,
+                route_id=candidate["id"],
+                route_name=candidate["route_name"],
+                source_company=candidate["source_company"],
+                target_company=candidate["target_company"],
+            )
+
+        try:
+            location_path = nx.shortest_path(graph, route["origin"], route["destination"], weight="weight")
+        except (nx.NetworkXNoPath, nx.NodeNotFound):
+            return None
+
+        if len(location_path) < 2:
+            return None
+
+        route_ids = []
+        route_names = []
+        company_path = []
+        path_risks = []
+        for index in range(len(location_path) - 1):
+            edge = graph[location_path[index]][location_path[index + 1]]
+            route_ids.append(edge["route_id"])
+            route_names.append(edge["route_name"])
+            path_risks.append(route_signal_map[edge["route_id"]]["risk_score"])
+            if index == 0:
+                company_path.append(edge["source_company"])
+            company_path.append(edge["target_company"])
+
+        waypoints = location_path[1:-1]
+        reason = "reroutes around the disrupted lane inside your uploaded logistics network"
+        if waypoints:
+            reason = f"reroutes via {', '.join(waypoints)} to avoid the disrupted corridor"
+        return {
+            "strategy": "network_reroute",
+            "summary": f"Reroute shipments from {route['origin']} to {route['destination']} using {' -> '.join(location_path)}.",
+            "reason": reason,
+            "estimated_risk_score": round(max(path_risks) if path_risks else 0.0, 2),
+            "risk_reduction": 0.0,
+            "route_ids": route_ids,
+            "route_names": route_names,
+            "company_path": company_path,
+            "location_path": location_path,
+        }
+
+    def _find_company_reroute(
+        self,
+        route: Dict[str, Any],
+        routes: List[Dict[str, Any]],
+        route_signal_map: Dict[str, Dict[str, Any]],
+    ) -> Optional[Dict[str, Any]]:
+        graph = nx.DiGraph()
+        route_lookup = {}
+        for candidate in routes:
+            if candidate["id"] == route["id"] or not self._route_is_safe(candidate, route_signal_map):
+                continue
+            weight = 1.0 + route_signal_map[candidate["id"]]["risk_score"] * 4
+            edge_key = (candidate["source_company"], candidate["target_company"])
+            existing_weight = graph[candidate["source_company"]][candidate["target_company"]]["weight"] if graph.has_edge(*edge_key) else None
+            if existing_weight is not None and existing_weight <= weight:
+                continue
+            graph.add_edge(candidate["source_company"], candidate["target_company"], weight=weight)
+            route_lookup[edge_key] = candidate
+
+        try:
+            company_path = nx.shortest_path(graph, route["source_company"], route["target_company"], weight="weight")
+        except (nx.NetworkXNoPath, nx.NodeNotFound):
+            return None
+
+        if len(company_path) < 3:
+            return None
+
+        route_ids = []
+        route_names = []
+        location_path = []
+        path_risks = []
+        for index in range(len(company_path) - 1):
+            candidate = route_lookup[(company_path[index], company_path[index + 1])]
+            route_ids.append(candidate["id"])
+            route_names.append(candidate["route_name"])
+            path_risks.append(route_signal_map[candidate["id"]]["risk_score"])
+            if index == 0:
+                location_path.append(candidate["origin"])
+            location_path.append(candidate["destination"])
+
+        return {
+            "strategy": "supplier_network_reroute",
+            "summary": f"Move supply through {' -> '.join(company_path)} instead of the disrupted direct lane.",
+            "reason": "uses an existing lower-risk supplier chain already present in the uploaded network",
+            "estimated_risk_score": round(max(path_risks) if path_risks else 0.0, 2),
+            "risk_reduction": 0.0,
+            "route_ids": route_ids,
+            "route_names": route_names,
+            "company_path": company_path,
+            "location_path": location_path,
+        }
+
+    def _route_is_safe(
+        self,
+        route: Dict[str, Any],
+        route_signal_map: Dict[str, Dict[str, Any]],
+    ) -> bool:
+        return route_signal_map[route["id"]]["risk_score"] < SAFE_ROUTE_RISK_THRESHOLD
+
+    def _route_distance_penalty(self, route: Dict[str, Any], candidate: Dict[str, Any]) -> float:
+        current_distance = self._route_distance_km(route)
+        candidate_distance = self._route_distance_km(candidate)
+        if current_distance is None or candidate_distance is None or current_distance <= 0:
+            return 0.0
+        extra_distance_ratio = max(candidate_distance - current_distance, 0.0) / current_distance
+        return min(extra_distance_ratio * 0.15, 0.15)
+
+    def _route_distance_km(self, route: Dict[str, Any]) -> Optional[float]:
+        coords = (
+            route.get("origin_lat"),
+            route.get("origin_lon"),
+            route.get("destination_lat"),
+            route.get("destination_lon"),
+        )
+        if any(value is None for value in coords):
+            return None
+        return self._haversine_km(coords[0], coords[1], coords[2], coords[3])
+
+    def _haversine_km(self, lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+        radius_km = 6371.0
+        dlat = math.radians(lat2 - lat1)
+        dlon = math.radians(lon2 - lon1)
+        lat1_rad = math.radians(lat1)
+        lat2_rad = math.radians(lat2)
+        a = (
+            math.sin(dlat / 2) ** 2
+            + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(dlon / 2) ** 2
+        )
+        return 2 * radius_km * math.asin(math.sqrt(a))
+
+    def _load_geocode_cache(self) -> Dict[str, List[float]]:
+        if not os.path.exists(self.geocode_cache_path):
+            return {}
+        try:
+            with open(self.geocode_cache_path, "r", encoding="utf-8") as handle:
+                payload = json.load(handle)
+            return {key: value for key, value in payload.items() if isinstance(value, list) and len(value) == 2}
+        except Exception as exc:
+            logger.warning("Failed to load geocode cache: %s", exc)
+            return {}
+
+    def _persist_geocode_cache(self) -> None:
+        try:
+            with open(self.geocode_cache_path, "w", encoding="utf-8") as handle:
+                json.dump(self.geocode_cache, handle, indent=2)
+        except Exception as exc:
+            logger.warning("Failed to save geocode cache: %s", exc)
+
+    def _geocode_location(self, location: str) -> Optional[Tuple[float, float]]:
+        normalized = _norm_lookup(location)
+        cached = self.geocode_cache.get(normalized)
+        if cached:
+            return float(cached[0]), float(cached[1])
+
+        if not location.strip():
+            return None
+
+        try:
+            response = requests.get(
+                GEOCODE_URL,
+                params={"q": location, "format": "jsonv2", "limit": 1},
+                headers=self.geocode_headers,
+                timeout=10,
+            )
+            response.raise_for_status()
+            results = response.json()
+        except Exception as exc:
+            logger.info("Geocoding failed for %s: %s", location, exc)
+            return None
+
+        if not results:
+            return None
+
+        coords = (float(results[0]["lat"]), float(results[0]["lon"]))
+        self.geocode_cache[normalized] = [coords[0], coords[1]]
+        self._persist_geocode_cache()
+        return coords
 
     def _snapshot_path(self, snapshot_id: str) -> str:
         return os.path.join(self.storage_dir, f"{snapshot_id}.json")

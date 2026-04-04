@@ -12,6 +12,7 @@ ATLAS_ENV = os.getenv("ATLAS_ENV", "development")
 
 # OpenWeatherMap API Key
 OPENWEATHERMAP_API_KEY = os.getenv("OPENWEATHERMAP_API_KEY")
+NOMINATIM_USER_AGENT = os.getenv("NOMINATIM_USER_AGENT", "atlas-ai-supply-monitor/1.0")
 
 # ─── Neo4j Database Settings (Fix #3: no insecure fallback in production) ────
 NEO4J_URI = os.getenv("NEO4J_URI", "bolt://localhost:7687")

@@ -95,6 +95,18 @@ export interface SupplyChainMatchedAlert {
   url?: string;
 }
 
+export interface SupplyChainAlternativeRoute {
+  strategy: "supplier_substitution" | "network_reroute" | "supplier_network_reroute";
+  summary: string;
+  reason: string;
+  estimated_risk_score: number;
+  risk_reduction: number;
+  route_ids: string[];
+  route_names: string[];
+  company_path: string[];
+  location_path: string[];
+}
+
 export interface SupplyChainImpactLink {
   route_id: string;
   route_name: string;
@@ -109,6 +121,7 @@ export interface SupplyChainImpactLink {
   risk_score: number;
   matched_alerts: SupplyChainMatchedAlert[];
   downstream_companies: string[];
+  alternative_route?: SupplyChainAlternativeRoute | null;
 }
 
 export interface SupplyChainImpactCompany {

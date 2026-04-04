@@ -82,7 +82,7 @@ export const SupplyChainMonitorView = () => {
               </span>
               <h2 className="text-3xl font-black tracking-tight">Upload only your company network, then watch the weak links in real time.</h2>
               <p className="max-w-xl text-sm leading-6 text-on-surface-variant">
-                This view turns your supplier-to-supplier routes into a monitored graph, checks live disruption signals, and shows which trade lanes and downstream companies are likely to be hit first.
+                This view turns your supplier-to-supplier routes into a monitored graph, checks live disruption signals from GDELT and OpenWeatherMap, and recommends safer alternate lanes whenever your uploaded network has one.
               </p>
             </div>
           </div>
@@ -97,7 +97,7 @@ export const SupplyChainMonitorView = () => {
                   <div className="space-y-2">
                     <h3 className="text-lg font-bold">Upload a CSV or JSON dependency file</h3>
                     <p className="text-sm text-on-surface-variant">
-                      Include companies, route endpoints, transport mode, and criticality. The backend keeps the latest snapshot and refreshes its disruption checks on a poll cycle.
+                      Include suppliers, buyers, route endpoints, transport mode, and criticality. The backend keeps the latest snapshot, refreshes live disruption checks, and suggests fallback routes when a lane becomes risky.
                     </p>
                   </div>
                 </div>
@@ -273,7 +273,7 @@ export const SupplyChainMonitorView = () => {
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <h3 className="text-lg font-bold">Current Disruption Signals</h3>
-                  <p className="text-sm text-on-surface-variant">Alerts that currently overlap your uploaded companies, materials, or route endpoints.</p>
+                  <p className="text-sm text-on-surface-variant">Live alerts that currently overlap your uploaded companies, materials, suppliers, or route endpoints.</p>
                 </div>
               </div>
 
@@ -382,18 +382,78 @@ export const SupplyChainMonitorView = () => {
                         </div>
                       </div>
 
-                      <div className="rounded-2xl border border-white/5 bg-black/10 p-4">
-                        <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-on-surface-variant">Downstream Exposure</p>
-                        <div className="mt-3 flex flex-wrap gap-2">
-                          {link.downstream_companies.length > 0 ? (
-                            link.downstream_companies.map((company) => (
-                              <span key={company} className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-on-surface-variant">
-                                {company}
-                              </span>
-                            ))
+                      <div className="space-y-4">
+                        <div className="rounded-2xl border border-white/5 bg-black/10 p-4">
+                          <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-on-surface-variant">Alternate Route</p>
+                          {link.alternative_route ? (
+                            <div className="mt-3 space-y-3">
+                              <div className="rounded-2xl border border-success/15 bg-success/5 p-3">
+                                <div className="flex items-start justify-between gap-3">
+                                  <div>
+                                    <p className="text-sm font-semibold text-on-surface">{link.alternative_route.summary}</p>
+                                    <p className="mt-2 text-xs leading-5 text-on-surface-variant">{link.alternative_route.reason}</p>
+                                  </div>
+                                  <div className="text-right">
+                                    <p className="text-[11px] uppercase tracking-[0.2em] text-on-surface-variant">Projected Risk</p>
+                                    <p className="text-lg font-black text-success">{Math.round(link.alternative_route.estimated_risk_score * 100)}%</p>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="grid gap-3 sm:grid-cols-2">
+                                <div>
+                                  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-on-surface-variant">Company Path</p>
+                                  <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-on-surface-variant">
+                                    {link.alternative_route.company_path.map((company, index) => (
+                                      <React.Fragment key={`${link.route_id}-company-${company}-${index}`}>
+                                        {index > 0 && <ArrowRight className="h-3.5 w-3.5" />}
+                                        <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1">{company}</span>
+                                      </React.Fragment>
+                                    ))}
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-on-surface-variant">Location Path</p>
+                                  <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-on-surface-variant">
+                                    {link.alternative_route.location_path.map((location, index) => (
+                                      <React.Fragment key={`${link.route_id}-location-${location}-${index}`}>
+                                        {index > 0 && <ArrowRight className="h-3.5 w-3.5" />}
+                                        <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1">{location}</span>
+                                      </React.Fragment>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="flex flex-wrap gap-2">
+                                {link.alternative_route.route_names.map((routeName) => (
+                                  <span key={`${link.route_id}-${routeName}`} className="rounded-full border border-success/15 bg-success/10 px-3 py-1 text-[11px] text-success">
+                                    {routeName}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
                           ) : (
-                            <span className="text-sm text-on-surface-variant">No downstream dependency recorded beyond this link.</span>
+                            <p className="mt-3 text-sm text-on-surface-variant">
+                              No safer alternate route was found inside the uploaded network yet. The lane stays monitored until a backup path or supplier is added.
+                            </p>
                           )}
+                        </div>
+
+                        <div className="rounded-2xl border border-white/5 bg-black/10 p-4">
+                          <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-on-surface-variant">Downstream Exposure</p>
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            {link.downstream_companies.length > 0 ? (
+                              link.downstream_companies.map((company) => (
+                                <span key={company} className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-on-surface-variant">
+                                  {company}
+                                </span>
+                              ))
+                            ) : (
+                              <span className="text-sm text-on-surface-variant">No downstream dependency recorded beyond this link.</span>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
