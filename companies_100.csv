@@ -1,0 +1,100 @@
+company_name,ticker,country,sector,industry,edgar_cik
+Apple Inc,AAPL,USA,Technology,Consumer Electronics,320193
+Microsoft Corporation,MSFT,USA,Technology,Software,789019
+Amazon.com Inc,AMZN,USA,Consumer Discretionary,E-Commerce,1018724
+Alphabet Inc,GOOGL,USA,Technology,Internet Services,1652044
+Tesla Inc,TSLA,USA,Consumer Discretionary,Electric Vehicles,1318605
+NVIDIA Corporation,NVDA,USA,Technology,Semiconductors,1045810
+Meta Platforms Inc,META,USA,Technology,Social Media,1326801
+ExxonMobil Corporation,XOM,USA,Energy,Oil & Gas,34088
+Johnson & Johnson,JNJ,USA,Healthcare,Pharmaceuticals,200406
+JPMorgan Chase & Co,JPM,USA,Financials,Banking,19617
+Walmart Inc,WMT,USA,Consumer Staples,Retail,104169
+Procter & Gamble Co,PG,USA,Consumer Staples,Personal Care,80424
+Chevron Corporation,CVX,USA,Energy,Oil & Gas,93410
+UnitedHealth Group,UNH,USA,Healthcare,Health Insurance,72971
+Home Depot Inc,HD,USA,Consumer Discretionary,Home Improvement,354950
+Coca-Cola Company,KO,USA,Consumer Staples,Beverages,21344
+AbbVie Inc,ABBV,USA,Healthcare,Biopharmaceuticals,1551152
+Merck & Co Inc,MRK,USA,Healthcare,Pharmaceuticals,310158
+PepsiCo Inc,PEP,USA,Consumer Staples,Beverages,77476
+Costco Wholesale,COST,USA,Consumer Staples,Wholesale Retail,909832
+Broadcom Inc,AVGO,USA,Technology,Semiconductors,1730168
+Intel Corporation,INTC,USA,Technology,Semiconductors,50863
+Qualcomm Inc,QCOM,USA,Technology,Semiconductors,804328
+3M Company,MMM,USA,Industrials,Diversified Manufacturing,66740
+Boeing Company,BA,USA,Industrials,Aerospace & Defense,12927
+Caterpillar Inc,CAT,USA,Industrials,Heavy Machinery,18230
+Deere & Company,DE,USA,Industrials,Agricultural Machinery,315189
+FedEx Corporation,FDX,USA,Industrials,Logistics,230056
+General Motors,GM,USA,Consumer Discretionary,Automobiles,40987
+Ford Motor Company,F,USA,Consumer Discretionary,Automobiles,37996
+Nike Inc,NKE,USA,Consumer Discretionary,Apparel,793952
+Starbucks Corporation,SBUX,USA,Consumer Discretionary,Food & Beverage,829224
+McDonald's Corporation,MCD,USA,Consumer Discretionary,Fast Food,63754
+Pfizer Inc,PFE,USA,Healthcare,Pharmaceuticals,78003
+Honeywell International,HON,USA,Industrials,Diversified Industrial,773840
+Taiwan Semiconductor,TSM,Taiwan,Technology,Semiconductors,1046179
+Samsung Electronics,005930.KS,South Korea,Technology,Consumer Electronics,
+Toyota Motor Corporation,TM,Japan,Consumer Discretionary,Automobiles,1094517
+Sony Group Corporation,SONY,Japan,Consumer Discretionary,Electronics & Entertainment,1065280
+Honda Motor Co,HMC,Japan,Consumer Discretionary,Automobiles,310301
+Volkswagen AG,VWAGY,Germany,Consumer Discretionary,Automobiles,
+BASF SE,BASFY,Germany,Materials,Chemicals,
+Siemens AG,SIEGY,Germany,Industrials,Diversified Industrial,
+SAP SE,SAP,Germany,Technology,Enterprise Software,1016708
+Bayer AG,BAYRY,Germany,Healthcare,Pharmaceuticals & Chemicals,
+Daimler Truck Holding,DTRUY,Germany,Industrials,Commercial Vehicles,
+LVMH,LVMUY,France,Consumer Discretionary,Luxury Goods,
+TotalEnergies SE,TTE,France,Energy,Oil & Gas,1001316
+AstraZeneca PLC,AZN,UK,Healthcare,Pharmaceuticals,901832
+Shell PLC,SHEL,UK,Energy,Oil & Gas,1306965
+BP PLC,BP,UK,Energy,Oil & Gas,313807
+GlaxoSmithKline,GSK,UK,Healthcare,Pharmaceuticals,1131399
+Unilever PLC,UL,UK,Consumer Staples,FMCG,1466175
+Rio Tinto PLC,RIO,UK,Materials,Mining,1039399
+BHP Group,BHP,Australia,Materials,Mining,1024739
+Alibaba Group,BABA,China,Consumer Discretionary,E-Commerce,1577552
+Tencent Holdings,TCEHY,China,Technology,Internet Services,
+Huawei Technologies,N/A,China,Technology,Telecom Equipment,
+CNOOC Limited,CEO,China,Energy,Oil & Gas,1095595
+China Construction Bank,CICHY,China,Financials,Banking,
+Baidu Inc,BIDU,China,Technology,Internet Services,1329099
+JD.com Inc,JD,China,Consumer Discretionary,E-Commerce,1549802
+Xiaomi Corporation,XIACF,China,Technology,Consumer Electronics,
+BYD Company,BYDDY,China,Consumer Discretionary,Electric Vehicles,
+Reliance Industries,RELIANCE.NS,India,Energy/Conglomerate,Oil Gas & Retail,
+Tata Consultancy Services,TCS.NS,India,Technology,IT Services,
+Infosys Limited,INFY,India,Technology,IT Services,1067491
+Wipro Limited,WIT,India,Technology,IT Services,1123396
+HDFC Bank,HDB,India,Financials,Banking,1166928
+Nestlé SA,NSRGY,Switzerland,Consumer Staples,Food & Beverages,
+ABB Ltd,ABB,Switzerland,Industrials,Electrification,1091587
+Novartis AG,NVS,Switzerland,Healthcare,Pharmaceuticals,1114448
+Roche Holding,RHHBY,Switzerland,Healthcare,Diagnostics & Pharma,
+Glencore PLC,GLNCY,Switzerland,Materials,Mining & Commodities,
+Hyundai Motor,HYMTF,South Korea,Consumer Discretionary,Automobiles,
+SK Hynix,000660.KS,South Korea,Technology,Semiconductors,
+LG Electronics,066570.KS,South Korea,Technology,Consumer Electronics,
+POSCO Holdings,PKX,South Korea,Materials,Steel,
+Softbank Group,SFTBY,Japan,Technology,Telecom & Investments,
+Panasonic Holdings,PCRFY,Japan,Technology,Electronics,
+Hitachi Ltd,HTHIY,Japan,Industrials,Diversified Industrial,
+Mitsubishi Corporation,MSBHF,Japan,Industrials,Trading Conglomerate,
+Airbus SE,EADSY,Netherlands,Industrials,Aerospace & Defense,
+ASML Holding,ASML,Netherlands,Technology,Semiconductor Equipment,1091865
+Stellantis NV,STLA,Netherlands,Consumer Discretionary,Automobiles,1834585
+ArcelorMittal,MT,Luxembourg,Materials,Steel,
+Saudi Aramco,2222.SR,Saudi Arabia,Energy,Oil & Gas,
+Vale SA,VALE,Brazil,Materials,Mining,1001233
+Petrobras,PBR,Brazil,Energy,Oil & Gas,1119639
+Embraer SA,ERJ,Brazil,Industrials,Aerospace,1144519
+Anglo American,AAUKF,South Africa,Materials,Mining,
+Sasol Limited,SSL,South Africa,Energy,Chemicals & Energy,
+Taiwan Foxconn,HNHPF,Taiwan,Technology,Electronics Manufacturing,
+MediaTek Inc,2454.TW,Taiwan,Technology,Semiconductors,
+Mitsui & Co,MITSY,Japan,Industrials,Trading Conglomerate,
+Maersk Group,AMKBY,Denmark,Industrials,Shipping & Logistics,
+Volvo AB,VLVLY,Sweden,Industrials,Commercial Vehicles,
+Ericsson,ERIC,Sweden,Technology,Telecom Equipment,1002655
+Schneider Electric,SBGSY,France,Industrials,Energy Management,

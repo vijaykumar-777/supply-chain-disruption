@@ -1,0 +1,99 @@
+source_company,source_country,destination_company,destination_country,relationship_type,route_mode,transit_days_min,transit_days_max,commodity,route_notes,risk_level,publicly_known
+Taiwan Semiconductor,Taiwan,Apple Inc,USA,tier1_supplier,sea,18,25,Advanced chips (A-series M-series),TSMC sole supplier for Apple silicon,high,yes
+Taiwan Semiconductor,Taiwan,NVIDIA Corporation,USA,tier1_supplier,sea,18,25,GPU chips H100 A100,TSMC manufactures all NVIDIA GPUs,high,yes
+Taiwan Semiconductor,Taiwan,Qualcomm Inc,USA,tier1_supplier,sea,18,25,Snapdragon chips,TSMC key fab partner for Qualcomm,high,yes
+Taiwan Semiconductor,Taiwan,Apple Inc,USA,tier1_supplier,air,2,4,Time-sensitive chip batches,Air freight for urgent orders,medium,yes
+Samsung Electronics,South Korea,Apple Inc,USA,tier1_supplier,sea,12,18,OLED displays memory,Samsung supplies displays and NAND,high,yes
+Samsung Electronics,South Korea,Qualcomm Inc,USA,tier1_supplier,sea,12,18,Memory chips,Samsung DRAM for Qualcomm reference designs,medium,yes
+SK Hynix,South Korea,Apple Inc,USA,tier1_supplier,sea,12,18,DRAM memory,SK Hynix supplies DRAM for iPhones,high,yes
+SK Hynix,South Korea,NVIDIA Corporation,USA,tier1_supplier,sea,12,18,HBM memory,HBM3 for H100 GPUs,high,yes
+ASML Holding,Netherlands,Taiwan Semiconductor,Taiwan,tier1_supplier,sea,25,40,EUV lithography machines,ASML sole supplier of EUV machines globally,critical,yes
+ASML Holding,Netherlands,Samsung Electronics,South Korea,tier1_supplier,sea,20,35,EUV lithography machines,Critical equipment for leading edge fabs,critical,yes
+Intel Corporation,USA,Apple Inc,USA,tier1_supplier,road,1,3,Modems baseband chips,Intel supplied modems before Qualcomm switch,low,yes
+Qualcomm Inc,USA,Apple Inc,USA,tier1_supplier,road,1,3,5G modems,Qualcomm modems for iPhone 15 series,high,yes
+Foxconn Taiwan,Taiwan,Apple Inc,USA,tier1_supplier,air,2,5,Assembled iPhones,Primary iPhone assembler Zhengzhou China plant,high,yes
+Foxconn Taiwan,Taiwan,Sony Group Corporation,Japan,tier2_supplier,sea,5,10,Electronics components,Assembly services for Sony products,medium,yes
+Foxconn Taiwan,Taiwan,Amazon.com Inc,USA,tier2_supplier,sea,18,30,Alexa devices Fire tablets,Contract manufacturing for Amazon hardware,medium,yes
+Toyota Motor Corporation,Japan,General Motors,USA,competitor_benchmarked,,,,Hybrid tech,Not supplier - benchmark reference,low,no
+Panasonic Holdings,Japan,Toyota Motor Corporation,Japan,tier1_supplier,road,1,3,EV battery cells,Panasonic supplies battery cells for Prius hybrids,high,yes
+CATL China,China,Tesla Inc,USA,tier1_supplier,sea,28,40,LFP battery packs,CATL largest Tesla battery supplier,high,yes
+CATL China,China,Volkswagen AG,Germany,tier1_supplier,sea,22,35,EV battery packs,Major VW EV battery supplier,high,yes
+CATL China,China,BMW Group,Germany,tier1_supplier,sea,22,35,EV battery cells,BMW i-series battery supply,high,yes
+BYD Company,China,Toyota Motor Corporation,Japan,tier1_supplier,sea,5,10,Blade battery cells,BYD supplies cells for bZ4X in China,medium,yes
+Panasonic Holdings,Japan,Tesla Inc,USA,tier1_supplier,road,1,2,2170 cylindrical cells,Gigafactory Nevada co-production,critical,yes
+LG Electronics,South Korea,Tesla Inc,USA,tier1_supplier,sea,12,18,Battery modules,LG Energy Solution cells for Model S X,high,yes
+Vale SA,Brazil,China Construction Bank,China,raw_material,,,,Iron ore financing,Vale exports iron ore to China steel mills,medium,yes
+Vale SA,Brazil,ArcelorMittal,Luxembourg,tier1_supplier,sea,20,30,Iron ore,Vale major iron ore supplier to ArcelorMittal,high,yes
+BHP Group,Australia,Toyota Motor Corporation,Japan,raw_material,sea,8,12,Coking coal steel inputs,BHP supplies raw materials for steel,medium,yes
+BHP Group,Australia,POSCO Holdings,South Korea,tier1_supplier,sea,7,10,Iron ore coking coal,BHP key supplier to POSCO steelworks,high,yes
+Rio Tinto PLC,UK,Aluminum producers China,China,raw_material,sea,18,28,Bauxite alumina,Rio Tinto supplies alumina to Chinese smelters,medium,yes
+ArcelorMittal,Luxembourg,Volkswagen AG,Germany,tier1_supplier,road,3,7,Advanced high-strength steel,Steel for VW vehicle body structures,high,yes
+ArcelorMittal,Luxembourg,Stellantis NV,Netherlands,tier1_supplier,road,3,7,Automotive steel,Steel supply for Stellantis vehicle platforms,high,yes
+POSCO Holdings,South Korea,Hyundai Motor,South Korea,tier1_supplier,road,1,2,Automotive steel,POSCO primary steel supplier for Hyundai Kia,critical,yes
+BASF SE,Germany,Volkswagen AG,Germany,tier1_supplier,road,1,3,Specialty chemicals coatings,BASF automotive coatings and chemicals,medium,yes
+BASF SE,Germany,NVIDIA Corporation,USA,tier2_supplier,sea,20,30,Specialty chemicals,BASF chemicals used in semiconductor manufacturing,low,yes
+Honeywell International,USA,Boeing Company,USA,tier1_supplier,road,1,5,Avionics flight systems,Honeywell key avionics supplier for Boeing,high,yes
+Honeywell International,USA,Airbus SE,Netherlands,tier1_supplier,sea,10,18,Avionics systems,Honeywell supplies avionics to Airbus,high,yes
+General Electric,USA,Boeing Company,USA,tier1_supplier,road,2,5,LEAP jet engines,GE Aviation engines for 737 MAX and 787,critical,yes
+Rolls Royce Holdings,UK,Airbus SE,Netherlands,tier1_supplier,sea,5,12,Trent series jet engines,Rolls Royce engines for A350 A380,critical,yes
+CFM International,USA/France,Boeing Company,USA,tier1_supplier,road,2,5,LEAP-1B engines,JV between GE and Safran for 737 MAX,critical,yes
+3M Company,USA,Boeing Company,USA,tier2_supplier,road,1,3,Adhesives specialty materials,3M aerospace materials,medium,yes
+Embraer SA,Brazil,Boeing Company,USA,competitor_partner,sea,,,Regional jets,Partial JV dissolved - benchmark reference,low,yes
+Reliance Industries,India,Infosys Limited,India,domestic_supplier,road,1,2,IT services petrochemical,Domestic B2B India supply,low,yes
+Tata Consultancy Services,India,Microsoft Corporation,USA,services_partner,digital,0,0,IT services cloud,TCS major Microsoft partner,medium,yes
+Infosys Limited,India,Apple Inc,USA,services_partner,digital,0,0,IT services,Infosys provides IT services to Apple,low,yes
+Wipro Limited,India,Boeing Company,USA,services_partner,digital,0,0,Engineering IT services,Wipro engineering services for Boeing,medium,yes
+Maersk Group,Denmark,Amazon.com Inc,USA,logistics_partner,sea,,,Shipping container logistics,Maersk key ocean carrier for Amazon imports,high,yes
+Maersk Group,Denmark,Walmart Inc,USA,logistics_partner,sea,,,Container shipping,Maersk ships goods for Walmart global supply,high,yes
+FedEx Corporation,USA,Apple Inc,USA,logistics_partner,air,1,2,iPhone shipments,FedEx primary express carrier for Apple,high,yes
+FedEx Corporation,USA,Amazon.com Inc,USA,logistics_partner,air+road,1,3,Express parcels,FedEx delivers Amazon non-Prime shipments,high,yes
+Saudi Aramco,Saudi Arabia,ExxonMobil Corporation,USA,raw_material,sea,20,30,Crude oil,Aramco exports crude to US refineries,high,yes
+Saudi Aramco,Saudi Arabia,TotalEnergies SE,France,raw_material,sea,18,25,Crude oil LNG,Aramco supplies TotalEnergies refining,high,yes
+Saudi Aramco,Saudi Arabia,China Construction Bank,China,raw_material,sea,22,30,Crude oil,Aramco largest crude supplier to China,critical,yes
+TotalEnergies SE,France,BASF SE,Germany,raw_material,pipeline,1,3,Natural gas petrochemicals,TotalEnergies supplies feedstock to BASF,high,yes
+Shell PLC,UK,BASF SE,Germany,raw_material,pipeline+sea,2,7,Natural gas LNG,Shell LNG supply to BASF facilities,high,yes
+BP PLC,UK,Bayer AG,Germany,raw_material,pipeline,1,4,Petrochemical feedstocks,BP supplies feedstocks for Bayer chemicals,medium,yes
+Glencore PLC,Switzerland,Bayer AG,Germany,raw_material,sea,10,20,Cobalt copper,Glencore supplies battery and industrial metals,medium,yes
+Glencore PLC,Switzerland,LG Electronics,South Korea,tier2_supplier,sea,20,30,Cobalt,Cobalt for LG battery cathode materials,high,yes
+Glencore PLC,Switzerland,CATL China,China,tier2_supplier,sea,25,35,Cobalt lithium,Battery raw materials for CATL,high,yes
+Anglo American,South Africa,POSCO Holdings,South Korea,tier1_supplier,sea,18,25,Iron ore coking coal,Anglo American seaborne coal and ore supply,high,yes
+Sasol Limited,South Africa,BASF SE,Germany,raw_material,sea,18,25,Specialty chemicals,Sasol chemicals to European market,medium,yes
+Novartis AG,Switzerland,Pfizer Inc,USA,competitor_licensor,digital,,,API licensing,Cross-licensing arrangement,low,yes
+AstraZeneca PLC,UK,Pfizer Inc,USA,competitor_partner,digital,,,Vaccine distribution,Distribution partnerships in some markets,low,yes
+GlaxoSmithKline,UK,Pfizer Inc,USA,competitor_partner,digital,,,API supply,Some API cross-supply arrangements,low,yes
+AbbVie Inc,USA,Pfizer Inc,USA,competitor_benchmarked,,,,,Biologic benchmarking,low,no
+Roche Holding,Switzerland,Johnson & Johnson,USA,diagnostics_partner,air,1,5,Diagnostic reagents,Roche diagnostics used in J&J clinical trials,medium,yes
+Merck & Co Inc,USA,Johnson & Johnson,USA,competitor_benchmarked,,,,,Pharma benchmark,low,no
+Pfizer Inc,USA,Walmart Inc,USA,distribution_partner,road,1,3,Pharmaceuticals OTC,Pfizer products sold via Walmart pharmacy,high,yes
+Nestlé SA,Switzerland,Walmart Inc,USA,tier1_supplier,sea+road,10,20,Food and beverage products,Nestlé major CPG supplier to Walmart,high,yes
+Procter & Gamble Co,USA,Walmart Inc,USA,tier1_supplier,road,2,5,Consumer goods,P&G largest supplier to Walmart globally,critical,yes
+Procter & Gamble Co,USA,Amazon.com Inc,USA,tier1_supplier,road,2,5,Consumer goods,P&G ships direct to Amazon fulfillment centers,high,yes
+Unilever PLC,UK,Walmart Inc,USA,tier1_supplier,sea+road,12,22,Personal care food,Unilever major CPG supplier,high,yes
+Unilever PLC,UK,Amazon.com Inc,USA,tier1_supplier,sea+road,12,22,Consumer goods,Unilever sells via Amazon Marketplace,medium,yes
+Coca-Cola Company,USA,McDonald's Corporation,USA,tier1_supplier,road,1,3,Beverages syrup,Coca-Cola exclusive beverage supplier to McDonalds,critical,yes
+Nestlé SA,Switzerland,Starbucks Corporation,USA,licensing_partner,sea,,,Coffee products,Nespresso Starbucks capsule global license deal,high,yes
+Nike Inc,USA,Foxconn Taiwan,Taiwan,tier2_supplier,,,,,No direct relation,low,no
+Nike Inc,USA,Vietnam factories,Vietnam,tier1_supplier,sea,18,28,Footwear apparel,Nike manufactures 50% of footwear in Vietnam,critical,yes
+Nike Inc,USA,Indonesia factories,Indonesia,tier1_supplier,sea,20,30,Footwear,Nike significant manufacturing in Indonesia,high,yes
+Adidas AG,Germany,Vietnam factories,Vietnam,tier1_supplier,sea,18,28,Footwear,Adidas major Vietnam manufacturing,high,yes
+Volkswagen AG,Germany,Bosch GmbH,Germany,tier1_supplier,road,1,3,Electronic systems fuel injection,Bosch largest auto supplier globally to VW,critical,yes
+Toyota Motor Corporation,Japan,Denso Corporation,Japan,tier1_supplier,road,1,2,Electronic components AC systems,Denso Toyota affiliate key supplier,critical,yes
+Toyota Motor Corporation,Japan,Aisin Corporation,Japan,tier1_supplier,road,1,2,Drivetrain components,Toyota group company Aisin,critical,yes
+Hyundai Motor,South Korea,Hyundai Mobis,South Korea,tier1_supplier,road,1,2,Modules electronic parts,Hyundai group captive supplier,critical,yes
+Stellantis NV,Netherlands,Valeo SA,France,tier1_supplier,road,2,5,Driver assistance systems,Valeo ADAS and lighting supplier to Stellantis,high,yes
+Airbus SE,Netherlands,Safran SA,France,tier1_supplier,road,2,5,Landing gear engines nacelles,Safran key engine and systems supplier Airbus,critical,yes
+Airbus SE,Netherlands,Leonardo DRS,Italy,tier1_supplier,sea,5,12,Avionics defense systems,Leonardo supplies avionics to Airbus,medium,yes
+Ericsson,Sweden,Softbank Group,Japan,tier1_supplier,sea,10,18,5G network equipment,Ericsson 5G RAN equipment for SoftBank Japan,high,yes
+Ericsson,Sweden,Reliance Industries,India,tier1_supplier,sea,15,25,5G telecom equipment,Ericsson 5G gear for Jio India rollout,high,yes
+Schneider Electric,France,Walmart Inc,USA,services_supplier,sea+road,,,Energy management systems,Schneider electric management for Walmart DCs,medium,yes
+Schneider Electric,France,Amazon.com Inc,USA,services_supplier,sea,,,Data center power,Schneider UPS and power for AWS data centers,high,yes
+Siemens AG,Germany,Boeing Company,USA,tier2_supplier,sea,12,20,Automation industrial systems,Siemens factory automation for Boeing plants,medium,yes
+Siemens AG,Germany,Airbus SE,Netherlands,tier2_supplier,road,2,5,Digital twin software automation,Siemens PLM software for Airbus design,medium,yes
+SAP SE,Germany,Toyota Motor Corporation,Japan,services_partner,digital,0,0,ERP software,SAP ERP runs Toyota global operations,high,yes
+SAP SE,Germany,Walmart Inc,USA,services_partner,digital,0,0,ERP supply chain software,SAP supply chain platform at Walmart,high,yes
+Mitsubishi Corporation,Japan,Cargill USA,USA,raw_material,sea,,,Agricultural commodities,Mitsubishi trades grain and food commodities,medium,yes
+Mitsui & Co,Japan,BHP Group,Australia,raw_material,sea,8,12,Iron ore coal,Mitsui long-term offtake agreements with BHP,high,yes
+MediaTek Inc,Taiwan,Xiaomi Corporation,China,tier1_supplier,sea,5,10,Smartphone SoCs,MediaTek Dimensity chips power Xiaomi phones,high,yes
+MediaTek Inc,Taiwan,Samsung Electronics,South Korea,tier1_supplier,sea,5,10,Mid-range SoCs,MediaTek chips in Samsung Galaxy A series,high,yes
+Broadcom Inc,USA,Apple Inc,USA,tier1_supplier,road+air,1,5,WiFi Bluetooth chips custom ASIC,Broadcom wireless chips in all iPhones,high,yes
+Broadcom Inc,USA,Samsung Electronics,South Korea,tier1_supplier,sea,12,18,Networking chips,Broadcom chips in Samsung enterprise gear,medium,yes

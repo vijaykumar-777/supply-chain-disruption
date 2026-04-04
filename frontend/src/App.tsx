@@ -100,7 +100,7 @@ export default function App() {
               <span className="text-[10px] font-bold uppercase tracking-widest text-primary">AI Insights</span>
             </div>
             <p className="text-xs text-on-surface-variant">
-              Predicted disruptions in next 48h: Port of Long Beach congestion expected to increase by 15% due to labor negotiations.
+              Open the AI Assistant to analyze your live graph, simulate route impact, and request mitigation guidance from your local model.
             </p>
           </div>
           <button 
@@ -108,7 +108,6 @@ export default function App() {
             className="h-14 w-14 rounded-full bg-primary text-background flex items-center justify-center shadow-2xl shadow-primary/30 active:scale-90 transition-transform relative"
           >
             <Bot className="w-8 h-8" />
-            <div className="absolute -top-1 -right-1 h-5 w-5 bg-error text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-background text-white">1</div>
           </button>
         </div>
       )}

@@ -212,21 +212,34 @@ class TestConfigSecurity:
 class TestAPIResponseMetadata:
     """Test that API responses include source metadata."""
 
-    def test_demo_events_contain_required_fields(self):
-        from src.api.main import DEMO_EVENTS
-        for event in DEMO_EVENTS:
-            assert "id" in event
-            assert "title" in event
-            assert "category" in event
-            assert "severity" in event
-            assert 0.0 <= event["severity"] <= 1.0
-            assert "locations" in event
-            assert isinstance(event["locations"], list)
+    def test_events_endpoint_returns_unavailable_without_demo_fallback(self, monkeypatch):
+        import src.api.main as api_main
 
-    def test_demo_nodes_resilience_in_range(self):
-        from src.api.main import DEMO_NODES
-        for node in DEMO_NODES:
-            assert "resilience_score" in node
-            assert 0.0 <= node["resilience_score"] <= 1.0, (
-                f"Node {node['name']} resilience_score {node['resilience_score']} out of 0..1 range"
-            )
+        monkeypatch.setattr(api_main, "get_neo4j_client", lambda: (None, "neo4j offline"))
+        response = api_main.get_events()
+
+        assert response["events"] == []
+        assert response["count"] == 0
+        assert response["source"] == "unavailable"
+
+    def test_graph_nodes_endpoint_returns_unavailable_without_demo_fallback(self, monkeypatch):
+        import src.api.main as api_main
+
+        monkeypatch.setattr(api_main, "get_neo4j_client", lambda: (None, "neo4j offline"))
+        response = api_main.get_graph_nodes()
+
+        assert response["nodes"] == []
+        assert response["count"] == 0
+        assert response["source"] == "unavailable"
+
+    def test_metrics_endpoint_returns_zeroed_unavailable_state(self, monkeypatch):
+        import src.api.main as api_main
+
+        monkeypatch.setattr(api_main, "get_neo4j_client", lambda: (None, "neo4j offline"))
+        response = api_main.get_dashboard_metrics()
+
+        assert response["total_active_events"] == 0
+        assert response["high_risk_nodes"] == 0
+        assert response["monitored_nodes"] == 0
+        assert response["weather_alerts"] == 0
+        assert response["source"] == "unavailable"

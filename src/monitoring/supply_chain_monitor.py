@@ -20,69 +20,6 @@ logger = logging.getLogger(__name__)
 SUPPLY_CHAIN_DATA_DIR = os.path.join(os.path.dirname(RAW_DATA_DIR), "supply_chain_uploads")
 os.makedirs(SUPPLY_CHAIN_DATA_DIR, exist_ok=True)
 
-DEFAULT_DISRUPTIONS = [
-    {
-        "id": "fallback-suez",
-        "title": "Suez Canal vessel backlog",
-        "description": "Logistics queue length has spiked and vessel transits are being delayed.",
-        "category": "logistics",
-        "severity": 0.86,
-        "type": "critical",
-        "locations": ["Suez Canal", "Port Said", "Egypt"],
-        "companies": [],
-        "timestamp": "2026-04-03T08:30:00Z",
-        "source": "fallback",
-    },
-    {
-        "id": "fallback-shanghai",
-        "title": "Shanghai port labor dispute",
-        "description": "Container throughput is reduced because of ongoing labor action at terminal operations.",
-        "category": "labor",
-        "severity": 0.74,
-        "type": "critical",
-        "locations": ["Shanghai", "Yangshan", "China"],
-        "companies": [],
-        "timestamp": "2026-04-02T14:00:00Z",
-        "source": "fallback",
-    },
-    {
-        "id": "fallback-singapore",
-        "title": "Singapore port cyber disruption",
-        "description": "Port systems are operating under contingency procedures after a cyber incident.",
-        "category": "cyber",
-        "severity": 0.58,
-        "type": "warning",
-        "locations": ["Singapore", "Jurong Port"],
-        "companies": [],
-        "timestamp": "2026-04-02T22:00:00Z",
-        "source": "fallback",
-    },
-    {
-        "id": "fallback-myanmar",
-        "title": "Rare earth export controls tighten in Myanmar",
-        "description": "Cross-border movement of rare earth materials has been interrupted by new export restrictions.",
-        "category": "geopolitical",
-        "severity": 0.81,
-        "type": "critical",
-        "locations": ["Myanmar", "Kunming"],
-        "companies": [],
-        "timestamp": "2026-04-03T03:00:00Z",
-        "source": "fallback",
-    },
-    {
-        "id": "fallback-south-china-sea",
-        "title": "South China Sea typhoon watch",
-        "description": "Severe weather may force shipping lanes to slow or reroute over the next 48 hours.",
-        "category": "weather",
-        "severity": 0.67,
-        "type": "warning",
-        "locations": ["South China Sea", "Hong Kong", "Shenzhen"],
-        "companies": [],
-        "timestamp": "2026-04-03T06:00:00Z",
-        "source": "fallback",
-    },
-]
-
 LOCATION_COORDINATES = {
     "shanghai": (31.2304, 121.4737),
     "singapore": (1.2903, 103.8519),
@@ -104,14 +41,14 @@ LOCATION_COORDINATES = {
 }
 
 COLUMN_ALIASES = {
-    "source_company": ["source_company", "source", "supplier", "from_company", "company_a", "from"],
-    "target_company": ["target_company", "target", "customer", "to_company", "company_b", "to"],
+    "source_company": ["source_company", "source", "supplier", "from_company", "company_a", "from", "supplier_name"],
+    "target_company": ["target_company", "target", "customer", "to_company", "company_b", "to", "destination_company", "buyer", "customer_name"],
     "relationship_type": ["relationship_type", "relationship", "relation", "link_type"],
     "material": ["material", "product", "raw_material", "commodity", "sku"],
-    "origin": ["origin", "origin_port", "origin_location", "from_location", "route_from", "source_location"],
-    "destination": ["destination", "destination_port", "destination_location", "to_location", "route_to", "target_location"],
-    "transport_mode": ["transport_mode", "mode", "shipment_mode", "logistics_mode"],
-    "criticality": ["criticality", "priority", "importance", "tier"],
+    "origin": ["origin", "origin_port", "origin_location", "from_location", "route_from", "source_location", "source_country", "from_country"],
+    "destination": ["destination", "destination_port", "destination_location", "to_location", "route_to", "target_location", "destination_country", "to_country"],
+    "transport_mode": ["transport_mode", "mode", "shipment_mode", "logistics_mode", "route_mode"],
+    "criticality": ["criticality", "priority", "importance", "tier", "risk_level"],
     "route_name": ["route", "route_name", "lane", "trade_route"],
     "origin_lat": ["origin_lat", "from_lat", "source_lat"],
     "origin_lon": ["origin_lon", "from_lon", "source_lon"],
@@ -435,16 +372,13 @@ class SupplyChainMonitor:
     def _collect_alerts(self, snapshot: Dict[str, Any]) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
         alerts = []
         source_status = {
-            "fallback": {"enabled": True, "live": False},
             "gdelt": {"enabled": True, "live": False},
             "weather": {"enabled": bool(self.weather_api_key), "live": False},
         }
-        live_source_connected = False
 
         try:
             gdelt_alerts = self._fetch_gdelt_alerts(snapshot)
             source_status["gdelt"]["live"] = True
-            live_source_connected = True
             if gdelt_alerts:
                 alerts.extend(gdelt_alerts)
         except Exception as exc:
@@ -455,18 +389,11 @@ class SupplyChainMonitor:
             weather_alerts = self._fetch_weather_alerts(snapshot)
             if self.weather_api_key:
                 source_status["weather"]["live"] = True
-                live_source_connected = True
             if weather_alerts:
                 alerts.extend(weather_alerts)
         except Exception as exc:
             source_status["weather"]["error"] = str(exc)
             logger.warning("Weather check failed: %s", exc)
-
-        if not live_source_connected:
-            fallback_alerts = self._filter_fallback_alerts(snapshot)
-            if fallback_alerts:
-                source_status["fallback"]["live"] = True
-                alerts.extend(fallback_alerts)
 
         deduped = []
         seen = set()
@@ -477,15 +404,6 @@ class SupplyChainMonitor:
             seen.add(key)
             deduped.append(alert)
         return deduped[:25], source_status
-
-    def _filter_fallback_alerts(self, snapshot: Dict[str, Any]) -> List[Dict[str, Any]]:
-        watch_terms = [_norm_lookup(term) for term in snapshot["watch_terms"]]
-        relevant = []
-        for alert in DEFAULT_DISRUPTIONS:
-            haystack = " ".join([alert["title"], alert["description"], *alert.get("locations", [])]).lower()
-            if any(term and term in haystack for term in watch_terms):
-                relevant.append(dict(alert))
-        return relevant if relevant else list(DEFAULT_DISRUPTIONS[:3])
 
     def _fetch_gdelt_alerts(self, snapshot: Dict[str, Any]) -> List[Dict[str, Any]]:
         terms = [

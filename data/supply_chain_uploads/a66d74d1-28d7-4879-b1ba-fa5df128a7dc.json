@@ -469,12 +469,12 @@
     "target_company",
     "transport_mode"
   ],
-  "last_checked_at": "2026-04-04T10:48:14Z",
+  "last_checked_at": "2026-04-04T11:49:32Z",
   "latest_report": {
     "snapshot_id": "a66d74d1-28d7-4879-b1ba-fa5df128a7dc",
     "file_name": "real_supply_chain.csv",
     "uploaded_at": "2026-04-04T10:44:30Z",
-    "last_checked_at": "2026-04-04T10:48:14Z",
+    "last_checked_at": "2026-04-04T11:49:32Z",
     "metrics": {
       "total_routes": 12,
       "blocked_routes": 0,
@@ -482,21 +482,35 @@
       "healthy_routes": 12,
       "monitored_companies": 17,
       "watched_locations": 16,
-      "active_alerts": 1
+      "active_alerts": 2
     },
     "alerts": [
       {
         "id": "weather-taichung",
         "title": "Weather disruption risk near Taichung",
-        "description": "moderate rain; wind 4.6 m/s; visibility 5000m.",
+        "description": "thunderstorm; wind 7.2 m/s; visibility 2400m.",
         "category": "weather",
-        "severity": 0.5,
-        "type": "warning",
+        "severity": 0.82,
+        "type": "critical",
         "locations": [
           "Taichung"
         ],
         "companies": [],
-        "timestamp": "2026-04-04T10:48:09Z",
+        "timestamp": "2026-04-04T11:49:27Z",
+        "source": "weather"
+      },
+      {
+        "id": "weather-long-beach",
+        "title": "Weather disruption risk near Long Beach",
+        "description": "fog; wind 2.1 m/s; visibility 402m.",
+        "category": "weather",
+        "severity": 0.5,
+        "type": "warning",
+        "locations": [
+          "Long Beach"
+        ],
+        "companies": [],
+        "timestamp": "2026-04-04T11:49:30Z",
         "source": "weather"
       }
     ],
@@ -898,14 +912,10 @@
       ]
     },
     "source_status": {
-      "fallback": {
-        "enabled": true,
-        "live": false
-      },
       "gdelt": {
         "enabled": true,
         "live": false,
-        "error": "429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22TSMC%22+OR+%22Foxconn%22+OR+%22Taichung%22+OR+%22Shenzhen%22+OR+%22Semiconductors%22+OR+%22TW-CN+Chip+Route%22+OR+%22Apple%22+OR+%22Los+Angeles%22%29+AND+%28port+OR+shipping+OR+logistics+OR+supplier+OR+factory+OR+strike+OR+storm+OR+export+OR+sanctions+OR+congestion%29&mode=ArtList&maxrecords=12&format=json&sort=DateDesc&timespan=3days"
+        "error": "Expecting value: line 1 column 1 (char 0)"
       },
       "weather": {
         "enabled": true,

@@ -82,7 +82,7 @@ def test_build_report_scores_impacts_and_downstream_exposure(tmp_path, monkeypat
     assert battery["risk_score"] > 0
 
 
-def test_live_alerts_do_not_force_fallback_alerts(tmp_path, monkeypatch):
+def test_live_alerts_do_not_inject_synthetic_alerts(tmp_path, monkeypatch):
     monitor = SupplyChainMonitor(storage_dir=str(tmp_path))
     monkeypatch.setattr(monitor, "_geocode_location", lambda *_args, **_kwargs: None)
     routes = [
@@ -124,7 +124,7 @@ def test_live_alerts_do_not_force_fallback_alerts(tmp_path, monkeypatch):
     report = monitor.build_report(snapshot)
 
     assert report["source_status"]["gdelt"]["live"] is True
-    assert report["source_status"]["fallback"]["live"] is False
+    assert "fallback" not in report["source_status"]
     assert report["alerts"][0]["source"] == "gdelt"
 
 

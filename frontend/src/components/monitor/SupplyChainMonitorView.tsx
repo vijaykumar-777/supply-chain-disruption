@@ -2,18 +2,21 @@ import React, { useDeferredValue, useState } from "react";
 import {
   AlertTriangle,
   ArrowRight,
+  Building2,
+  DatabaseZap,
   FileUp,
   Link2,
   LoaderCircle,
   Radar,
   RefreshCw,
   Route,
+  Search,
   ShieldAlert,
   Waves,
 } from "lucide-react";
-import { useSupplyChainMonitor } from "../../hooks/useAtlasData";
+import { useCompanyIntelligence, useSupplyChainMonitor } from "../../hooks/useAtlasData";
 import { cn } from "../../lib/utils";
-import type { SupplyChainReport, SupplyChainSourceStatusItem } from "../../services/api";
+import type { CompanyIntelCompany, SupplyChainReport, SupplyChainSourceStatusItem } from "../../services/api";
 
 const STATUS_CLASSES: Record<string, string> = {
   blocked: "bg-error/15 text-error border-error/25",
@@ -24,7 +27,7 @@ const STATUS_CLASSES: Record<string, string> = {
 
 const SOURCE_CLASSES: Record<string, string> = {
   live: "text-success border-success/20 bg-success/10",
-  fallback: "text-tertiary border-tertiary/20 bg-tertiary/10",
+  standby: "text-tertiary border-tertiary/20 bg-tertiary/10",
   disabled: "text-on-surface-variant border-white/10 bg-white/5",
 };
 
@@ -56,16 +59,110 @@ const MetricTile = ({
   </div>
 );
 
+const CompanySearchCard = ({
+  company,
+  importing,
+  onImport,
+}: {
+  company: CompanyIntelCompany;
+  importing: boolean;
+  onImport: () => void;
+}) => (
+  <div className="rounded-2xl border border-white/5 bg-black/10 p-4">
+    <div className="flex items-start justify-between gap-3">
+      <div>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant">
+            {company.source_labels.join(" + ")}
+          </span>
+          {company.ticker && (
+            <span className="rounded-full border border-success/15 bg-success/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-success">
+              {company.ticker}
+            </span>
+          )}
+        </div>
+        <div className="mt-3 flex items-center gap-2">
+          <div className="rounded-xl border border-white/10 bg-white/5 p-2 text-on-surface-variant">
+            <Building2 className="h-4 w-4" />
+          </div>
+          <div>
+            <p className="font-semibold">{company.name}</p>
+            <p className="text-xs text-on-surface-variant">{company.description}</p>
+          </div>
+        </div>
+      </div>
+      <button
+        type="button"
+        onClick={onImport}
+        disabled={importing}
+        className="inline-flex items-center gap-2 rounded-full border border-success/20 bg-success/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-success transition-colors hover:border-success/30 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        {importing ? <LoaderCircle className="h-3.5 w-3.5 animate-spin" /> : <DatabaseZap className="h-3.5 w-3.5" />}
+        Import
+      </button>
+    </div>
+
+    <div className="mt-4 grid gap-3 text-xs text-on-surface-variant sm:grid-cols-2">
+      <div className="rounded-2xl border border-white/5 bg-white/3 p-3">
+        <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-on-surface-variant">Identifiers</p>
+        <p className="mt-2">LEI: {company.lei ?? "Not available"}</p>
+        <p className="mt-1">CIK: {company.cik ?? "Not available"}</p>
+        <p className="mt-1">Jurisdiction: {company.jurisdiction ?? "Not available"}</p>
+      </div>
+      <div className="rounded-2xl border border-white/5 bg-white/3 p-3">
+        <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-on-surface-variant">Address Coverage</p>
+        <p className="mt-2">{company.country ?? "Country not available"}</p>
+        <p className="mt-1">{company.legal_address ?? company.headquarters_address ?? "Address not available"}</p>
+      </div>
+    </div>
+  </div>
+);
+
 export const SupplyChainMonitorView = () => {
   const { report, template, snapshots, loading, bootLoading, error, uploadFile, refresh, loadSnapshot } = useSupplyChainMonitor();
+  const {
+    results: companyResults,
+    sourceStatus: companySourceStatus,
+    loading: companyLoading,
+    importingId,
+    bulkImportLoading,
+    lastImport,
+    lastBulkImport,
+    error: companyError,
+    search: searchCompanies,
+    importCompany,
+    bulkImportCompanies,
+  } = useCompanyIntelligence();
   const deferredReport = useDeferredValue(report);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [companyQuery, setCompanyQuery] = useState("");
+  const [bulkCompanyNames, setBulkCompanyNames] = useState("");
 
   const onUpload = async () => {
     if (!selectedFile) {
       return;
     }
     await uploadFile(selectedFile);
+  };
+
+  const onCompanySearch = async () => {
+    if (!companyQuery.trim()) {
+      return;
+    }
+    await searchCompanies(companyQuery.trim());
+  };
+
+  const onBulkImport = async () => {
+    const companyNames = bulkCompanyNames
+      .split(/[\n,]+/)
+      .map((value) => value.trim())
+      .filter(Boolean);
+
+    if (companyNames.length === 0) {
+      return;
+    }
+
+    await bulkImportCompanies(companyNames);
   };
 
   const latestReport = deferredReport ?? report;
@@ -89,6 +186,155 @@ export const SupplyChainMonitorView = () => {
 
           <div className="grid gap-6 p-6 lg:grid-cols-[1fr_0.9fr]">
             <div className="space-y-4">
+              <div className="rounded-2xl border border-white/5 bg-white/3 p-5">
+                <div className="flex items-start gap-3">
+                  <div className="rounded-2xl border border-success/20 bg-success/10 p-3 text-success">
+                    <DatabaseZap className="h-5 w-5" />
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-bold">Search real companies from free public sources</h3>
+                    <p className="text-sm text-on-surface-variant">
+                      GLEIF gives us broad global legal-entity coverage, and SEC EDGAR enriches public-company tickers and recent filings. Importing a match writes only live source data into Neo4j.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-5 flex flex-col gap-3 md:flex-row">
+                  <input
+                    type="text"
+                    value={companyQuery}
+                    onChange={(event) => setCompanyQuery(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") {
+                        void onCompanySearch();
+                      }
+                    }}
+                    placeholder="Search Apple, Siemens, TSMC, Reliance..."
+                    className="flex-1 rounded-2xl border border-white/10 bg-surface/60 px-4 py-3 text-sm text-on-surface outline-none transition-colors placeholder:text-on-surface-variant focus:border-primary/25"
+                  />
+                  <button
+                    type="button"
+                    onClick={onCompanySearch}
+                    disabled={!companyQuery.trim() || companyLoading}
+                    className="inline-flex items-center justify-center gap-2 rounded-2xl bg-success px-5 py-3 text-sm font-bold text-background transition-all disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    {companyLoading ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+                    Search Live Sources
+                  </button>
+                </div>
+
+                <div className="mt-4 rounded-2xl border border-white/5 bg-black/10 p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <h4 className="text-sm font-bold uppercase tracking-[0.22em] text-on-surface-variant">Bulk Import</h4>
+                      <p className="mt-1 text-sm text-on-surface-variant">
+                        Paste one company per line, or separate names with commas. We will resolve the best live match for each one and import everything in one run.
+                      </p>
+                    </div>
+                  </div>
+
+                  <textarea
+                    value={bulkCompanyNames}
+                    onChange={(event) => setBulkCompanyNames(event.target.value)}
+                    placeholder={"Apple Inc.\nTSMC\nSiemens AG\nReliance Industries"}
+                    className="mt-4 min-h-[132px] w-full rounded-2xl border border-white/10 bg-surface/60 px-4 py-3 text-sm text-on-surface outline-none transition-colors placeholder:text-on-surface-variant focus:border-primary/25"
+                  />
+
+                  <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+                    <p className="text-xs text-on-surface-variant">
+                      Best for loading your top suppliers, manufacturers, and customers into Neo4j before uploading route lanes.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={onBulkImport}
+                      disabled={!bulkCompanyNames.trim() || bulkImportLoading}
+                      className="inline-flex items-center justify-center gap-2 rounded-2xl bg-tertiary px-5 py-3 text-sm font-bold text-background transition-all disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      {bulkImportLoading ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <DatabaseZap className="h-4 w-4" />}
+                      Bulk Import To Neo4j
+                    </button>
+                  </div>
+
+                  {lastBulkImport && (
+                    <div className="mt-4 space-y-3">
+                      <div className="rounded-2xl border border-success/20 bg-success/10 px-4 py-3 text-sm text-success">
+                        Imported {lastBulkImport.count} compan{lastBulkImport.count === 1 ? "y" : "ies"} from the pasted list.
+                        {lastBulkImport.skipped_count > 0 ? ` ${lastBulkImport.skipped_count} could not be matched.` : ""}
+                      </div>
+
+                      {lastBulkImport.imported.length > 0 && (
+                        <div className="rounded-2xl border border-white/5 bg-white/3 p-4">
+                          <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-on-surface-variant">Imported</p>
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            {lastBulkImport.imported.map((item) => (
+                              <span key={item.company_id} className="rounded-full border border-success/15 bg-success/10 px-3 py-1 text-xs text-success">
+                                {item.name}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {lastBulkImport.skipped.length > 0 && (
+                        <div className="rounded-2xl border border-warning/20 bg-warning/10 p-4">
+                          <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-warning">Needs Review</p>
+                          <div className="mt-3 space-y-2">
+                            {lastBulkImport.skipped.map((item) => (
+                              <div key={`${item.name}-${item.reason}`} className="rounded-2xl border border-warning/15 bg-black/10 px-3 py-2 text-xs text-on-surface-variant">
+                                <span className="font-semibold text-on-surface">{item.name}</span>
+                                {` • ${item.reason}`}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                  {Object.entries(companySourceStatus).map(([source, status]) => {
+                    const tone = status.live ? SOURCE_CLASSES.live : status.enabled ? SOURCE_CLASSES.standby : SOURCE_CLASSES.disabled;
+                    return (
+                      <div key={source} className={cn("rounded-2xl border p-4", tone)}>
+                        <p className="text-[11px] font-bold uppercase tracking-[0.22em]">{source}</p>
+                        <p className="mt-2 text-sm font-semibold">{status.live ? "Live" : "Unavailable"}</p>
+                        <p className="mt-1 text-xs opacity-80">{status.error ?? "Source responded successfully."}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {companyError && (
+                  <div className="mt-4 rounded-2xl border border-error/25 bg-error/10 px-4 py-3 text-sm text-error">
+                    {companyError}
+                  </div>
+                )}
+
+                {lastImport && (
+                  <div className="mt-4 rounded-2xl border border-success/20 bg-success/10 px-4 py-3 text-sm text-success">
+                    Imported {lastImport.count} live compan{lastImport.count === 1 ? "y" : "ies"} into Neo4j.
+                  </div>
+                )}
+
+                <div className="mt-4 space-y-3">
+                  {companyResults.length === 0 && !companyLoading && (
+                    <div className="rounded-2xl border border-dashed border-white/10 p-5 text-sm text-on-surface-variant">
+                      Search for a company to pull live registry and filing metadata into the graph.
+                    </div>
+                  )}
+
+                  {companyResults.map((company) => (
+                    <CompanySearchCard
+                      key={company.entity_id}
+                      company={company}
+                      importing={importingId === company.entity_id}
+                      onImport={() => importCompany(company)}
+                    />
+                  ))}
+                </div>
+              </div>
+
               <div className="rounded-2xl border border-dashed border-primary/25 bg-primary/5 p-5">
                 <div className="flex items-start gap-3">
                   <div className="rounded-2xl border border-primary/20 bg-primary/10 p-3 text-primary">
@@ -97,7 +343,7 @@ export const SupplyChainMonitorView = () => {
                   <div className="space-y-2">
                     <h3 className="text-lg font-bold">Upload a CSV or JSON dependency file</h3>
                     <p className="text-sm text-on-surface-variant">
-                      Include suppliers, buyers, route endpoints, transport mode, and criticality. The backend keeps the latest snapshot, refreshes live disruption checks, and suggests fallback routes when a lane becomes risky.
+                      Include suppliers, buyers, route endpoints, transport mode, and criticality. The backend keeps the latest snapshot, refreshes live disruption checks, and suggests alternate routes when a lane becomes risky.
                     </p>
                   </div>
                 </div>
@@ -244,12 +490,12 @@ export const SupplyChainMonitorView = () => {
 
               <div className="mt-5 grid gap-3 sm:grid-cols-3">
                 {getSourceEntries(latestReport).map(([source, status]) => {
-                  const tone = status.live ? SOURCE_CLASSES.live : status.enabled ? SOURCE_CLASSES.fallback : SOURCE_CLASSES.disabled;
+                  const tone = status.live ? SOURCE_CLASSES.live : status.enabled ? SOURCE_CLASSES.standby : SOURCE_CLASSES.disabled;
                   return (
                     <div key={source} className={cn("rounded-2xl border p-4", tone)}>
                       <p className="text-[11px] font-bold uppercase tracking-[0.22em]">{source}</p>
                       <p className="mt-2 text-sm font-semibold">
-                        {status.live ? "Live" : status.enabled ? "Fallback only" : "Not configured"}
+                        {status.live ? "Live" : status.enabled ? "Configured" : "Not configured"}
                       </p>
                       <p className="mt-1 text-xs opacity-80">{status.error ?? "Source checked successfully."}</p>
                     </div>

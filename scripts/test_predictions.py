@@ -22,15 +22,22 @@ def test_predictions():
         sc_network = SupplyChainNetwork()
         sc_network.load_from_neo4j(graph_data)
         
-        source = "S_CH_01"  # Shenzhen
-        target = "F_US_CA"  # Tesla Fremont
+        route_edges_in_graph = [
+            (edge["source"], edge["target"])
+            for edge in graph_data["edges"]
+            if edge["type"] == "ROUTES_TO"
+        ]
+        if not route_edges_in_graph:
+            raise RuntimeError("No live ROUTES_TO edges found in Neo4j. Import real route data before testing predictions.")
+
+        source, target = route_edges_in_graph[0]
         
         print(f"\n3. Running Pathfinding Optimization (Normal Delivery) from {source} to {target}")
         best_path = sc_network.find_alternative_route(source, target)
         print(f"   => Optimal Route: {' -> '.join(best_path)}")
         
-        print(f"\n4. Risk Scenario: Disruption at Port of Long Beach!")
-        disrupted_nodes = ["Port of Long Beach"]
+        print(f"\n4. Risk Scenario: Disruption at {target}!")
+        disrupted_nodes = [target]
         alt_path = sc_network.find_alternative_route(source, target, disrupted_nodes=disrupted_nodes)
         if alt_path:
             print(f"   => Alternative Route Found: {' -> '.join(alt_path)}")
@@ -55,17 +62,28 @@ def test_predictions():
         from src.ai.ollama_client import AIAdvisor
         advisor = AIAdvisor()
         
-        # Mock event metadata
-        event_dict = {
-            "title": "Port Labor Dispute - Long Beach",
-            "category": "STRIKE",
-            "locations": ["Port of Long Beach"]
-        }
-        
-        recommendation = advisor.generate_recommendation(event_dict, results, alt_path)
-        print("\n--- AI ADVISOR RECOMMENDATION ---")
-        print(recommendation)
-        print("---------------------------------")
+        with client.driver.session() as session:
+            event_record = session.run(
+                """
+                MATCH (e:Event)-[:AFFECTS]->(l:Location)
+                RETURN e.title as title, e.category as category, collect(l.name) as locations
+                ORDER BY e.timestamp DESC
+                LIMIT 1
+                """
+            ).single()
+
+        if event_record:
+            event_dict = {
+                "title": event_record["title"],
+                "category": event_record["category"],
+                "locations": event_record["locations"],
+            }
+            recommendation = advisor.generate_recommendation(event_dict, results, alt_path)
+            print("\n--- AI ADVISOR RECOMMENDATION ---")
+            print(recommendation)
+            print("---------------------------------")
+        else:
+            print("\n6. No live disruption events found in Neo4j, so AI recommendation generation was skipped.")
         
         # Test feedback loop
         advisor.submit_feedback("rec_test_123", 1, "Provided good actionable steps during testing.")

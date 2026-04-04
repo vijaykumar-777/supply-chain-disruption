@@ -39,8 +39,66 @@ export interface APINode {
   resilience_score?: number;  // Fix #9: canonical 0..1 range
 }
 
+export interface APILink {
+  source_id: string;
+  target_id: string;
+  rel_type: string;
+}
+
 // Fix #10: source metadata type
-export type DataSource = "live" | "fallback";
+export type DataSource = "live" | "unavailable";
+
+export interface CompanyIntelSourceStatusItem {
+  enabled: boolean;
+  live: boolean;
+  error?: string | null;
+}
+
+export interface CompanyIntelCompany {
+  entity_id: string;
+  name: string;
+  legal_name?: string | null;
+  lei?: string | null;
+  cik?: string | null;
+  ticker?: string | null;
+  country?: string | null;
+  jurisdiction?: string | null;
+  entity_status?: string | null;
+  legal_form?: string | null;
+  registered_as?: string | null;
+  legal_address?: string | null;
+  headquarters_address?: string | null;
+  source_labels: string[];
+  description: string;
+}
+
+export interface CompanyIntelSearchResponse {
+  companies: CompanyIntelCompany[];
+  count: number;
+  source_status: Record<string, CompanyIntelSourceStatusItem>;
+}
+
+export interface CompanyIntelImportResult {
+  company_id: string;
+  name: string;
+  lei?: string | null;
+  cik?: string | null;
+  tickers: string[];
+  country?: string | null;
+  filings_imported: number;
+  sources: string[];
+}
+
+export interface CompanyIntelImportResponse {
+  imported: CompanyIntelImportResult[];
+  count: number;
+  source: DataSource;
+}
+
+export interface CompanyIntelBulkImportResponse extends CompanyIntelImportResponse {
+  skipped: Array<{ name: string; reason: string }>;
+  skipped_count: number;
+}
 
 export interface DashboardMetrics {
   total_active_events: number;
@@ -204,8 +262,13 @@ export const api = {
   getEvents: () =>
     request<{ events: APIEvent[]; count: number; source?: DataSource }>("/api/events"),
 
+  ingestEvents: () =>
+    request<{ success: boolean; inserted_events: number; source_status: any }>("/api/ingest/events", {
+      method: "POST",
+    }),
+
   getGraphNodes: () =>
-    request<{ nodes: APINode[]; count: number; source?: DataSource }>("/api/graph/nodes"),
+    request<{ nodes: APINode[]; links: APILink[]; count: number; source?: DataSource }>("/api/graph/nodes"),
 
   getMetrics: () => request<DashboardMetrics>("/api/metrics"),
 
@@ -246,6 +309,21 @@ export const api = {
     request<{ success: boolean; error?: string }>("/api/feedback", {
       method: "POST",
       body: JSON.stringify({ recommendation_id, rating, comment }),
+    }),
+
+  searchCompanyIntelligence: (query: string, limit = 8) =>
+    request<CompanyIntelSearchResponse>(`/api/company-intel/search?q=${encodeURIComponent(query)}&limit=${limit}`),
+
+  importCompanyIntelligence: (companies: Array<{ lei?: string; cik?: string; name?: string; ticker?: string }>) =>
+    request<CompanyIntelImportResponse>("/api/company-intel/import", {
+      method: "POST",
+      body: JSON.stringify({ companies }),
+    }),
+
+  importCompanyIntelligenceBulk: (company_names: string[]) =>
+    request<CompanyIntelBulkImportResponse>("/api/company-intel/import-bulk", {
+      method: "POST",
+      body: JSON.stringify({ company_names }),
     }),
 
   getSupplyChainTemplate: () =>

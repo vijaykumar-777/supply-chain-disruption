@@ -469,12 +469,12 @@
     "target_company",
     "transport_mode"
   ],
-  "last_checked_at": "2026-04-04T10:45:22Z",
+  "last_checked_at": "2026-04-04T11:49:38Z",
   "latest_report": {
     "snapshot_id": "d03f7d39-d1ae-45fb-a1bf-57abcc6d5cea",
     "file_name": "real_supply_chain.csv",
     "uploaded_at": "2026-04-04T10:45:08Z",
-    "last_checked_at": "2026-04-04T10:45:22Z",
+    "last_checked_at": "2026-04-04T11:49:38Z",
     "metrics": {
       "total_routes": 12,
       "blocked_routes": 0,
@@ -482,21 +482,35 @@
       "healthy_routes": 12,
       "monitored_companies": 17,
       "watched_locations": 16,
-      "active_alerts": 1
+      "active_alerts": 2
     },
     "alerts": [
       {
         "id": "weather-taichung",
         "title": "Weather disruption risk near Taichung",
-        "description": "moderate rain; wind 5.1 m/s; visibility 5000m.",
+        "description": "thunderstorm; wind 7.2 m/s; visibility 2400m.",
         "category": "weather",
-        "severity": 0.5,
-        "type": "warning",
+        "severity": 0.82,
+        "type": "critical",
         "locations": [
           "Taichung"
         ],
         "companies": [],
-        "timestamp": "2026-04-04T10:45:14Z",
+        "timestamp": "2026-04-04T11:49:33Z",
+        "source": "weather"
+      },
+      {
+        "id": "weather-long-beach",
+        "title": "Weather disruption risk near Long Beach",
+        "description": "fog; wind 2.1 m/s; visibility 402m.",
+        "category": "weather",
+        "severity": 0.5,
+        "type": "warning",
+        "locations": [
+          "Long Beach"
+        ],
+        "companies": [],
+        "timestamp": "2026-04-04T11:49:35Z",
         "source": "weather"
       }
     ],
@@ -898,10 +912,6 @@
       ]
     },
     "source_status": {
-      "fallback": {
-        "enabled": true,
-        "live": false
-      },
       "gdelt": {
         "enabled": true,
         "live": false,

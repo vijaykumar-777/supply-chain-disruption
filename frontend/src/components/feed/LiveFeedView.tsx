@@ -11,7 +11,7 @@ const SEVERITY_CLASSES: Record<string, { color: string; bg: string; border: stri
 };
 
 export const LiveFeedView = () => {
-  const { events, loading, refresh } = useEvents(15000);
+  const { events, loading, refresh, source } = useEvents(15000);
   
   const [search, setSearch] = useState("");
   const [filterSeverity, setFilterSeverity] = useState<string>("all");
@@ -39,7 +39,9 @@ export const LiveFeedView = () => {
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-2xl font-bold text-on-surface">Live Disruption Feed</h2>
-          <p className="text-sm text-on-surface-variant">Real-time supply chain event monitoring from Neo4j</p>
+          <p className="text-sm text-on-surface-variant">
+            {source === "live" ? "Real-time supply chain event monitoring from Neo4j" : "No live event stream is currently available"}
+          </p>
         </div>
         <div className="flex gap-2">
           <button 

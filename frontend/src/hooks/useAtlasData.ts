@@ -9,6 +9,12 @@ import {
   SupplyChainReport,
   SupplyChainTemplate,
   SupplyChainSnapshotSummary,
+  CompanyIntelCompany,
+  CompanyIntelBulkImportResponse,
+  CompanyIntelImportResponse,
+  CompanyIntelSearchResponse,
+  CompanyIntelSourceStatusItem,
+  APILink,
 } from "../services/api";
 
 // ─── useMetrics ───────────────────────────────────────────────────────────────
@@ -62,12 +68,25 @@ export function useEvents(pollMs = 15000) {
     return () => clearInterval(id);
   }, [fetch, pollMs]);
 
-  return { events, loading, refresh: fetch, source };  // Fix #10
+  const ingestLiveSignals = useCallback(async () => {
+    setLoading(true);
+    try {
+      await api.ingestEvents();
+      await fetch();
+    } catch (e) {
+      console.error("Failed to ingest live signals", e);
+    } finally {
+      setLoading(false);
+    }
+  }, [fetch]);
+
+  return { events, loading, refresh: fetch, ingestLiveSignals, source };  // Fix #10
 }
 
 // ─── useGraphNodes ────────────────────────────────────────────────────────────
 export function useGraphNodes(pollMs = 30000) {
   const [nodes, setNodes] = useState<APINode[]>([]);
+  const [links, setLinks] = useState<APILink[]>([]);
   const [loading, setLoading] = useState(true);
   const [source, setSource] = useState<DataSource | null>(null);
 
@@ -75,6 +94,7 @@ export function useGraphNodes(pollMs = 30000) {
     try {
       const data = await api.getGraphNodes();
       setNodes(data.nodes);
+      setLinks(data.links || []);
       setSource(data.source ?? null);
     } catch (e) {
       console.warn("Graph nodes fetch failed", e);
@@ -89,7 +109,7 @@ export function useGraphNodes(pollMs = 30000) {
     return () => clearInterval(id);
   }, [fetch, pollMs]);
 
-  return { nodes, loading, refresh: fetch, source };
+  return { nodes, links, loading, refresh: fetch, source };
 }
 
 // ─── useSimulation ───────────────────────────────────────────────────────────
@@ -174,6 +194,91 @@ export function useFeedback() {
   }, []);
 
   return { submit, loading, success };
+}
+
+// ─── useCompanyIntelligence ──────────────────────────────────────────────────
+export function useCompanyIntelligence() {
+  const [results, setResults] = useState<CompanyIntelCompany[]>([]);
+  const [sourceStatus, setSourceStatus] = useState<Record<string, CompanyIntelSourceStatusItem>>({});
+  const [loading, setLoading] = useState(false);
+  const [importingId, setImportingId] = useState<string | null>(null);
+  const [lastImport, setLastImport] = useState<CompanyIntelImportResponse | null>(null);
+  const [bulkImportLoading, setBulkImportLoading] = useState(false);
+  const [lastBulkImport, setLastBulkImport] = useState<CompanyIntelBulkImportResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const search = useCallback(async (query: string, limit = 8) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data: CompanyIntelSearchResponse = await api.searchCompanyIntelligence(query, limit);
+      startTransition(() => {
+        setResults(data.companies);
+        setSourceStatus(data.source_status);
+      });
+      return data;
+    } catch (e: any) {
+      setError(e.message);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const importCompany = useCallback(async (company: CompanyIntelCompany) => {
+    setImportingId(company.entity_id);
+    setError(null);
+    try {
+      const data = await api.importCompanyIntelligence([
+        {
+          lei: company.lei ?? undefined,
+          cik: company.cik ?? undefined,
+          name: company.name,
+          ticker: company.ticker ?? undefined,
+        },
+      ]);
+      startTransition(() => {
+        setLastImport(data);
+      });
+      return data;
+    } catch (e: any) {
+      setError(e.message);
+      return null;
+    } finally {
+      setImportingId(null);
+    }
+  }, []);
+
+  const bulkImportCompanies = useCallback(async (companyNames: string[]) => {
+    setBulkImportLoading(true);
+    setError(null);
+    try {
+      const data = await api.importCompanyIntelligenceBulk(companyNames);
+      startTransition(() => {
+        setLastBulkImport(data);
+      });
+      return data;
+    } catch (e: any) {
+      setError(e.message);
+      return null;
+    } finally {
+      setBulkImportLoading(false);
+    }
+  }, []);
+
+  return {
+    results,
+    sourceStatus,
+    loading,
+    importingId,
+    bulkImportLoading,
+    lastImport,
+    lastBulkImport,
+    error,
+    search,
+    importCompany,
+    bulkImportCompanies,
+  };
 }
 
 // ─── useSupplyChainMonitor ────────────────────────────────────────────────────
