@@ -1,0 +1,583 @@
+source_company,destination_company,relationship_type,route_mode,transit_days_min,transit_days_max,commodity,risk_level,publicly_known
+ASML Holding,Taiwan Semiconductor,tier1_supplier,sea,25,40,EUV lithography machines,critical,yes
+ASML Holding,Samsung Electronics,tier1_supplier,sea,20,35,EUV lithography machines,critical,yes
+ASML Holding,Intel Corporation,tier1_supplier,sea,20,30,DUV EUV machines,critical,yes
+ASML Holding,SMIC,tier1_supplier,sea,22,35,DUV machines,high,yes
+Applied Materials,Taiwan Semiconductor,tier1_supplier,sea,20,30,CVD PVD deposition tools,high,yes
+Applied Materials,Samsung Electronics,tier1_supplier,sea,18,28,Etch deposition tools,high,yes
+Applied Materials,Intel Corporation,tier1_supplier,road,5,10,Semiconductor equipment,high,yes
+Lam Research,Taiwan Semiconductor,tier1_supplier,sea,20,30,Etch equipment,high,yes
+Lam Research,Samsung Electronics,tier1_supplier,sea,18,28,Etch equipment,high,yes
+KLA Corporation,Taiwan Semiconductor,tier1_supplier,sea,20,30,Inspection metrology tools,high,yes
+KLA Corporation,Samsung Electronics,tier1_supplier,sea,18,28,Inspection tools,high,yes
+Taiwan Semiconductor,Apple Inc,tier1_supplier,air,2,5,A-series M-series chips,critical,yes
+Taiwan Semiconductor,NVIDIA Corporation,tier1_supplier,sea,18,25,GPU chips H100,critical,yes
+Taiwan Semiconductor,Qualcomm Inc,tier1_supplier,sea,18,25,Snapdragon SoCs,critical,yes
+Taiwan Semiconductor,AMD,tier1_supplier,sea,18,25,CPU GPU chips,critical,yes
+Taiwan Semiconductor,Broadcom Inc,tier1_supplier,sea,18,25,Networking ASICs,high,yes
+Taiwan Semiconductor,MediaTek Inc,tier1_supplier,road,1,3,Dimensity SoCs,high,yes
+Taiwan Semiconductor,Marvell Technology,tier1_supplier,sea,18,25,Data centre chips,high,yes
+Samsung Electronics,Apple Inc,tier1_supplier,sea,12,18,OLED displays NAND,high,yes
+Samsung Electronics,Qualcomm Inc,tier1_supplier,sea,12,18,DRAM,medium,yes
+SK Hynix,Apple Inc,tier1_supplier,sea,12,18,DRAM NAND,high,yes
+SK Hynix,NVIDIA Corporation,tier1_supplier,sea,12,18,HBM3 memory,critical,yes
+SK Hynix,Amazon.com Inc,tier1_supplier,sea,12,18,Data centre DRAM,high,yes
+Micron Technology,Apple Inc,tier1_supplier,road,2,5,NAND flash DRAM,high,yes
+Micron Technology,NVIDIA Corporation,tier1_supplier,road,2,5,HBM memory,critical,yes
+Micron Technology,Amazon.com Inc,tier1_supplier,road,3,7,Server DRAM,high,yes
+Intel Corporation,Amazon.com Inc,tier1_supplier,road,2,5,Xeon server CPUs,high,yes
+Intel Corporation,Microsoft Corporation,tier1_supplier,road,2,5,Server CPUs,high,yes
+Qualcomm Inc,Apple Inc,tier1_supplier,road,1,3,5G modems,high,yes
+Qualcomm Inc,Samsung Electronics,tier1_supplier,sea,5,10,Snapdragon for Galaxy,high,yes
+Qualcomm Inc,Xiaomi Corporation,tier1_supplier,sea,8,15,Snapdragon SoCs,high,yes
+Broadcom Inc,Apple Inc,tier1_supplier,road,1,5,WiFi Bluetooth ASIC,high,yes
+MediaTek Inc,Xiaomi Corporation,tier1_supplier,sea,5,10,Dimensity chips,high,yes
+MediaTek Inc,Samsung Electronics,tier1_supplier,sea,5,10,Mid-range SoCs,high,yes
+Renesas Electronics,Toyota Motor Corporation,tier1_supplier,road,1,2,Automotive MCUs,critical,yes
+Renesas Electronics,Hyundai Motor,tier1_supplier,sea,5,10,Automotive MCUs,high,yes
+Renesas Electronics,Volkswagen AG,tier1_supplier,sea,15,22,Automotive MCUs,high,yes
+Infineon Technologies,Volkswagen AG,tier1_supplier,road,2,5,Power semiconductors,high,yes
+Infineon Technologies,BMW Group,tier1_supplier,road,2,5,Power semiconductors,high,yes
+Infineon Technologies,Tesla Inc,tier1_supplier,sea,18,25,SiC power modules,critical,yes
+STMicroelectronics,Tesla Inc,tier1_supplier,sea,18,25,SiC chips,high,yes
+STMicroelectronics,Apple Inc,tier1_supplier,sea,15,22,Motion sensors,medium,yes
+Texas Instruments,Ford Motor Company,tier1_supplier,road,2,5,Automotive chips,high,yes
+Texas Instruments,General Motors,tier1_supplier,road,2,5,Automotive chips,high,yes
+ASE Technology,Qualcomm Inc,tier1_supplier,road,1,3,Chip packaging testing,high,yes
+ASE Technology,Broadcom Inc,tier1_supplier,road,1,3,Advanced packaging,high,yes
+BOE Technology,Apple Inc,tier2_supplier,sea,8,15,OLED panels,medium,yes
+BOE Technology,Lenovo Group,tier1_supplier,road,1,3,LCD panels,high,yes
+Largan Precision,Apple Inc,tier1_supplier,sea,5,10,Camera lenses,high,yes
+Murata Manufacturing,Apple Inc,tier1_supplier,sea,8,12,MLCC capacitors RF,high,yes
+TDK Corporation,Apple Inc,tier1_supplier,sea,8,12,Passive components,medium,yes
+Murata Manufacturing,Samsung Electronics,tier1_supplier,sea,5,10,MLCC capacitors,high,yes
+Foxconn Technology,Apple Inc,tier1_supplier,air,2,5,Assembled iPhones MacBooks,critical,yes
+Foxconn Technology,Amazon.com Inc,tier1_supplier,sea,18,25,Alexa Fire devices,medium,yes
+Foxconn Technology,Sony Group Corporation,tier2_supplier,sea,5,10,PlayStation assembly,medium,yes
+Pegatron Corporation,Apple Inc,tier1_supplier,air,2,5,iPhone assembly,critical,yes
+Wistron Corporation,Apple Inc,tier2_supplier,air,2,5,Older iPhone assembly,medium,yes
+Flex Ltd,Microsoft Corporation,tier1_supplier,sea,15,25,Xbox assembly,high,yes
+Flex Ltd,Amazon.com Inc,tier1_supplier,sea,18,25,Kindle Echo assembly,medium,yes
+Jabil Inc,Apple Inc,tier2_supplier,sea,18,25,iPhone enclosures,medium,yes
+Jabil Inc,Johnson & Johnson,tier1_supplier,road,3,7,Medical device assembly,medium,yes
+Celestica Inc,Cisco Systems,tier1_supplier,sea,15,20,Network hardware,medium,yes
+CATL,Tesla Inc,tier1_supplier,sea,28,40,LFP battery packs,critical,yes
+CATL,Volkswagen AG,tier1_supplier,sea,22,35,EV battery packs,critical,yes
+CATL,BMW Group,tier1_supplier,sea,22,35,EV battery cells,high,yes
+CATL,Hyundai Motor,tier1_supplier,sea,12,18,EV batteries,high,yes
+CATL,Ford Motor Company,tier1_supplier,sea,28,40,BlueOval battery cells,high,yes
+CATL Europe,Volkswagen AG,tier1_supplier,road,2,5,EV batteries Germany plant,critical,yes
+Panasonic Holdings,Tesla Inc,tier1_supplier,road,1,2,2170 cylindrical cells,critical,yes
+LG Energy Solution,Tesla Inc,tier1_supplier,sea,12,18,Pouch cells Model S,high,yes
+LG Energy Solution,General Motors,tier1_supplier,road,2,5,Ultium cells,critical,yes
+LG Energy Solution,Hyundai Motor,tier1_supplier,road,1,3,Battery packs,high,yes
+Samsung SDI,BMW Group,tier1_supplier,sea,12,18,Prismatic cells,high,yes
+Samsung SDI,Stellantis NV,tier1_supplier,sea,15,22,Battery modules,high,yes
+SK Innovation,Ford Motor Company,tier1_supplier,road,3,7,Battery cells,high,yes
+SK Innovation,Volkswagen AG,tier1_supplier,sea,12,18,Battery cells,high,yes
+BYD Company,Toyota Motor Corporation,tier1_supplier,sea,5,10,Blade battery cells,medium,yes
+Indonesia Nickel Corp,CATL,raw_material,sea,12,18,Nickel for battery cathode,critical,yes
+Indonesia Nickel Corp,LG Energy Solution,raw_material,sea,12,18,Nickel,high,yes
+Freeport Indonesia,CATL,raw_material,sea,10,15,Copper for battery,high,yes
+Glencore PLC,CATL,raw_material,sea,25,35,Cobalt lithium,high,yes
+Glencore PLC,Samsung SDI,raw_material,sea,20,30,Cobalt,high,yes
+Glencore PLC,LG Energy Solution,raw_material,sea,20,30,Cobalt,high,yes
+Robert Bosch GmbH,Volkswagen AG,tier1_supplier,road,1,3,ECUs fuel injection ADAS,critical,yes
+Robert Bosch GmbH,Toyota Motor Corporation,tier1_supplier,sea,12,18,Chassis brakes,high,yes
+Robert Bosch GmbH,Ford Motor Company,tier1_supplier,road,2,5,Powertrain electronics,high,yes
+Robert Bosch GmbH,BMW Group,tier1_supplier,road,1,3,Electronics systems,high,yes
+Robert Bosch GmbH,General Motors,tier1_supplier,road,3,7,Automotive electronics,high,yes
+Denso Corporation,Toyota Motor Corporation,tier1_supplier,road,1,2,Thermal HVAC electronics,critical,yes
+Denso Corporation,Honda Motor Co,tier1_supplier,road,1,2,Auto components,high,yes
+Aisin Corporation,Toyota Motor Corporation,tier1_supplier,road,1,2,Drivetrain components,critical,yes
+Hyundai Mobis,Hyundai Motor,tier1_supplier,road,1,2,Modules electronics,critical,yes
+Hyundai Mobis,Kia Corporation,tier1_supplier,road,1,2,Auto modules,critical,yes
+Continental AG,Volkswagen AG,tier1_supplier,road,1,3,Tires sensors ADAS,high,yes
+Continental AG,BMW Group,tier1_supplier,road,1,3,ADAS chassis systems,high,yes
+Continental AG,Ford Motor Company,tier1_supplier,road,2,5,Tyres electronics,high,yes
+Valeo SA,Stellantis NV,tier1_supplier,road,2,5,ADAS lighting,high,yes
+Valeo SA,Renault-Nissan,tier1_supplier,road,2,5,Driver assistance,high,yes
+Magna International,General Motors,tier1_supplier,road,2,5,Body stampings seating,high,yes
+Magna International,BMW Group,tier1_supplier,sea,12,18,Exterior modules,high,yes
+Aptiv PLC,General Motors,tier1_supplier,road,2,5,Wiring harness electrical,critical,yes
+Aptiv PLC,Volkswagen AG,tier1_supplier,road,3,7,Wiring systems,high,yes
+TE Connectivity,Boeing Company,tier1_supplier,road,2,5,Connectors sensors,high,yes
+TE Connectivity,Toyota Motor Corporation,tier1_supplier,sea,10,18,Automotive connectors,high,yes
+Sumitomo Electric,Toyota Motor Corporation,tier1_supplier,road,1,2,Wiring harness,critical,yes
+Sumitomo Electric,Honda Motor Co,tier1_supplier,road,1,2,Wiring harness,high,yes
+Bridgestone Corporation,Toyota Motor Corporation,tier1_supplier,road,1,2,OEM tires,high,yes
+Michelin Group,Airbus SE,tier1_supplier,road,3,7,Aircraft tires,medium,yes
+Michelin Group,Boeing Company,tier1_supplier,sea,15,22,Aircraft tires,medium,yes
+ArcelorMittal,Volkswagen AG,tier1_supplier,road,3,7,AHSS steel,high,yes
+ArcelorMittal,Ford Motor Company,tier1_supplier,road,3,7,Automotive steel,high,yes
+POSCO Holdings,Hyundai Motor,tier1_supplier,road,1,2,Automotive steel,critical,yes
+POSCO Holdings,Samsung Electronics,tier1_supplier,road,1,2,Electrical steel,medium,yes
+Tata Steel,Jaguar Land Rover,tier1_supplier,road,1,3,Automotive steel UK,high,yes
+JSW Steel,Tata Motors,tier1_supplier,road,2,4,Automotive steel,high,yes
+Toray Industries,Toyota Motor Corporation,tier1_supplier,road,2,5,Carbon fibre CFRP,high,yes
+Toray Industries,Airbus SE,tier1_supplier,sea,15,25,Carbon fibre composites,critical,yes
+Toray Industries,Boeing Company,tier1_supplier,sea,18,28,Carbon fibre composites,critical,yes
+General Electric,Boeing Company,tier1_supplier,road,2,5,LEAP CFM56 jet engines,critical,yes
+Rolls-Royce Holdings,Airbus SE,tier1_supplier,sea,5,12,Trent engines A350,critical,yes
+Rolls-Royce Holdings,Boeing Company,tier1_supplier,sea,8,15,Trent engines 787,critical,yes
+Safran SA,Airbus SE,tier1_supplier,road,2,5,Landing gear nacelles,critical,yes
+Honeywell International,Boeing Company,tier1_supplier,road,1,5,Avionics APU,high,yes
+Honeywell International,Airbus SE,tier1_supplier,sea,10,18,Avionics,high,yes
+Raytheon Technologies,Boeing Company,tier1_supplier,road,2,5,Pratt & Whitney engines,high,yes
+Raytheon Technologies,Airbus SE,tier1_supplier,sea,10,18,Pratt & Whitney A220,high,yes
+BAE Systems,Airbus SE,tier1_supplier,road,3,7,Avionics defence systems,high,yes
+Leonardo DRS,Airbus SE,tier1_supplier,sea,5,12,Avionics,medium,yes
+Embraer SA,Boeing Company,services_partner,sea,,,,medium,yes
+Parker Hannifin,Boeing Company,tier1_supplier,road,2,5,Hydraulic fuel systems,high,yes
+Parker Hannifin,Airbus SE,tier1_supplier,sea,10,18,Hydraulic systems,high,yes
+Saudi Aramco,ExxonMobil Corporation,raw_material,sea,20,30,Crude oil,high,yes
+Saudi Aramco,Sinopec,raw_material,sea,22,30,Crude oil,critical,yes
+Saudi Aramco,TotalEnergies SE,raw_material,sea,18,25,Crude oil LNG,high,yes
+Saudi Aramco,BASF SE,raw_material,sea,20,28,Petrochemical feedstock,high,yes
+SABIC,BASF SE,tier1_supplier,sea,20,28,Specialty chemicals,high,yes
+Shell PLC,BASF SE,raw_material,pipeline,1,3,Natural gas LNG,high,yes
+TotalEnergies SE,BASF SE,raw_material,pipeline,1,3,LNG feedstock,high,yes
+ExxonMobil Corporation,Dow Inc,raw_material,road,2,5,Ethylene petrochemical feed,high,yes
+Equinor ASA,Shell PLC,raw_material,pipeline,1,3,North Sea crude gas,high,yes
+Petrobras,TotalEnergies SE,raw_material,sea,20,30,Deep water crude,medium,yes
+CNOOC Limited,Sinopec,raw_material,pipeline,1,2,Offshore crude,high,yes
+BP PLC,Bayer AG,raw_material,pipeline,1,4,Petrochemical feedstocks,medium,yes
+Sasol Limited,BASF SE,raw_material,sea,18,25,Specialty chemicals,medium,yes
+Schlumberger NV,Saudi Aramco,services_supplier,road,1,5,Oilfield services tech,high,yes
+Halliburton Company,ExxonMobil Corporation,services_supplier,road,1,5,Oilfield services,high,yes
+Halliburton Company,Petrobras,services_supplier,sea,10,20,Oilfield services,medium,yes
+BHP Group,POSCO Holdings,tier1_supplier,sea,7,10,Iron ore coking coal,high,yes
+BHP Group,ArcelorMittal,tier1_supplier,sea,20,30,Iron ore,high,yes
+BHP Group,BASF SE,raw_material,sea,20,30,Copper nickel,medium,yes
+Vale SA,ArcelorMittal,tier1_supplier,sea,20,30,Iron ore,high,yes
+Vale SA,Tata Steel,tier1_supplier,sea,18,28,Iron ore,high,yes
+Vale SA,CATL,raw_material,sea,20,28,Nickel,high,yes
+Rio Tinto PLC,Alcoa Corporation,tier1_supplier,sea,20,30,Bauxite alumina,high,yes
+Rio Tinto PLC,POSCO Holdings,tier1_supplier,sea,12,18,Iron ore,high,yes
+Fortescue Metals,Thyssenkrupp AG,tier1_supplier,sea,18,25,Iron ore,high,yes
+Fortescue Metals,POSCO Holdings,tier1_supplier,sea,10,15,Iron ore,high,yes
+Anglo American,Thyssenkrupp AG,tier1_supplier,sea,18,25,Coking coal iron ore,high,yes
+Freeport-McMoRan,POSCO Holdings,tier1_supplier,sea,12,18,Copper,medium,yes
+Freeport-McMoRan,Samsung Electronics,raw_material,sea,12,18,Copper,medium,yes
+Newmont Corporation,Barrick Gold,competitor_benchmarked,,,,,medium,yes
+Glencore PLC,ArcelorMittal,raw_material,sea,15,25,Coking coal,high,yes
+LKAB,SSAB Sweden,tier1_supplier,road,1,2,Iron ore pellets,critical,yes
+Linde PLC,Taiwan Semiconductor,tier1_supplier,road,1,5,Ultra-pure gases fab gases,critical,yes
+Linde PLC,Samsung Electronics,tier1_supplier,sea,5,10,Specialty fab gases,high,yes
+Air Liquide,Airbus SE,tier1_supplier,road,2,5,Industrial gases,medium,yes
+Air Products,Intel Corporation,tier1_supplier,road,1,3,Fab gases,high,yes
+Air Products,Samsung Electronics,tier1_supplier,sea,5,10,Ultra pure gases,high,yes
+Procter & Gamble Co,Walmart Inc,tier1_supplier,road,2,5,Consumer goods,critical,yes
+Procter & Gamble Co,Amazon.com Inc,tier1_supplier,road,2,5,Consumer goods,high,yes
+Procter & Gamble Co,Costco Wholesale,tier1_supplier,road,2,5,Consumer goods,high,yes
+Procter & Gamble Co,Target Corporation,tier1_supplier,road,2,5,Consumer goods,high,yes
+Nestlé SA,Walmart Inc,tier1_supplier,sea,10,20,Food beverages,high,yes
+Nestlé SA,Amazon.com Inc,tier1_supplier,sea,10,20,Food beverages,medium,yes
+Unilever PLC,Walmart Inc,tier1_supplier,sea,12,22,Personal care food,high,yes
+Unilever PLC,Amazon.com Inc,tier1_supplier,sea,12,22,Consumer goods,medium,yes
+PepsiCo Inc,Walmart Inc,tier1_supplier,road,2,5,Beverages snacks,high,yes
+Coca-Cola Company,McDonald's Corporation,tier1_supplier,road,1,3,Beverages syrup,critical,yes
+Coca-Cola Company,Walmart Inc,tier1_supplier,road,2,5,Beverages,high,yes
+Nestlé SA,Starbucks Corporation,licensing_partner,sea,,,,medium,yes
+Wilmar International,Nestlé SA,tier1_supplier,sea,15,25,Palm oil edible oils,high,yes
+Wilmar International,Unilever PLC,tier1_supplier,sea,15,25,Palm oil,high,yes
+Thai Union Group,Walmart Inc,tier1_supplier,sea,25,35,Canned seafood,medium,yes
+Yara International,Nutrien Ltd,competitor_benchmarked,,,,,medium,yes
+Nutrien Ltd,Wilmar International,raw_material,sea,20,30,Fertilizers potash,medium,yes
+Thermo Fisher Scientific,Pfizer Inc,tier1_supplier,road,2,5,Lab equipment biotech,high,yes
+Thermo Fisher Scientific,Johnson & Johnson,tier1_supplier,road,2,5,Lab equipment,high,yes
+Thermo Fisher Scientific,AstraZeneca PLC,tier1_supplier,sea,10,18,Lab equipment,high,yes
+Roche Holding,Johnson & Johnson,diagnostics_partner,air,1,5,Diagnostic reagents,medium,yes
+Sanofi SA,Pfizer Inc,competitor_partner,digital,0,0,API supply agreement,low,yes
+Sun Pharmaceutical,Abbott Laboratories,tier2_supplier,sea,12,20,Generic APIs,medium,yes
+Dr. Reddy's Laboratories,Pfizer Inc,tier2_supplier,sea,12,20,Generic APIs,medium,yes
+Cipla Ltd,GlaxoSmithKline,tier2_supplier,sea,12,20,API manufacturing,medium,yes
+Baxter International,Johnson & Johnson,tier2_supplier,road,2,5,IV fluids medical,medium,yes
+Pfizer Inc,Walmart Inc,distribution_partner,road,1,3,Pharmaceuticals OTC,high,yes
+AstraZeneca PLC,Tata Consultancy Services,services_partner,digital,0,0,Digital transformation,low,yes
+SAP SE,Toyota Motor Corporation,services_partner,digital,0,0,ERP software,high,yes
+SAP SE,Walmart Inc,services_partner,digital,0,0,Supply chain ERP,high,yes
+SAP SE,BMW Group,services_partner,digital,0,0,ERP PLM software,high,yes
+SAP SE,Siemens AG,services_partner,digital,0,0,ERP integration,medium,yes
+Oracle Corporation,Amazon.com Inc,services_partner,digital,0,0,Cloud database,medium,yes
+Tata Consultancy Services,Microsoft Corporation,services_partner,digital,0,0,IT services,medium,yes
+Tata Consultancy Services,Boeing Company,services_partner,digital,0,0,Engineering IT,high,yes
+Infosys Limited,Apple Inc,services_partner,digital,0,0,IT services,low,yes
+Infosys Limited,Airbus SE,services_partner,digital,0,0,IT services,medium,yes
+Wipro Limited,Boeing Company,services_partner,digital,0,0,Engineering services,medium,yes
+HCL Technologies,Boeing Company,services_partner,digital,0,0,IT engineering services,medium,yes
+Maersk Group,Walmart Inc,logistics_partner,sea,,,,medium,yes
+Maersk Group,Amazon.com Inc,logistics_partner,sea,,,,medium,yes
+Maersk Group,Nike Inc,logistics_partner,sea,,,,medium,yes
+Maersk Group,IKEA Sweden,logistics_partner,sea,,,,medium,yes
+FedEx Corporation,Apple Inc,logistics_partner,air,1,2,iPhone shipments,high,yes
+FedEx Corporation,Amazon.com Inc,logistics_partner,air+road,1,3,Express parcels,high,yes
+UPS Inc,Walmart Inc,logistics_partner,road,1,3,Last mile delivery,high,yes
+UPS Inc,Nike Inc,logistics_partner,road,1,3,Shoe delivery,medium,yes
+Grab Holdings,Sea Limited,competitor_benchmarked,,,,,medium,yes
+Adani Group,Reliance Industries,services_partner,road,1,5,Port logistics India,high,yes
+Ericsson,Softbank Group,tier1_supplier,sea,10,18,5G RAN equipment,high,yes
+Ericsson,Reliance Industries,tier1_supplier,sea,15,25,5G Jio rollout,high,yes
+Ericsson,Vodafone Group,tier1_supplier,road,3,7,5G network gear,high,yes
+Nokia Corporation,Vodafone Group,tier1_supplier,road,3,7,5G network equipment,high,yes
+Nokia Corporation,Softbank Group,tier1_supplier,sea,10,18,5G RAN,medium,yes
+Siemens AG,Saudi Aramco,services_supplier,sea,15,25,Power turbines energy,high,yes
+Siemens AG,Boeing Company,tier2_supplier,sea,12,20,Factory automation,medium,yes
+ABB Ltd,Taiwan Semiconductor,tier2_supplier,sea,18,25,Industrial robots automation,medium,yes
+ABB Ltd,Samsung Electronics,tier2_supplier,sea,12,18,Robotics factory,medium,yes
+Schneider Electric,Amazon.com Inc,services_supplier,sea,,,,medium,yes
+Schneider Electric,Walmart Inc,services_supplier,sea,,,,medium,yes
+Nike Inc,Vietnam Manufacturing JV,tier1_supplier,sea,18,28,Footwear,critical,yes
+Nike Inc,Indonesia Nickel Corp,tier2_supplier,sea,20,30,Rubber soles via Indonesia,low,yes
+H&M Group,Vietnam Manufacturing JV,tier1_supplier,sea,18,28,Apparel,high,yes
+H&M Group,Samsung Vietnam,tier2_supplier,sea,15,22,Textile components,low,yes
+Samsung Vietnam,Samsung Electronics,tier1_supplier,road,5,10,Assembled smartphones,critical,yes
+Sika AG,Volkswagen AG,tier2_supplier,road,2,5,Adhesives sealing,medium,yes
+Henkel AG,BMW Group,tier2_supplier,road,2,5,Adhesives automotive,medium,yes
+Saint-Gobain,Airbus SE,tier2_supplier,sea,10,18,Glass composites,medium,yes
+CRH PLC,Caterpillar Inc,tier2_supplier,road,3,7,Construction aggregates,low,yes
+Thyssenkrupp AG,Airbus SE,tier1_supplier,road,3,7,Aluminium titanium,high,yes
+Thyssenkrupp AG,Boeing Company,tier1_supplier,sea,15,25,Aerospace materials,high,yes
+Yara International,Wilmar International,raw_material,sea,15,25,Nitrogen fertilizers,medium,yes
+BASF SE,Yara International,raw_material,road,2,5,Chemical inputs,medium,yes
+PTT Global Chemical,Wilmar International,tier2_supplier,sea,10,18,Petrochemicals for agri,low,yes
+LVMH,Hermes International,competitor_benchmarked,,,,,medium,yes
+Sanofi SA,Roche Holding,competitor_benchmarked,,,,,medium,yes
+Delta Electronics,Apple Inc,tier2_supplier,sea,8,15,Power adapters chargers,high,yes
+Delta Electronics,Microsoft Corporation,tier2_supplier,sea,8,15,Server power supplies,medium,yes
+Kyocera Corporation,Toyota Motor Corporation,tier1_supplier,road,1,3,Automotive ceramics sensors,medium,yes
+Kyocera Corporation,Apple Inc,tier2_supplier,sea,8,12,Ceramic components,low,yes
+Panasonic Holdings,Amazon.com Inc,tier2_supplier,sea,15,22,Consumer batteries,medium,yes
+Panasonic Holdings,Boeing Company,tier2_supplier,sea,15,22,Avionics displays,medium,yes
+Sony Group Corporation,Microsoft Corporation,competitor_partner,digital,0,0,Xbox PlayStation cross-licensing,low,yes
+Sony Group Corporation,Apple Inc,tier2_supplier,sea,8,15,Image sensors cameras,high,yes
+Hitachi Ltd,Mitsubishi Corporation,services_partner,road,1,3,Industrial systems trade,medium,yes
+Mitsubishi Corporation,BHP Group,raw_material,sea,8,12,Iron ore coal offtake,high,yes
+Mitsui & Co,BHP Group,raw_material,sea,8,12,LNG iron ore offtake,high,yes
+Woodside Energy,Softbank Group,raw_material,sea,10,15,LNG supply Japan,high,yes
+Woodside Energy,Sinopec,raw_material,sea,12,18,LNG supply China,high,yes
+DBS Group,Grab Holdings,services_partner,digital,0,0,Banking fintech partnership,medium,yes
+HDFC Bank,Infosys Limited,services_partner,digital,0,0,Core banking IT,medium,yes
+HDFC Bank,Tata Consultancy Services,services_partner,digital,0,0,Banking IT services,medium,yes
+Bharat Petroleum,Reliance Industries,competitor_benchmarked,,,,,medium,yes
+Mahindra & Mahindra,Tata Motors,competitor_benchmarked,,,,,medium,yes
+Mahindra & Mahindra,Robert Bosch GmbH,tier1_supplier,sea,12,18,Auto electronics,high,yes
+Air Canada,Boeing Company,tier1_supplier,sea,15,25,737 MAX orders,high,yes
+Barrick Gold,Freeport-McMoRan,competitor_benchmarked,,,,,medium,yes
+Sandvik AB,BHP Group,tier1_supplier,sea,18,25,Mining equipment,high,yes
+Sandvik AB,Vale SA,tier1_supplier,sea,20,28,Mining equipment,high,yes
+Volvo AB,Samsung Electronics,tier2_supplier,sea,10,18,Electronic components trucks,low,yes
+Volvo AB,Maersk Group,services_partner,sea,,,,medium,yes
+PTT Global Chemical,BYD Company,raw_material,sea,12,18,Polymer plastics EV parts,medium,yes
+Sea Limited,Grab Holdings,competitor_benchmarked,,,,,medium,yes
+UCB SA,AstraZeneca PLC,tier2_supplier,sea,10,18,Biologic API,medium,yes
+IMEC,ASML Holding,research_partner,road,3,7,EUV research collaboration,medium,yes
+Aptiv PLC,Boeing Company,tier2_supplier,road,2,5,Wiring aerospace,medium,yes
+TE Connectivity,Airbus SE,tier1_supplier,sea,10,18,Connectors sensors aerospace,high,yes
+Linde PLC,BASF SE,tier1_supplier,pipeline,1,3,Industrial gases chemicals,high,yes
+Air Liquide,BASF SE,tier1_supplier,pipeline,1,3,Industrial gases,high,yes
+DuPont de Nemours,Taiwan Semiconductor,tier1_supplier,sea,18,25,Photoresists chemicals,critical,yes
+DuPont de Nemours,Samsung Electronics,tier1_supplier,sea,15,22,Semiconductor chemicals,high,yes
+Dow Inc,Procter & Gamble Co,tier1_supplier,road,2,5,Specialty chemicals surfactants,medium,yes
+Dow Inc,Unilever PLC,tier1_supplier,sea,12,18,Chemicals FMCG,medium,yes
+Akzo Nobel,Airbus SE,tier2_supplier,sea,10,18,Aircraft coatings paints,medium,yes
+Akzo Nobel,Boeing Company,tier2_supplier,sea,15,22,Aircraft coatings,medium,yes
+Philips N.V.,Johnson & Johnson,diagnostics_partner,sea,10,18,Medical imaging,medium,yes
+Philips N.V.,Medtronic PLC,competitor_benchmarked,,,,,medium,yes
+Medtronic PLC,Johnson & Johnson,competitor_benchmarked,,,,,medium,yes
+Abbott Laboratories,Thermo Fisher Scientific,competitor_benchmarked,,,,,medium,yes
+Heineken N.V.,Wilmar International,raw_material,sea,15,25,Barley hops agri inputs,low,yes
+Grab Holdings,PTT Global Chemical,services_partner,road,1,5,Fuel logistics Thailand,low,yes
+NXP Semiconductors,Volkswagen AG,tier1_supplier,road,3,7,Automotive MCUs radar,critical,yes
+NXP Semiconductors,Ford Motor Company,tier1_supplier,road,3,7,Automotive chips,high,yes
+NXP Semiconductors,BMW Group,tier1_supplier,road,3,7,V2X radar chips,high,yes
+NXP Semiconductors,Tesla Inc,tier1_supplier,road,3,7,Infotainment chips,medium,yes
+ON Semiconductor,Tesla Inc,tier1_supplier,road,3,7,SiC power modules,critical,yes
+ON Semiconductor,General Motors,tier1_supplier,road,3,7,Image sensors,high,yes
+AMD,Amazon.com Inc,tier1_supplier,road,2,5,EPYC server CPUs,high,yes
+AMD,Microsoft Corporation,tier1_supplier,road,2,5,EPYC CPUs Xbox chips,high,yes
+AMD,Tesla Inc,tier1_supplier,road,2,5,Infotainment APU,medium,yes
+Marvell Technology,Amazon.com Inc,tier1_supplier,road,2,5,Custom data centre chips,high,yes
+Marvell Technology,Microsoft Corporation,tier1_supplier,road,2,5,Data centre ASICs,high,yes
+ZF Friedrichshafen,Volkswagen AG,tier1_supplier,road,1,3,Transmission driveline,critical,yes
+ZF Friedrichshafen,BMW Group,tier1_supplier,road,1,3,Automatic gearboxes,high,yes
+ZF Friedrichshafen,General Motors,tier1_supplier,road,2,5,Transmissions,high,yes
+ZF Friedrichshafen,Hyundai Motor,tier1_supplier,sea,8,15,Automatic transmissions,high,yes
+Schaeffler AG,Volkswagen AG,tier1_supplier,road,1,3,Bearings clutch,high,yes
+Schaeffler AG,BMW Group,tier1_supplier,road,1,3,Precision bearings,high,yes
+Faurecia,Volkswagen AG,tier1_supplier,road,2,5,Seating exhaust systems,high,yes
+Faurecia,Ford Motor Company,tier1_supplier,road,2,5,Seating modules,high,yes
+Plastic Omnium,BMW Group,tier1_supplier,road,2,5,Bumpers plastic body,medium,yes
+Plastic Omnium,Volkswagen AG,tier1_supplier,road,2,5,Body plastic parts,medium,yes
+Pirelli & C.,BMW Group,tier1_supplier,road,2,5,OEM performance tyres,high,yes
+HELLA GmbH,Volkswagen AG,tier1_supplier,road,1,3,Automotive lighting,high,yes
+HELLA GmbH,Ford Motor Company,tier1_supplier,road,2,5,Lighting electronics,medium,yes
+Nidec Corporation,Tesla Inc,tier1_supplier,sea,12,20,EV traction motors,critical,yes
+Nidec Corporation,Volkswagen AG,tier1_supplier,sea,15,22,EV motors,high,yes
+Nidec Corporation,Hyundai Motor,tier1_supplier,sea,8,15,EV drive motors,high,yes
+Nidec Corporation,General Motors,tier1_supplier,sea,12,20,EV traction motors,high,yes
+Knorr-Bremse,Daimler Truck Holding,tier1_supplier,road,1,3,Air brakes commercial,critical,yes
+Wabco Holdings,Daimler Truck Holding,tier1_supplier,road,2,5,Trailer ABS EBS,high,yes
+Wabco Holdings,Volvo AB,tier1_supplier,road,2,5,Braking systems trucks,high,yes
+Fanuc Corporation,Toyota Motor Corporation,tier1_supplier,road,1,2,Welding robots,high,yes
+Fanuc Corporation,Volkswagen AG,tier1_supplier,sea,15,22,Factory robots,high,yes
+Yaskawa Electric,Toyota Motor Corporation,tier1_supplier,road,1,2,Industrial robots,high,yes
+Komatsu Ltd,BHP Group,tier1_supplier,sea,18,25,Mining autonomous trucks,high,yes
+Komatsu Ltd,Vale SA,tier1_supplier,sea,20,28,Mining equipment,high,yes
+Metso Outotec,Vale SA,tier1_supplier,sea,20,28,Mineral processing equipment,high,yes
+Metso Outotec,BHP Group,tier1_supplier,sea,18,25,Mining processing plant,high,yes
+Atlas Copco,Taiwan Semiconductor,tier2_supplier,sea,20,28,Vacuum pumps compressors,high,yes
+Atlas Copco,Samsung Electronics,tier2_supplier,sea,15,22,Fab compressors,medium,yes
+SKF AB,Volkswagen AG,tier1_supplier,road,1,3,Wheel bearings,high,yes
+SKF AB,Airbus SE,tier1_supplier,road,3,7,Aerospace bearings,medium,yes
+Alfa Laval,Maersk Group,tier1_supplier,sea,10,20,Marine heat exchangers,high,yes
+Wartsila,Maersk Group,tier1_supplier,sea,15,25,Marine engines,critical,yes
+Vestas Wind Systems,Orsted AS,tier1_supplier,sea,10,20,Wind turbine supply,critical,yes
+Siemens AG,Orsted AS,tier1_supplier,sea,10,20,Offshore wind turbines,high,yes
+Neste Corporation,Airbus SE,raw_material,sea,10,20,Sustainable aviation fuel,high,yes
+SSAB AB,Volvo AB,tier1_supplier,road,1,3,Green fossil-free steel,high,yes
+LG Chem,LG Energy Solution,tier1_supplier,road,1,2,Cathode materials,critical,yes
+LG Chem,Samsung SDI,tier1_supplier,road,1,2,Battery materials,high,yes
+Lonza Group,Pfizer Inc,tier1_supplier,road,3,7,Biologics CDMO manufacturing,critical,yes
+Lonza Group,Novartis AG,tier1_supplier,road,3,7,CDMO drug manufacturing,high,yes
+Lonza Group,AstraZeneca PLC,tier1_supplier,sea,10,18,CDMO manufacturing,high,yes
+Dassault Systemes,Airbus SE,services_partner,digital,0,0,3DEXPERIENCE PLM,critical,yes
+Dassault Systemes,Boeing Company,services_partner,digital,0,0,PLM design software,high,yes
+Dassault Systemes,BMW Group,services_partner,digital,0,0,Virtual car design,high,yes
+Dassault Systemes,Toyota Motor Corporation,services_partner,digital,0,0,PLM simulation,medium,yes
+IBM Corporation,Boeing Company,services_partner,digital,0,0,IT mainframe services,medium,yes
+IBM Corporation,Walmart Inc,services_partner,digital,0,0,Blockchain supply chain,medium,yes
+Oracle Corporation,Boeing Company,services_partner,digital,0,0,ERP HR systems,medium,yes
+Oracle Corporation,Toyota Motor Corporation,services_partner,digital,0,0,Cloud ERP,medium,yes
+Nokia Corporation,Reliance Industries,tier1_supplier,sea,15,25,5G AirScale gear,high,yes
+Schaeffler AG,Airbus SE,tier2_supplier,road,3,7,Precision bearings aerospace,medium,yes
+Infosys Limited,Volkswagen AG,services_partner,digital,0,0,IT services ERP,medium,yes
+Wipro Limited,Airbus SE,services_partner,digital,0,0,Engineering IT services,medium,yes
+HCL Technologies,Boeing Company,services_partner,digital,0,0,IT engineering services,medium,yes
+HCL Technologies,Apple Inc,services_partner,digital,0,0,IT infrastructure,low,yes
+Tata Consultancy Services,Airbus SE,services_partner,digital,0,0,IT digital services,medium,yes
+Thermo Fisher Scientific,Roche Holding,tier1_supplier,sea,10,18,Lab instruments,high,yes
+Thermo Fisher Scientific,Novartis AG,tier1_supplier,sea,10,18,Research instruments,high,yes
+Cisco Systems,Amazon.com Inc,tier1_supplier,road,2,5,Network infrastructure AWS,high,yes
+Cisco Systems,Microsoft Corporation,tier1_supplier,road,2,5,Network equipment Azure,high,yes
+Cisco Systems,Boeing Company,tier2_supplier,road,2,5,Network comms,medium,yes
+Schlumberger NV,BP PLC,services_supplier,road,1,5,Oilfield services,high,yes
+Schlumberger NV,Equinor ASA,services_supplier,sea,5,10,Oilfield drilling services,high,yes
+Halliburton Company,Saudi Aramco,services_supplier,sea,5,10,Oilfield services,high,yes
+Halliburton Company,BP PLC,services_supplier,road,2,5,Oilfield services,medium,yes
+Komatsu Ltd,Newmont Corporation,tier1_supplier,sea,20,28,Mining trucks equipment,high,yes
+Sandvik AB,Fortescue Metals,tier1_supplier,sea,18,25,Rock drilling tools,high,yes
+Petronas,Shell PLC,raw_material,sea,8,15,LNG crude oil,high,yes
+Charoen Pokphand,Nestlé SA,tier1_supplier,sea,12,20,Poultry shrimp food supply,medium,yes
+Thai Union Group,Nestlé SA,tier2_supplier,sea,15,25,Seafood ingredients,medium,yes
+Olam International,Nestlé SA,raw_material,sea,15,25,Coffee cocoa beans,high,yes
+Olam International,Unilever PLC,raw_material,sea,15,25,Edible oils agri,high,yes
+Wilmar International,Procter & Gamble Co,raw_material,sea,15,25,Palm oil chemicals,medium,yes
+Hartalega,Johnson & Johnson,tier1_supplier,sea,15,25,Nitrile medical gloves,high,yes
+Top Glove,Pfizer Inc,tier1_supplier,sea,15,25,Medical gloves,medium,yes
+SembCorp Industries,Maersk Group,tier1_supplier,sea,5,15,Ship repair port services,medium,yes
+Adani Group,Maersk Group,services_partner,road,1,5,Mundra port logistics India,high,yes
+Korea Zinc,Samsung SDI,tier1_supplier,road,1,2,Zinc for battery packaging,medium,yes
+Zijin Mining,CATL,raw_material,sea,5,10,Copper gold mining China,high,yes
+Freeport-McMoRan,Dow Inc,raw_material,sea,15,25,Copper for chemicals,medium,yes
+Anglo American,BMW Group,raw_material,sea,20,30,Platinum for fuel cells,medium,yes
+Anglo American,Toyota Motor Corporation,raw_material,sea,20,30,Palladium catalysts,medium,yes
+Maersk Group,Procter & Gamble Co,logistics_partner,sea,0,0,FMCG shipping,high,yes
+UPS Inc,Amazon.com Inc,logistics_partner,road,1,3,Parcel delivery,high,yes
+UPS Inc,Apple Inc,logistics_partner,air,1,2,Device express delivery,medium,yes
+FedEx Corporation,Walmart Inc,logistics_partner,road,1,3,Retail logistics,high,yes
+Linde PLC,BASF SE,tier1_supplier,pipeline,1,3,Industrial gases chemicals,high,yes
+Air Liquide,BASF SE,tier1_supplier,pipeline,1,3,Industrial gases,high,yes
+DuPont de Nemours,Taiwan Semiconductor,tier1_supplier,sea,18,25,Photoresists chemicals,critical,yes
+DuPont de Nemours,Samsung Electronics,tier1_supplier,sea,15,22,Semiconductor chemicals,high,yes
+Dow Inc,Procter & Gamble Co,tier1_supplier,road,2,5,Specialty chemicals surfactants,medium,yes
+Dow Inc,Unilever PLC,tier1_supplier,sea,12,18,Chemicals FMCG,medium,yes
+Linde PLC,Taiwan Semiconductor,tier1_supplier,road,1,5,Ultra-pure fab gases,critical,yes
+Air Products,Taiwan Semiconductor,tier1_supplier,road,1,5,Specialty gases,high,yes
+Itochu Corporation,BHP Group,raw_material,sea,18,25,Coal iron ore trading,high,yes
+Itochu Corporation,CATL,raw_material,sea,10,18,Battery materials trading,medium,yes
+Marubeni Corporation,Vale SA,raw_material,sea,20,28,Iron ore trading,high,yes
+Geely Automobile,CATL,tier1_supplier,road,1,3,EV battery supply China,critical,yes
+Vinfast,LG Energy Solution,tier1_supplier,sea,15,22,EV battery packs,high,yes
+Vinfast,CATL,tier1_supplier,sea,15,22,EV battery alternative,medium,yes
+DBS Group,Wilmar International,services_partner,digital,0,0,Trade finance Singapore,high,yes
+HDFC Bank,Tata Consultancy Services,services_partner,digital,0,0,Banking IT services,medium,yes
+JPMorgan Chase & Co,Boeing Company,services_partner,digital,0,0,Supply chain finance,medium,yes
+SMC Corporation,Taiwan Semiconductor,tier1_supplier,sea,8,15,Pneumatic automation fab,high,yes
+SMC Corporation,Samsung Electronics,tier1_supplier,sea,8,15,Pneumatics clean room,high,yes
+Daikin Industries,Amazon.com Inc,tier2_supplier,sea,15,22,DC cooling HVAC,medium,yes
+Daikin Industries,Microsoft Corporation,tier2_supplier,sea,15,22,Data centre HVAC,medium,yes
+Flex Ltd,Microsoft Corporation,tier1_supplier,sea,15,25,Xbox assembly,high,yes
+Flex Ltd,Amazon.com Inc,tier1_supplier,sea,18,25,Kindle Echo assembly,medium,yes
+Jabil Inc,Apple Inc,tier2_supplier,sea,18,25,iPhone enclosures,medium,yes
+Jabil Inc,Johnson & Johnson,tier1_supplier,road,3,7,Medical device assembly,medium,yes
+Aptiv PLC,General Motors,tier1_supplier,road,2,5,Wiring harness electrical,critical,yes
+Aptiv PLC,Volkswagen AG,tier1_supplier,road,3,7,Wiring systems,high,yes
+TE Connectivity,Boeing Company,tier1_supplier,road,2,5,Connectors sensors,high,yes
+TE Connectivity,Toyota Motor Corporation,tier1_supplier,sea,10,18,Automotive connectors,high,yes
+TE Connectivity,Airbus SE,tier1_supplier,sea,10,18,Connectors sensors aerospace,high,yes
+Magna International,General Motors,tier1_supplier,road,2,5,Body stampings seating,high,yes
+Magna International,BMW Group,tier1_supplier,sea,12,18,Exterior modules,high,yes
+SABIC,BASF SE,tier1_supplier,sea,20,28,Specialty chemicals,high,yes
+Fortescue Metals,POSCO Holdings,tier1_supplier,sea,10,15,Iron ore,high,yes
+Fortescue Metals,Thyssenkrupp AG,tier1_supplier,sea,18,25,Iron ore,high,yes
+EMS-Chemie,BMW Group,tier1_supplier,road,2,5,Specialty polymers lightweighting,high,yes
+EMS-Chemie,Airbus SE,tier1_supplier,sea,10,18,High-performance polymers,high,yes
+Grab Holdings,DBS Group,services_partner,digital,0,0,Banking fintech,medium,yes
+CIMB Group,Grab Holdings,services_partner,digital,0,0,Banking fintech Malaysia,medium,yes
+Holcim Group,Vinci SA,tier1_supplier,road,1,3,Cement concrete,high,yes
+PTT Global Chemical,CATL,raw_material,sea,12,18,Polymer battery casing,medium,yes
+Sanofi SA,Lonza Group,tier2_supplier,road,3,7,API manufacturing CDMO,high,yes
+Wanhua Chemical,BASF SE,raw_material,sea,12,18,MDI polyurethane chemicals,medium,yes
+Mahindra & Mahindra,Robert Bosch GmbH,tier1_supplier,sea,12,18,Auto electronics ADAS,high,yes
+JSW Steel,Tata Motors,tier1_supplier,road,2,4,Automotive steel,high,yes
+Equinor ASA,TotalEnergies SE,raw_material,pipeline,1,5,North Sea oil gas,high,yes
+Equinor ASA,Shell PLC,raw_material,pipeline,1,3,North Sea crude gas,high,yes
+Woodside Energy,Sinopec,raw_material,sea,12,18,LNG supply China,high,yes
+Sony Group Corporation,Apple Inc,tier2_supplier,sea,8,15,Image sensors cameras,high,yes
+Murata Manufacturing,Samsung Electronics,tier1_supplier,sea,5,8,MLCC components,high,yes
+TDK Corporation,Samsung Electronics,tier1_supplier,sea,5,8,Electronic components,medium,yes
+Kyocera Corporation,Samsung Electronics,tier1_supplier,sea,5,10,Ceramic substrates,medium,yes
+Delta Electronics,Samsung Electronics,tier2_supplier,sea,8,15,Server power,medium,yes
+Applied Materials,Taiwan Semiconductor,tier1_supplier,sea,20,30,CVD PVD tools,high,yes
+Applied Materials,Samsung Electronics,tier1_supplier,sea,18,28,Etch tools,high,yes
+Applied Materials,Intel Corporation,tier1_supplier,road,5,10,CVD PVD tools,high,yes
+Lam Research,Taiwan Semiconductor,tier1_supplier,sea,20,30,Etch equipment,high,yes
+Lam Research,Intel Corporation,tier1_supplier,road,5,10,Etch equipment,high,yes
+KLA Corporation,Taiwan Semiconductor,tier1_supplier,sea,20,30,Inspection tools,high,yes
+KLA Corporation,Samsung Electronics,tier1_supplier,sea,18,28,Inspection tools,high,yes
+Texas Instruments,General Motors,tier1_supplier,road,2,5,Automotive chips,high,yes
+Texas Instruments,Ford Motor Company,tier1_supplier,road,2,5,Automotive chips,high,yes
+Micron Technology,Microsoft Corporation,tier1_supplier,road,2,5,Server DRAM,high,yes
+Broadcom Inc,Samsung Electronics,tier1_supplier,sea,12,18,Networking chips,medium,yes
+ASE Technology,Broadcom Inc,tier1_supplier,road,1,3,Advanced packaging,high,yes
+ASE Technology,Qualcomm Inc,tier1_supplier,road,1,3,Chip packaging testing,high,yes
+Pegatron Corporation,Apple Inc,tier1_supplier,air,2,5,iPhone assembly backup,critical,yes
+Mitsui & Co,BHP Group,raw_material,sea,8,12,LNG iron ore offtake,high,yes
+Parker Hannifin,Boeing Company,tier1_supplier,road,2,5,Hydraulic fuel systems,high,yes
+Parker Hannifin,Airbus SE,tier1_supplier,sea,10,18,Hydraulic systems,high,yes
+Raytheon Technologies,Boeing Company,tier1_supplier,road,2,5,Pratt Whitney engines,high,yes
+Lockheed Martin,Honeywell International,tier1_supplier,road,2,5,Avionics F-35,high,yes
+Northrop Grumman,Raytheon Technologies,tier2_supplier,road,3,7,Defense electronics,medium,yes
+Baxter International,Johnson & Johnson,tier2_supplier,road,2,5,IV fluids medical,medium,yes
+Air Products,Intel Corporation,tier1_supplier,road,1,3,Fab gases,high,yes
+Air Products,Samsung Electronics,tier1_supplier,sea,5,10,Ultra pure gases,high,yes
+Target Corporation,Procter & Gamble Co,tier1_supplier,road,2,5,Consumer goods,high,yes
+Freeport-McMoRan,Samsung Electronics,raw_material,sea,12,18,Copper,medium,yes
+Freeport-McMoRan,POSCO Holdings,tier1_supplier,sea,12,18,Copper,medium,yes
+Dow Inc,Procter & Gamble Co,tier1_supplier,road,2,5,Specialty chemicals,medium,yes
+Dow Inc,Unilever PLC,tier1_supplier,sea,12,18,Chemicals FMCG,medium,yes
+DuPont de Nemours,Taiwan Semiconductor,tier1_supplier,sea,18,25,Photoresists,critical,yes
+DuPont de Nemours,Samsung Electronics,tier1_supplier,sea,15,22,Semiconductor chemicals,high,yes
+Aptiv PLC,BMW Group,tier1_supplier,road,2,5,Wiring harness,high,yes
+Continental AG,Stellantis NV,tier1_supplier,road,2,5,Tires sensors,high,yes
+Bridgestone Corporation,Volkswagen AG,tier1_supplier,road,2,5,OEM tyres,high,yes
+Michelin Group,Toyota Motor Corporation,tier1_supplier,sea,10,15,OEM tyres,medium,yes
+HELLA GmbH,BMW Group,tier1_supplier,road,1,3,Lighting ADAS systems,high,yes
+Fanuc Corporation,Samsung Electronics,tier2_supplier,sea,5,10,Factory automation,medium,yes
+Sumitomo Electric,Honda Motor Co,tier1_supplier,road,1,2,Wiring harness,high,yes
+Denso Corporation,Honda Motor Co,tier1_supplier,road,1,2,Auto components HVAC,high,yes
+Renesas Electronics,Ford Motor Company,tier1_supplier,sea,15,22,Automotive MCUs,high,yes
+Infineon Technologies,Toyota Motor Corporation,tier1_supplier,sea,10,18,Power semiconductors,high,yes
+STMicroelectronics,Volkswagen AG,tier1_supplier,road,3,7,SiC chips EV,high,yes
+ON Semiconductor,Volkswagen AG,tier1_supplier,road,3,7,Power semiconductors,high,yes
+NXP Semiconductors,Honda Motor Co,tier1_supplier,sea,10,18,Automotive chips,medium,yes
+Murata Manufacturing,Apple Inc,tier1_supplier,sea,8,12,MLCC capacitors RF,high,yes
+TDK Corporation,Apple Inc,tier1_supplier,sea,8,12,Passive components,medium,yes
+TDK Corporation,Samsung Electronics,tier1_supplier,sea,5,8,Electronic components,medium,yes
+Kyocera Corporation,Toyota Motor Corporation,tier1_supplier,road,1,3,Automotive ceramics,medium,yes
+Kyocera Corporation,Samsung Electronics,tier1_supplier,sea,5,10,Ceramic substrates,medium,yes
+SMC Corporation,Applied Materials,tier2_supplier,sea,15,22,Pneumatics semiconductor,medium,yes
+Panasonic Holdings,Toyota Motor Corporation,tier1_supplier,road,1,3,Battery cells hybrid,high,yes
+Mahindra & Mahindra,Robert Bosch GmbH,tier1_supplier,sea,12,18,Auto electronics ADAS,high,yes
+JSW Steel,Tata Motors,tier1_supplier,road,2,4,Automotive steel,high,yes
+Equinor ASA,TotalEnergies SE,raw_material,pipeline,1,5,North Sea oil gas,high,yes
+Woodside Energy,Sinopec,raw_material,sea,12,18,LNG supply China,high,yes
+Adani Group,Maersk Group,services_partner,road,1,5,Mundra port logistics India,high,yes
+Dassault Systemes,SAP SE,services_partner,digital,0,0,PLM ERP integration,medium,yes
+Nokia Corporation,Ericsson,competitor_benchmarked,,,,5G equipment benchmark,low,no
+Maersk Group,Grab Holdings,logistics_partner,sea,0,0,Container SEA logistics,medium,yes
+FedEx Corporation,Sea Limited,logistics_partner,sea,0,0,E-commerce last mile,medium,yes
+UPS Inc,Amazon.com Inc,logistics_partner,road,1,3,Parcel delivery,high,yes
+Wanhua Chemical,BASF SE,raw_material,sea,12,18,MDI polyurethane chemicals,medium,yes
+Sanofi SA,Lonza Group,tier2_supplier,road,3,7,API manufacturing CDMO,high,yes
+PTT Global Chemical,CATL,raw_material,sea,12,18,Polymer battery casing,medium,yes
+Korea Zinc,Samsung SDI,tier1_supplier,road,1,2,Zinc battery packaging,medium,yes
+Zijin Mining,CATL,raw_material,sea,5,10,Copper gold mining China,high,yes
+Geely Automobile,CATL,tier1_supplier,road,1,3,EV battery supply China,critical,yes
+Vinfast,LG Energy Solution,tier1_supplier,sea,15,22,EV battery packs,high,yes
+Sony Group Corporation,Apple Inc,tier2_supplier,sea,8,15,Image sensors cameras,high,yes
+Petronas,Shell PLC,raw_material,sea,8,15,LNG crude oil,high,yes
+Charoen Pokphand,Nestlé SA,tier1_supplier,sea,12,20,Poultry food supply,medium,yes
+Olam International,Nestlé SA,raw_material,sea,15,25,Coffee cocoa beans,high,yes
+Hartalega,Johnson & Johnson,tier1_supplier,sea,15,25,Nitrile medical gloves,high,yes
+Holcim Group,Vinci SA,tier1_supplier,road,1,3,Cement concrete,high,yes
+LG Chem,LG Energy Solution,tier1_supplier,road,1,2,Cathode materials,critical,yes
+LG Chem,Samsung SDI,tier1_supplier,road,1,2,Battery cathode materials,high,yes
+Lonza Group,Pfizer Inc,tier1_supplier,road,3,7,Biologics CDMO,critical,yes
+Lonza Group,AstraZeneca PLC,tier1_supplier,sea,10,18,CDMO manufacturing,high,yes
+Dassault Systemes,Airbus SE,services_partner,digital,0,0,3DEXPERIENCE PLM,critical,yes
+Dassault Systemes,Boeing Company,services_partner,digital,0,0,PLM design software,high,yes
+IBM Corporation,Boeing Company,services_partner,digital,0,0,IT mainframe services,medium,yes
+Oracle Corporation,Boeing Company,services_partner,digital,0,0,ERP HR systems,medium,yes
+Oracle Corporation,Toyota Motor Corporation,services_partner,digital,0,0,Cloud ERP,medium,yes
+Linde PLC,BASF SE,tier1_supplier,pipeline,1,3,Industrial gases chemicals,high,yes
+Air Liquide,BASF SE,tier1_supplier,pipeline,1,3,Industrial gases,high,yes
+Linde PLC,Taiwan Semiconductor,tier1_supplier,road,1,5,Ultra-pure fab gases,critical,yes
+Itochu Corporation,BHP Group,raw_material,sea,18,25,Coal iron ore trading,high,yes
+Itochu Corporation,CATL,raw_material,sea,10,18,Battery materials trading,medium,yes
+Marubeni Corporation,Vale SA,raw_material,sea,20,28,Iron ore trading,high,yes
+SABIC,BASF SE,tier1_supplier,sea,20,28,Specialty chemicals,high,yes
+SABIC,TotalEnergies SE,raw_material,sea,15,22,Petrochemical feedstock,medium,yes
+EMS-Chemie,BMW Group,tier1_supplier,road,2,5,Specialty polymers,high,yes
+EMS-Chemie,Airbus SE,tier1_supplier,sea,10,18,High-performance polymers,high,yes
+Fortescue Metals,POSCO Holdings,tier1_supplier,sea,10,15,Iron ore,high,yes
+Fortescue Metals,Thyssenkrupp AG,tier1_supplier,sea,18,25,Iron ore,high,yes
+Metso Outotec,Vale SA,tier1_supplier,sea,20,28,Mining equipment,high,yes
+Metso Outotec,BHP Group,tier1_supplier,sea,18,25,Mining processing plant,high,yes
+Anglo American,BMW Group,raw_material,sea,20,30,Platinum fuel cells,medium,yes
+Anglo American,Toyota Motor Corporation,raw_material,sea,20,30,Palladium catalysts,medium,yes
+Sandvik AB,Fortescue Metals,tier1_supplier,sea,18,25,Rock drilling tools,high,yes
+Nidec Corporation,Tesla Inc,tier1_supplier,sea,12,20,EV traction motors,critical,yes
+Nidec Corporation,Hyundai Motor,tier1_supplier,sea,8,15,EV drive motors,high,yes
+Wartsila,Maersk Group,tier1_supplier,sea,15,25,Marine engines,critical,yes
+Alfa Laval,Maersk Group,tier1_supplier,sea,10,20,Marine heat exchangers,high,yes
+Vestas Wind Systems,Orsted AS,tier1_supplier,sea,10,20,Wind turbine supply,critical,yes
+Siemens AG,Orsted AS,tier1_supplier,sea,10,20,Offshore wind turbines,high,yes
+Neste Corporation,Airbus SE,raw_material,sea,10,20,Sustainable aviation fuel,high,yes
+SSAB AB,Volvo AB,tier1_supplier,road,1,3,Green fossil-free steel,high,yes
+Knorr-Bremse,Daimler Truck Holding,tier1_supplier,road,1,3,Air brakes commercial,critical,yes
+Wabco Holdings,Volvo AB,tier1_supplier,road,2,5,Braking systems trucks,high,yes
+Fanuc Corporation,Volkswagen AG,tier1_supplier,sea,15,22,Factory robots,high,yes
+Yaskawa Electric,Toyota Motor Corporation,tier1_supplier,road,1,2,Industrial robots,high,yes
+Komatsu Ltd,BHP Group,tier1_supplier,sea,18,25,Mining trucks,high,yes
+Komatsu Ltd,Vale SA,tier1_supplier,sea,20,28,Mining equipment,high,yes
+Atlas Copco,Taiwan Semiconductor,tier2_supplier,sea,20,28,Vacuum pumps,high,yes
+SKF AB,Volkswagen AG,tier1_supplier,road,1,3,Wheel bearings,high,yes
+HCL Technologies,Boeing Company,services_partner,digital,0,0,IT engineering services,medium,yes
+Tata Consultancy Services,Airbus SE,services_partner,digital,0,0,IT digital services,medium,yes
+Wipro Limited,Airbus SE,services_partner,digital,0,0,Engineering IT services,medium,yes
+Thermo Fisher Scientific,Roche Holding,tier1_supplier,sea,10,18,Lab instruments,high,yes
+Cisco Systems,Amazon.com Inc,tier1_supplier,road,2,5,Network infrastructure AWS,high,yes
+Cisco Systems,Microsoft Corporation,tier1_supplier,road,2,5,Network equipment Azure,high,yes
+Schlumberger NV,BP PLC,services_supplier,road,1,5,Oilfield services,high,yes
+Halliburton Company,Saudi Aramco,services_supplier,sea,5,10,Oilfield services,high,yes
+DBS Group,Wilmar International,services_partner,digital,0,0,Trade finance Singapore,high,yes
+HDFC Bank,Tata Consultancy Services,services_partner,digital,0,0,Banking IT services,medium,yes
+JPMorgan Chase & Co,Boeing Company,services_partner,digital,0,0,Supply chain finance,medium,yes
+Flex Ltd,Microsoft Corporation,tier1_supplier,sea,15,25,Xbox assembly,high,yes
+Jabil Inc,Apple Inc,tier2_supplier,sea,18,25,iPhone enclosures,medium,yes
+Magna International,General Motors,tier1_supplier,road,2,5,Body stampings seating,high,yes
+Magna International,BMW Group,tier1_supplier,sea,12,18,Exterior modules,high,yes
+TE Connectivity,Boeing Company,tier1_supplier,road,2,5,Connectors sensors,high,yes
+TE Connectivity,Toyota Motor Corporation,tier1_supplier,sea,10,18,Automotive connectors,high,yes
+Valeo SA,Stellantis NV,tier1_supplier,road,2,5,ADAS lighting,high,yes
+Daikin Industries,Amazon.com Inc,tier2_supplier,sea,15,22,DC cooling HVAC,medium,yes
+SMC Corporation,Taiwan Semiconductor,tier1_supplier,sea,8,15,Pneumatic automation fab,high,yes
+ZF Friedrichshafen,Volkswagen AG,tier1_supplier,road,1,3,Transmission driveline,critical,yes
+ZF Friedrichshafen,BMW Group,tier1_supplier,road,1,3,Automatic gearboxes,high,yes
+ZF Friedrichshafen,General Motors,tier1_supplier,road,2,5,Transmissions,high,yes
+Schaeffler AG,Volkswagen AG,tier1_supplier,road,1,3,Bearings clutch,high,yes
+Faurecia,Volkswagen AG,tier1_supplier,road,2,5,Seating exhaust systems,high,yes
+Plastic Omnium,BMW Group,tier1_supplier,road,2,5,Bumpers plastic body,medium,yes
+Pirelli & C.,BMW Group,tier1_supplier,road,2,5,OEM performance tyres,high,yes

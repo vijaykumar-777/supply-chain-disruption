@@ -82,11 +82,11 @@ export const GlobalMapView = () => {
               <CircleMarker
                 key={node.id}
                 center={[node.lat!, node.lon!]}
-                radius={isCompany ? 6 : 8}
+                radius={isCompany ? 3.5 : 4}
                 fillColor={nodeColor}
                 color={nodeColor}
-                fillOpacity={isCompany ? 0.8 : 0.5}
-                weight={isCompany ? 2 : 1}
+                fillOpacity={isCompany ? 0.9 : 0.6}
+                weight={isCompany ? 1.5 : 1}
               >
                 <Tooltip permanent={false} direction="top">
                   <span className="text-xs font-bold">{node.name}</span>
@@ -114,7 +114,7 @@ export const GlobalMapView = () => {
               <CircleMarker
                 key={event.id}
                 center={[matchNode.lat!, matchNode.lon!]}
-                radius={event.type === 'critical' ? 22 : event.type === 'warning' ? 16 : 10}
+                radius={event.type === 'critical' ? 14 : event.type === 'warning' ? 10 : 7}
                 fillColor={SEVERITY_COLOR(event.type)}
                 color="transparent"
                 fillOpacity={0.35}

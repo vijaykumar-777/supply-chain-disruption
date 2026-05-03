@@ -1,0 +1,279 @@
+company_name,ticker,country,sector,industry,edgar_cik
+Apple Inc,AAPL,USA,Technology,Consumer Electronics,320193
+Microsoft Corporation,MSFT,USA,Technology,Software,789019
+Amazon.com Inc,AMZN,USA,Consumer Discretionary,E-Commerce,1018724
+Alphabet Inc,GOOGL,USA,Technology,Internet Services,1652044
+Tesla Inc,TSLA,USA,Consumer Discretionary,Electric Vehicles,1318605
+NVIDIA Corporation,NVDA,USA,Technology,Semiconductors,1045810
+Meta Platforms Inc,META,USA,Technology,Social Media,1326801
+Intel Corporation,INTC,USA,Technology,Semiconductors,50863
+Qualcomm Inc,QCOM,USA,Technology,Semiconductors,804328
+Broadcom Inc,AVGO,USA,Technology,Semiconductors,1730168
+Texas Instruments,TXN,USA,Technology,Semiconductors,97476
+Micron Technology,MU,USA,Technology,Semiconductors,723125
+Applied Materials,AMAT,USA,Technology,Semiconductor Equipment,796343
+Lam Research,LRCX,USA,Technology,Semiconductor Equipment,707549
+KLA Corporation,KLAC,USA,Technology,Semiconductor Equipment,319201
+Cisco Systems,CSCO,USA,Technology,Networking Equipment,858877
+IBM Corporation,IBM,USA,Technology,IT Services,51143
+Oracle Corporation,ORCL,USA,Technology,Enterprise Software,1341439
+Salesforce Inc,CRM,USA,Technology,Cloud Software,1108524
+Adobe Inc,ADBE,USA,Technology,Software,796343
+Boeing Company,BA,USA,Industrials,Aerospace & Defense,12927
+Honeywell International,HON,USA,Industrials,Diversified Industrial,773840
+3M Company,MMM,USA,Industrials,Diversified Manufacturing,66740
+Caterpillar Inc,CAT,USA,Industrials,Heavy Machinery,18230
+Deere & Company,DE,USA,Industrials,Agricultural Machinery,315189
+General Electric,GE,USA,Industrials,Aerospace Engines,40554
+Raytheon Technologies,RTX,USA,Industrials,Aerospace & Defense,101829
+Lockheed Martin,LMT,USA,Industrials,Aerospace & Defense,936468
+Northrop Grumman,NOC,USA,Industrials,Aerospace & Defense,1133421
+Parker Hannifin,PH,USA,Industrials,Motion Control,76334
+General Motors,GM,USA,Consumer Discretionary,Automobiles,40987
+Ford Motor Company,F,USA,Consumer Discretionary,Automobiles,37996
+ExxonMobil Corporation,XOM,USA,Energy,Oil & Gas,34088
+Chevron Corporation,CVX,USA,Energy,Oil & Gas,93410
+ConocoPhillips,COP,USA,Energy,Oil & Gas,1163165
+Schlumberger NV,SLB,USA,Energy,Oilfield Services,87347
+Halliburton Company,HAL,USA,Energy,Oilfield Services,45012
+Johnson & Johnson,JNJ,USA,Healthcare,Pharmaceuticals,200406
+Pfizer Inc,PFE,USA,Healthcare,Pharmaceuticals,78003
+Merck & Co Inc,MRK,USA,Healthcare,Pharmaceuticals,310158
+AbbVie Inc,ABBV,USA,Healthcare,Biopharmaceuticals,1551152
+Eli Lilly,LLY,USA,Healthcare,Pharmaceuticals,59478
+Thermo Fisher Scientific,TMO,USA,Healthcare,Lab Equipment,97745
+Abbott Laboratories,ABT,USA,Healthcare,Medical Devices,1800
+Medtronic PLC,MDT,USA,Healthcare,Medical Devices,1613103
+Baxter International,BAX,USA,Healthcare,Medical Supplies,10456
+Walmart Inc,WMT,USA,Consumer Staples,Retail,104169
+Amazon.com Inc - Retail,AMZN_R,USA,Consumer Staples,E-Retail,1018724
+Costco Wholesale,COST,USA,Consumer Staples,Wholesale Retail,909832
+Target Corporation,TGT,USA,Consumer Staples,Retail,27419
+Home Depot Inc,HD,USA,Consumer Discretionary,Home Improvement,354950
+Nike Inc,NKE,USA,Consumer Discretionary,Apparel,793952
+Procter & Gamble Co,PG,USA,Consumer Staples,Personal Care,80424
+Coca-Cola Company,KO,USA,Consumer Staples,Beverages,21344
+PepsiCo Inc,PEP,USA,Consumer Staples,Beverages,77476
+McDonald's Corporation,MCD,USA,Consumer Discretionary,Fast Food,63754
+Starbucks Corporation,SBUX,USA,Consumer Discretionary,Food & Beverage,829224
+FedEx Corporation,FDX,USA,Industrials,Logistics,230056
+UPS Inc,UPS,USA,Industrials,Logistics,1090727
+JPMorgan Chase & Co,JPM,USA,Financials,Banking,19617
+UnitedHealth Group,UNH,USA,Healthcare,Health Insurance,72971
+Dow Inc,DOW,USA,Materials,Chemicals,29915
+DuPont de Nemours,DD,USA,Materials,Specialty Chemicals,1666700
+Air Products,APD,USA,Materials,Industrial Gases,2969
+Freeport-McMoRan,FCX,USA,Materials,Copper Mining,831259
+Newmont Corporation,NEM,USA,Materials,Gold Mining,1164858
+Taiwan Semiconductor,TSM,Taiwan,Technology,Semiconductors,1046179
+Foxconn Technology,HNHPF,Taiwan,Technology,Electronics Manufacturing,
+MediaTek Inc,2454.TW,Taiwan,Technology,Semiconductors,
+ASE Technology,ASX,Taiwan,Technology,Semiconductor Packaging,1018979
+Pegatron Corporation,4938.TW,Taiwan,Technology,Electronics Manufacturing,
+Wistron Corporation,3231.TW,Taiwan,Technology,Electronics Manufacturing,
+Largan Precision,3008.TW,Taiwan,Technology,Optical Lenses,
+Delta Electronics,2308.TW,Taiwan,Technology,Power Components,
+Samsung Electronics,005930.KS,South Korea,Technology,Consumer Electronics,
+SK Hynix,000660.KS,South Korea,Technology,Semiconductors,
+LG Electronics,066570.KS,South Korea,Technology,Consumer Electronics,
+Hyundai Motor,HYMTF,South Korea,Consumer Discretionary,Automobiles,
+Kia Corporation,000270.KS,South Korea,Consumer Discretionary,Automobiles,
+POSCO Holdings,PKX,South Korea,Materials,Steel,
+Hyundai Mobis,012330.KS,South Korea,Consumer Discretionary,Auto Parts,
+Samsung SDI,006400.KS,South Korea,Technology,Battery Cells,
+LG Energy Solution,373220.KS,South Korea,Technology,Battery Cells,
+SK Innovation,096770.KS,South Korea,Energy,Battery & Chemicals,
+Toyota Motor Corporation,TM,Japan,Consumer Discretionary,Automobiles,1094517
+Sony Group Corporation,SONY,Japan,Consumer Discretionary,Electronics & Entertainment,1065280
+Honda Motor Co,HMC,Japan,Consumer Discretionary,Automobiles,310301
+Panasonic Holdings,PCRFY,Japan,Technology,Electronics,
+Denso Corporation,DNZOY,Japan,Consumer Discretionary,Auto Parts,
+Aisin Corporation,AISIY,Japan,Consumer Discretionary,Auto Parts,
+Murata Manufacturing,MRAAY,Japan,Technology,Electronic Components,
+TDK Corporation,TTDKY,Japan,Technology,Electronic Components,
+Kyocera Corporation,KYO,Japan,Technology,Electronic Components,1011659
+Renesas Electronics,RNECY,Japan,Technology,Semiconductors,
+Sumitomo Electric,SMTOY,Japan,Industrials,Wire & Cable,
+Hitachi Ltd,HTHIY,Japan,Industrials,Diversified Industrial,
+Mitsubishi Corporation,MSBHF,Japan,Industrials,Trading Conglomerate,
+Mitsui & Co,MITSY,Japan,Industrials,Trading Conglomerate,
+Softbank Group,SFTBY,Japan,Technology,Telecom & Investments,
+Nissan Motor Co,NSANY,Japan,Consumer Discretionary,Automobiles,
+Bridgestone Corporation,BRDCY,Japan,Consumer Discretionary,Tires,
+Toray Industries,TRYIY,Japan,Materials,Advanced Materials,
+Alibaba Group,BABA,China,Consumer Discretionary,E-Commerce,1577552
+Tencent Holdings,TCEHY,China,Technology,Internet Services,
+BYD Company,BYDDY,China,Consumer Discretionary,Electric Vehicles,
+Xiaomi Corporation,XIACF,China,Technology,Consumer Electronics,
+CATL,300750.SZ,China,Technology,Battery Cells,
+Baidu Inc,BIDU,China,Technology,Internet Services,1329099
+JD.com Inc,JD,China,Consumer Discretionary,E-Commerce,1549802
+CNOOC Limited,CEO,China,Energy,Oil & Gas,1095595
+Sinopec,SNP,China,Energy,Oil & Gas Refining,1115417
+SMIC,0981.HK,China,Technology,Semiconductors,
+BOE Technology,000725.SZ,China,Technology,Displays,
+Lenovo Group,0992.HK,China,Technology,PCs & Servers,
+Haier Smart Home,600690.SS,China,Consumer Discretionary,Home Appliances,
+Midea Group,000333.SZ,China,Consumer Discretionary,Home Appliances,
+Volkswagen AG,VWAGY,Germany,Consumer Discretionary,Automobiles,
+Daimler Truck Holding,DTRUY,Germany,Industrials,Commercial Vehicles,
+BMW Group,BMWYY,Germany,Consumer Discretionary,Automobiles,
+Siemens AG,SIEGY,Germany,Industrials,Diversified Industrial,
+SAP SE,SAP,Germany,Technology,Enterprise Software,1016708
+BASF SE,BASFY,Germany,Materials,Chemicals,
+Bayer AG,BAYRY,Germany,Healthcare,Pharmaceuticals & Chemicals,
+Robert Bosch GmbH,BOSCH,Germany,Consumer Discretionary,Auto Parts,
+Continental AG,CTTAY,Germany,Consumer Discretionary,Auto Parts,
+Thyssenkrupp AG,TYEKF,Germany,Materials,Steel & Industrial,
+Airbus SE,EADSY,Germany,Industrials,Aerospace & Defense,
+Infineon Technologies,IFNNY,Germany,Technology,Semiconductors,
+Henkel AG,HENKY,Germany,Consumer Staples,Adhesives & FMCG,
+Shell PLC,SHEL,UK,Energy,Oil & Gas,1306965
+BP PLC,BP,UK,Energy,Oil & Gas,313807
+AstraZeneca PLC,AZN,UK,Healthcare,Pharmaceuticals,901832
+GlaxoSmithKline,GSK,UK,Healthcare,Pharmaceuticals,1131399
+Unilever PLC,UL,UK,Consumer Staples,FMCG,1466175
+Rio Tinto PLC,RIO,UK,Materials,Mining,1039399
+Anglo American,AAUKF,UK,Materials,Mining,
+Rolls-Royce Holdings,RYCEY,UK,Industrials,Aerospace Engines,
+BAE Systems,BAESY,UK,Industrials,Aerospace & Defense,
+Vodafone Group,VOD,UK,Technology,Telecom,101829
+TotalEnergies SE,TTE,France,Energy,Oil & Gas,1001316
+LVMH,LVMUY,France,Consumer Discretionary,Luxury Goods,
+Schneider Electric,SBGSY,France,Industrials,Energy Management,
+Safran SA,SAFRY,France,Industrials,Aerospace Engines,
+Valeo SA,VLEEY,France,Consumer Discretionary,Auto Parts,
+Michelin Group,MGDDY,France,Consumer Discretionary,Tires,
+Saint-Gobain,CODGF,France,Materials,Construction Materials,
+Air Liquide,AIQUY,France,Materials,Industrial Gases,
+ASML Holding,ASML,Netherlands,Technology,Semiconductor Equipment,1091865
+Stellantis NV,STLA,Netherlands,Consumer Discretionary,Automobiles,1834585
+Philips N.V.,PHG,Netherlands,Healthcare,Medical Equipment,313216
+Heineken N.V.,HEINY,Netherlands,Consumer Staples,Beverages,
+Akzo Nobel,AKZOY,Netherlands,Materials,Paints & Coatings,
+Nestlé SA,NSRGY,Switzerland,Consumer Staples,Food & Beverages,
+Novartis AG,NVS,Switzerland,Healthcare,Pharmaceuticals,1114448
+Roche Holding,RHHBY,Switzerland,Healthcare,Diagnostics & Pharma,
+ABB Ltd,ABB,Switzerland,Industrials,Electrification,1091587
+Glencore PLC,GLNCY,Switzerland,Materials,Mining & Commodities,
+Sika AG,SXYAY,Switzerland,Materials,Specialty Chemicals,
+Reliance Industries,RELIANCE.NS,India,Energy,Oil Gas & Retail,
+Tata Consultancy Services,TCS.NS,India,Technology,IT Services,
+Infosys Limited,INFY,India,Technology,IT Services,1067491
+Wipro Limited,WIT,India,Technology,IT Services,1310901
+HCL Technologies,HCLTECH.NS,India,Technology,IT Services,
+Tata Motors,TTM,India,Consumer Discretionary,Automobiles,1098700
+Tata Steel,TATASTEEL.NS,India,Materials,Steel,
+HDFC Bank,HDB,India,Financials,Banking,1166928
+Sun Pharmaceutical,SUNPHARMA.NS,India,Healthcare,Pharmaceuticals,
+Dr. Reddy's Laboratories,RDY,India,Healthcare,Generic Pharmaceuticals,1082754
+BHP Group,BHP,Australia,Materials,Mining,1024739
+Rio Tinto Australia,RIO_AU,Australia,Materials,Mining,1039399
+Fortescue Metals,FSUGY,Australia,Materials,Iron Ore Mining,
+Woodside Energy,WDS,Australia,Energy,LNG,1616862
+Vale SA,VALE,Brazil,Materials,Mining,1001233
+Petrobras,PBR,Brazil,Energy,Oil & Gas,1119639
+Embraer SA,ERJ,Brazil,Industrials,Aerospace,1144519
+Saudi Aramco,2222.SR,Saudi Arabia,Energy,Oil & Gas,
+SABIC,2010.SR,Saudi Arabia,Materials,Petrochemicals,
+Sasol Limited,SSL,South Africa,Energy,Chemicals & Energy,
+Maersk Group,AMKBY,Denmark,Industrials,Shipping & Logistics,
+Volvo AB,VLVLY,Sweden,Industrials,Commercial Vehicles,
+Ericsson,ERIC,Sweden,Technology,Telecom Equipment,1002655
+H&M Group,HNNMY,Sweden,Consumer Discretionary,Apparel Retail,
+Sandvik AB,SDVKY,Sweden,Industrials,Mining Equipment,
+LKAB,LKAB,Sweden,Materials,Iron Ore Mining,
+Equinor ASA,EQNR,Norway,Energy,Oil & Gas,1163308
+Yara International,YARIY,Norway,Materials,Fertilizers,
+Nokia Corporation,NOK,Finland,Technology,Telecom Equipment,1061219
+STMicroelectronics,STM,Italy,Technology,Semiconductors,912093
+Leonardo DRS,LDO.MI,Italy,Industrials,Aerospace & Defense,
+Ferrari N.V.,RACE,Italy,Consumer Discretionary,Luxury Automobiles,1621221
+LVMH Parfums,MC.PA,France,Consumer Discretionary,Luxury Goods,
+Hermes International,RMS.PA,France,Consumer Discretionary,Luxury Goods,
+Sanofi SA,SNY,France,Healthcare,Pharmaceuticals,1121404
+UCB SA,UCB.BR,Belgium,Healthcare,Biopharmaceuticals,
+IMEC,IMEC,Belgium,Technology,Semiconductor Research,
+ArcelorMittal,MT,Luxembourg,Materials,Steel,
+CATL Europe,CATL_EU,Germany,Technology,Battery Cells,
+Aptiv PLC,APTV,Ireland,Consumer Discretionary,Auto Parts,1521332
+TE Connectivity,TEL,Ireland,Technology,Connectors & Sensors,1385157
+CRH PLC,CRH,Ireland,Materials,Construction Materials,1389170
+Linde PLC,LIN,Ireland,Materials,Industrial Gases,1707092
+Flex Ltd,FLEX,Singapore,Technology,Electronics Manufacturing,866374
+Jabil Inc,JBL,USA,Technology,Electronics Manufacturing,898293
+Celestica Inc,CLS,Canada,Technology,Electronics Manufacturing,1061219
+Magna International,MGA,Canada,Consumer Discretionary,Auto Parts,749485
+Barrick Gold,GOLD,Canada,Materials,Gold Mining,812011
+Nutrien Ltd,NTR,Canada,Materials,Fertilizers,1725964
+Air Canada,ACDVF,Canada,Industrials,Airlines,
+Grab Holdings,GRAB,Singapore,Technology,Ride-hailing & Logistics,1836935
+Sea Limited,SE,Singapore,Technology,E-Commerce & Gaming,1744676
+DBS Group,DBSDY,Singapore,Financials,Banking,
+Wilmar International,WLMIY,Singapore,Consumer Staples,Agribusiness,
+Thai Union Group,TU.BK,Thailand,Consumer Staples,Seafood Processing,
+PTT Global Chemical,PTTGC.BK,Thailand,Materials,Petrochemicals,
+Vietnam Manufacturing JV,VMF_VN,Vietnam,Technology,Electronics Manufacturing,
+Samsung Vietnam,SEV_VN,Vietnam,Technology,Electronics Manufacturing,
+Indonesia Nickel Corp,INC_ID,Indonesia,Materials,Nickel Mining,
+Freeport Indonesia,FCX_ID,Indonesia,Materials,Copper Mining,
+Adani Group,ADANIENT.NS,India,Industrials,Ports & Logistics,
+Mahindra & Mahindra,M&M.NS,India,Consumer Discretionary,Automobiles,
+JSW Steel,JSWSTEEL.NS,India,Materials,Steel,
+Cipla Ltd,CIPLA.NS,India,Healthcare,Generic Pharmaceuticals,
+Bharat Petroleum,BPCL.NS,India,Energy,Oil Refining,
+AMD,AMD,USA,Technology,Semiconductors,1674917
+Marvell Technology,MRVL,USA,Technology,Semiconductors,1058057
+ON Semiconductor,ON,USA,Technology,Semiconductors,861284
+NXP Semiconductors,NXPI,Netherlands,Technology,Automotive Chips,1413447
+Renault SA,RNO.PA,France,Consumer Discretionary,Automobiles,
+ZF Friedrichshafen,ZF,Germany,Consumer Discretionary,Auto Transmissions,
+Schaeffler AG,SHA.DE,Germany,Consumer Discretionary,Bearings & Auto,
+HELLA GmbH,HLE.DE,Germany,Consumer Discretionary,Automotive Lighting,
+Faurecia,EO.PA,France,Consumer Discretionary,Auto Interiors,
+Plastic Omnium,POM.PA,France,Consumer Discretionary,Auto Plastics,
+Pirelli & C.,PIRC.MI,Italy,Consumer Discretionary,Tires,
+Daikin Industries,DKILY,Japan,Industrials,HVAC Systems,
+Nidec Corporation,NJDCY,Japan,Technology,Electric Motors,
+Fanuc Corporation,FANUY,Japan,Industrials,Industrial Robots,
+Yaskawa Electric,YASKY,Japan,Industrials,Robots Servo Motors,
+Komatsu Ltd,KMTUY,Japan,Industrials,Mining Heavy Equipment,
+Kubota Corporation,KUBOY,Japan,Industrials,Agricultural Machinery,
+Marubeni Corporation,MARUY,Japan,Industrials,Trading Conglomerate,
+Itochu Corporation,ITOCY,Japan,Industrials,Trading Conglomerate,
+Suzuki Motor,SZKMY,Japan,Consumer Discretionary,Automobiles,
+SMC Corporation,SMCAY,Japan,Industrials,Pneumatics,
+LG Chem,051910.KS,South Korea,Materials,Specialty Chemicals,
+Korea Zinc,010130.KS,South Korea,Materials,Zinc Smelting,
+Haier Group,600690.SS,China,Consumer Discretionary,Home Appliances,
+Geely Automobile,0175.HK,China,Consumer Discretionary,Automobiles,
+Weichai Power,WECHY,China,Industrials,Diesel Engines,
+CRRC Corporation,1766.HK,China,Industrials,Rail Rolling Stock,
+Zijin Mining,2899.HK,China,Materials,Gold Copper Mining,
+Wanhua Chemical,600309.SS,China,Materials,Polyurethane Chemicals,
+Petronas,PTR_MY,Malaysia,Energy,Oil & Gas,
+Hartalega,HART.KL,Malaysia,Healthcare,Medical Gloves,
+Top Glove,TPVG.KL,Malaysia,Healthcare,Medical Gloves,
+CIMB Group,CIMB.KL,Malaysia,Financials,Banking,
+Charoen Pokphand,CPF.BK,Thailand,Consumer Staples,Food Conglomerate,
+Vinfast,VFS,Vietnam,Consumer Discretionary,Electric Vehicles,1971213
+SembCorp Industries,U96.SI,Singapore,Industrials,Energy & Marine,
+Olam International,VC2.SI,Singapore,Consumer Staples,Agribusiness,
+Vestas Wind Systems,VWS.CO,Denmark,Industrials,Wind Turbines,
+Orsted AS,DNNGY,Denmark,Energy,Offshore Wind,
+Neste Corporation,NTOIY,Finland,Energy,Renewable Fuels,
+Metso Outotec,OUKPF,Finland,Industrials,Mining Equipment,
+Wartsila,WRTBY,Finland,Industrials,Marine Engines,
+Atlas Copco,ATLKY,Sweden,Industrials,Compressors Mining,
+SKF AB,SKFRY,Sweden,Industrials,Bearings,
+Alfa Laval,ALFVY,Sweden,Industrials,Heat Transfer,
+SSAB AB,SSABY,Sweden,Materials,Green Steel,
+Outokumpu,OUTKY,Finland,Materials,Stainless Steel,
+Holcim Group,HCMLY,Switzerland,Materials,Cement,
+Lonza Group,LZAGY,Switzerland,Healthcare,CDMO Biologics,
+EMS-Chemie,EMSGY,Switzerland,Materials,Specialty Polymers,
+ENGIE SA,ENGIY,France,Energy,Utilities Renewables,
+Vinci SA,VCISY,France,Industrials,Construction,
+Dassault Systemes,DASTY,France,Technology,3D CAD Software,1505512
+Knorr-Bremse,KBX.DE,Germany,Industrials,Rail Truck Brakes,
+Wabco Holdings,WBC,USA,Industrials,Truck Braking Systems,1403708
