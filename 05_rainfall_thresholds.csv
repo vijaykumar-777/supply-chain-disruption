@@ -1,0 +1,25 @@
+district,zone_type,yellow_alert_mm_day,orange_alert_mm_day,red_alert_mm_day,extreme_red_mm_day,landslide_trigger_mm_day,flood_trigger_mm_day,annual_avg_mm,peak_monsoon_months,notes
+Kodagu,Western Ghats,64,115,204,>204,115,150,2600,Jun-Sep,Highest risk; Bhagamandala avg 3000mm
+Dakshina Kannada,Coastal+Ghat,64,115,204,>204,120,130,3800,Jun-Sep,Highest annual rainfall in KA
+Udupi,Coastal+Ghat,64,115,204,>204,120,130,3500,Jun-Sep,Coastal flooding + ghat landslide
+Uttara Kannada,Western Ghats,64,115,204,>204,115,140,2800,Jun-Sep,Highest landslide-prone area 8389 sqkm
+Shivamogga,Malenadu,64,115,204,>204,110,130,1800,Jun-Sep,Agumbe 7000mm+; Bhadra/Sharavathi risk
+Chikkamagaluru,Western Ghats,64,115,204,>204,110,140,1700,Jun-Sep,Bhadra dam backwater risk
+Hassan,Transition,64,115,204,>204,120,150,1100,Jun-Sep,Hemavathi river; Sakleshpur ghat
+Belagavi,Krishna Basin,64,115,180,>180,NA,80,800,Jun-Oct,Dam discharge from MH; flat terrain flooding
+Vijayapura,Krishna Basin,64,115,180,>180,NA,70,530,Jul-Oct,Bhima basin; dam release from MH
+Bagalkot,Krishna Basin,64,115,180,>180,NA,75,650,Jun-Oct,Ghataprabha/Malaprabha risk
+Raichur,Tungabhadra,64,115,180,>180,NA,70,620,Jul-Sep,Tungabhadra dam discharge
+Koppal,Tungabhadra,64,115,180,>180,NA,70,580,Jul-Sep,Moderate risk
+Kalburgi,Bhima-Krishna,64,115,180,>180,NA,65,770,Jul-Sep,Bhima river; dam release from MH
+Yadgir,Bhima-Krishna,64,115,180,>180,NA,65,720,Jul-Oct,Bhima basin; Ujjani dam discharge risk
+Mysuru,Mixed,64,115,204,>204,NA,100,800,Jun-Sep,Cauvery; KRS dam release risk
+Mandya,Cauvery,64,115,204,>204,NA,100,720,Jun-Sep,KRS dam backwater
+Chamarajanagara,Forest Zone,64,115,204,>204,NA,90,750,Jun-Sep,Moderate; tribal areas
+Dharwad,Mixed,64,115,180,>180,NA,65,800,Jun-Sep,Malaprabha risk
+Haveri,Mixed,64,115,180,>180,NA,70,700,Jun-Sep,Varada river
+Gadag,Malaprabha,64,115,180,>180,NA,65,600,Jun-Sep,Moderate; Malaprabha
+Davanagere,Mixed,64,115,180,>180,NA,75,650,Jun-Sep,Bhadra-Tungabhadra
+Bengaluru Urban,Urban,64,115,180,>180,NA,100,970,Jun-Sep,Urban flooding; lake encroachment
+Ballari,Tungabhadra,64,115,180,>180,NA,65,550,Jul-Sep,Moderate
+Bidar,Bhima,64,115,180,>180,NA,60,790,Jul-Sep,Low risk

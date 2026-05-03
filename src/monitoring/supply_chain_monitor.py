@@ -21,6 +21,59 @@ SUPPLY_CHAIN_DATA_DIR = os.path.join(os.path.dirname(RAW_DATA_DIR), "supply_chai
 os.makedirs(SUPPLY_CHAIN_DATA_DIR, exist_ok=True)
 
 LOCATION_COORDINATES = {
+    "bengaluru": (12.9716, 77.5946),
+    "bangalore": (12.9716, 77.5946),
+    "mangaluru": (12.9141, 74.8560),
+    "mangalore": (12.9141, 74.8560),
+    "mysuru": (12.2958, 76.6394),
+    "mysore": (12.2958, 76.6394),
+    "hubballi": (15.3647, 75.1240),
+    "shivamogga": (13.9299, 75.5681),
+    "madikeri": (12.4244, 75.7382),
+    "kodagu": (12.3375, 75.8069),
+    "sakleshpur": (12.9442, 75.7848),
+    "virajpet": (12.1964, 75.8051),
+    "kushalnagar": (12.4575, 75.9590),
+    "hassan": (13.0068, 76.1004),
+    "shiradi ghat": (12.9061, 75.6688),
+    "chikkamagaluru": (13.3161, 75.7720),
+    "karwar": (14.8185, 74.1416),
+    "honnavar": (14.2799, 74.4439),
+    "kumta": (14.4283, 74.4189),
+    "ankola": (14.6605, 74.3047),
+    "udupi": (13.3409, 74.7421),
+    "kundapura": (13.6255, 74.6914),
+    "kollur": (13.8667, 74.8167),
+    "bhagamandala": (12.3861, 75.5291),
+    "sagara": (14.1670, 75.0403),
+    "siddapura": (14.3432, 74.8940),
+    "sirsi": (14.6192, 74.8354),
+    "dharwad": (15.4589, 75.0078),
+    "belagavi": (15.8497, 74.4977),
+    "vijayapura": (16.8302, 75.7100),
+    "bagalkot": (16.1691, 75.6615),
+    "gadag": (15.4319, 75.6355),
+    "raichur": (16.2120, 77.3566),
+    "koppal": (15.3505, 76.1567),
+    "kalburgi": (17.3297, 76.8343),
+    "yadgir": (16.7626, 77.1446),
+    "chamarajanagara": (11.9261, 76.9437),
+    "goa border": (14.9048, 74.0842),
+    "goa_border": (14.9048, 74.0842),
+    "haveri": (14.7951, 75.3991),
+    "davanagere": (14.4644, 75.9218),
+    "tumakuru": (13.3379, 77.1173),
+    "mandya": (12.5218, 76.8951),
+    "chikkaballapur": (13.4355, 77.7315),
+    "kolar": (13.1367, 78.1295),
+    "ballari": (15.1394, 76.9214),
+    "bidar": (17.9133, 77.5301),
+    "gonikoppal": (12.1838, 75.9323),
+    "ponnampet": (12.1446, 75.9453),
+    "kerala border": (12.0605, 75.7985),
+    "kerala_border": (12.0605, 75.7985),
+    "jog falls": (14.2298, 74.8120),
+    "jog_falls": (14.2298, 74.8120),
     "shanghai": (31.2304, 121.4737),
     "singapore": (1.2903, 103.8519),
     "rotterdam": (51.9244, 4.4777),
@@ -41,15 +94,18 @@ LOCATION_COORDINATES = {
 }
 
 COLUMN_ALIASES = {
-    "source_company": ["source_company", "source", "supplier", "from_company", "company_a", "from", "supplier_name"],
-    "target_company": ["target_company", "target", "customer", "to_company", "company_b", "to", "destination_company", "buyer", "customer_name"],
-    "relationship_type": ["relationship_type", "relationship", "relation", "link_type"],
-    "material": ["material", "product", "raw_material", "commodity", "sku"],
-    "origin": ["origin", "origin_port", "origin_location", "from_location", "route_from", "source_location", "source_country", "from_country"],
-    "destination": ["destination", "destination_port", "destination_location", "to_location", "route_to", "target_location", "destination_country", "to_country"],
-    "transport_mode": ["transport_mode", "mode", "shipment_mode", "logistics_mode", "route_mode"],
-    "criticality": ["criticality", "priority", "importance", "tier", "risk_level"],
-    "route_name": ["route", "route_name", "lane", "trade_route"],
+    "source_company": ["source_company", "source", "supplier", "from_company", "company_a", "from", "supplier_name", "from_settlement", "relief_hub", "origin_node", "source_node"],
+    "target_company": ["target_company", "target", "customer", "to_company", "company_b", "to", "destination_company", "buyer", "customer_name", "to_settlement", "village", "target_node", "destination_node"],
+    "relationship_type": ["relationship_type", "relationship", "relation", "link_type", "road_type", "access_type"],
+    "material": ["material", "product", "raw_material", "commodity", "sku", "relief_payload", "aid_type", "cargo"],
+    "origin": ["origin", "origin_port", "origin_location", "from_location", "route_from", "source_location", "source_country", "from_country", "road_from"],
+    "destination": ["destination", "destination_port", "destination_location", "to_location", "route_to", "target_location", "destination_country", "to_country", "road_to"],
+    "transport_mode": ["transport_mode", "mode", "shipment_mode", "logistics_mode", "route_mode", "vehicle_type"],
+    "criticality": ["criticality", "priority", "importance", "tier", "risk_level", "relief_priority", "medical_priority"],
+    "route_name": ["route", "route_name", "lane", "trade_route", "road_segment", "corridor", "access_route", "road_name"],
+    "distance_km": ["distance_km", "distance", "km"],
+    "travel_time_min": ["travel_time_min", "travel_minutes", "duration_min", "time_min"],
+    "notes": ["notes", "remarks", "risk_notes"],
     "origin_lat": ["origin_lat", "from_lat", "source_lat"],
     "origin_lon": ["origin_lon", "from_lon", "source_lon"],
     "destination_lat": ["destination_lat", "to_lat", "target_lat"],
@@ -60,13 +116,13 @@ CRITICALITY_WEIGHTS = {"high": 1.0, "medium": 0.78, "low": 0.58}
 TRANSPORT_KEYWORDS = {
     "sea": ["port", "vessel", "maritime", "shipping", "canal", "terminal"],
     "air": ["airport", "air cargo", "freight", "airline"],
-    "road": ["truck", "highway", "road", "border crossing"],
+    "road": ["truck", "highway", "road", "border crossing", "ghat", "bridge", "village access"],
     "rail": ["rail", "train", "intermodal"],
 }
 
 SEVERITY_KEYWORDS = {
-    "critical": ["block", "blocked", "closure", "closed", "halt", "shutdown", "strike", "sanction", "suspended", "flood", "storm", "collision"],
-    "warning": ["delay", "slowdown", "congestion", "watch", "inspection", "shortage", "queue", "cyber"],
+    "critical": ["block", "blocked", "closure", "closed", "halt", "shutdown", "strike", "sanction", "suspended", "flood", "storm", "collision", "landslide", "washed out", "cut off"],
+    "warning": ["delay", "slowdown", "congestion", "watch", "inspection", "shortage", "queue", "cyber", "waterlogging", "overflow", "heavy rain"],
 }
 
 CATEGORY_KEYWORDS = {
@@ -76,6 +132,8 @@ CATEGORY_KEYWORDS = {
     "geopolitical": ["sanction", "tariff", "export control", "border", "conflict", "war"],
     "cyber": ["cyber", "outage", "system", "ransomware"],
     "supply": ["shortage", "factory", "supplier", "mine", "refinery", "production"],
+    "landslide": ["landslide", "slope", "ghat", "mudslide", "rockfall"],
+    "flood": ["flood", "waterlogging", "overflow", "inundation"],
 }
 
 GEOCODE_URL = "https://nominatim.openstreetmap.org/search"
@@ -139,7 +197,7 @@ class SupplyChainMonitor:
 
         routes = self._normalize_routes(rows)
         if not routes:
-            raise ValueError("No valid supply-chain routes were found in the uploaded file.")
+            raise ValueError("No valid relief road segments were found in the uploaded file.")
 
         snapshot_id = str(uuid.uuid4())
         snapshot = {
@@ -195,6 +253,8 @@ class SupplyChainMonitor:
             "healthy_routes": max(len(snapshot["routes"]) - len(impacted_links), 0),
             "monitored_companies": len([n for n in snapshot["nodes"] if n["type"] == "company"]),
             "watched_locations": len([n for n in snapshot["nodes"] if n["type"] == "location"]),
+            "monitored_settlements": len([n for n in snapshot["nodes"] if n["type"] == "company"]),
+            "watched_road_points": len([n for n in snapshot["nodes"] if n["type"] == "location"]),
             "active_alerts": len(alerts),
         }
 
@@ -222,26 +282,26 @@ class SupplyChainMonitor:
     def template(self) -> Dict[str, Any]:
         sample_rows = [
             {
-                "source_company": "MineCo Chile",
-                "target_company": "RefineCo China",
-                "relationship_type": "supplies",
-                "material": "Lithium Ore",
-                "origin": "Chile",
-                "destination": "Shanghai",
-                "transport_mode": "sea",
+                "source_company": "Bengaluru Relief Hub",
+                "target_company": "Sakleshpur",
+                "relationship_type": "relief_road",
+                "material": "Food, water, medical kits",
+                "origin": "Bengaluru",
+                "destination": "Sakleshpur",
+                "transport_mode": "truck",
                 "criticality": "high",
-                "route_name": "Chile to Shanghai lithium lane",
+                "route_name": "Bengaluru to Sakleshpur relief corridor",
             },
             {
-                "source_company": "RefineCo China",
-                "target_company": "BatteryCo India",
-                "relationship_type": "processes_for",
-                "material": "Lithium Cells",
-                "origin": "Shanghai",
-                "destination": "Mumbai",
-                "transport_mode": "sea",
+                "source_company": "Sakleshpur",
+                "target_company": "Mangaluru Coastal Hub",
+                "relationship_type": "ghat_road",
+                "material": "Rescue supplies",
+                "origin": "Shiradi Ghat",
+                "destination": "Mangaluru",
+                "transport_mode": "truck",
                 "criticality": "high",
-                "route_name": "Shanghai to Mumbai battery cells",
+                "route_name": "Shiradi Ghat emergency access",
             },
         ]
         return {"columns": list(COLUMN_ALIASES.keys()), "sample_rows": sample_rows}
@@ -272,8 +332,14 @@ class SupplyChainMonitor:
 
             origin = normalized.get("origin") or source_company
             destination = normalized.get("destination") or target_company
-            transport_mode = (normalized.get("transport_mode") or "sea").lower()
+            transport_mode = (normalized.get("transport_mode") or "truck").lower()
             criticality = (normalized.get("criticality") or "medium").lower()
+            notes = normalized.get("notes", "").lower()
+            if criticality == "medium":
+                if "very high" in notes or "high" in notes:
+                    criticality = "high"
+                elif "safe" in notes or "low risk" in notes:
+                    criticality = "low"
             if criticality not in CRITICALITY_WEIGHTS:
                 criticality = "medium"
 
@@ -293,6 +359,9 @@ class SupplyChainMonitor:
                     "transport_mode": transport_mode,
                     "criticality": criticality,
                     "route_name": route_name,
+                    "distance_km": normalized.get("distance_km"),
+                    "travel_time_min": normalized.get("travel_time_min"),
+                    "notes": normalized.get("notes"),
                     "origin_lat": origin_lat,
                     "origin_lon": origin_lon,
                     "destination_lat": destination_lat,
@@ -415,7 +484,7 @@ class SupplyChainMonitor:
             return []
 
         query_terms = " OR ".join(f'"{term}"' for term in terms)
-        query = f"({query_terms}) AND (port OR shipping OR logistics OR supplier OR factory OR strike OR storm OR export OR sanctions OR congestion)"
+        query = f"({query_terms}) AND (flood OR rainfall OR landslide OR road OR bridge OR waterlogging OR rescue OR relief OR storm)"
         response = requests.get(
             "https://api.gdeltproject.org/api/v2/doc/doc",
             params={

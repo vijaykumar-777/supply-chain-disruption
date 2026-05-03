@@ -32,15 +32,15 @@ export const AnalyticsView = () => {
   return (
     <div className="h-full flex flex-col gap-6 overflow-y-auto no-scrollbar pr-2 pb-4">
       <div>
-        <h2 className="text-2xl font-bold text-on-surface">Analytics & Trends</h2>
-        <p className="text-sm text-on-surface-variant">Real-time breakdown of current supply chain disruptions</p>
+        <h2 className="text-2xl font-bold text-on-surface">Relief Risk Analytics</h2>
+        <p className="text-sm text-on-surface-variant">Breakdown of active flood, landslide, weather, and road-access hazards</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="glass-elevated p-4 rounded-xl border border-primary/20 flex flex-col items-center justify-center text-center">
            <AlertCircle className="w-8 h-8 text-primary mb-2" />
            <p className="text-2xl font-bold text-on-surface">{stats.total}</p>
-           <p className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Active Events</p>
+           <p className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Active Hazards</p>
         </div>
         <div className="glass-elevated p-4 rounded-xl border border-error/30 flex flex-col items-center justify-center text-center bg-error/5 relative overflow-hidden">
            <div className="absolute top-0 right-0 w-16 h-16 bg-error/10 blur-xl rounded-full"></div>
@@ -51,18 +51,18 @@ export const AnalyticsView = () => {
         <div className="glass-elevated p-4 rounded-xl border border-primary/10 flex flex-col items-center justify-center text-center opacity-50 grayscale">
            <TrendingUp className="w-8 h-8 text-on-surface-variant mb-2" />
            <p className="text-xl font-bold text-on-surface-variant">--</p>
-           <p className="text-xs text-on-surface-variant uppercase tracking-wider">Historical Models (Phase 2)</p>
+           <p className="text-xs text-on-surface-variant uppercase tracking-wider">Rainfall Trends</p>
         </div>
         <div className="glass-elevated p-4 rounded-xl border border-primary/10 flex flex-col items-center justify-center text-center opacity-50 grayscale">
            <FileText className="w-8 h-8 text-on-surface-variant mb-2" />
            <p className="text-xl font-bold text-on-surface-variant">--</p>
-           <p className="text-xs text-on-surface-variant uppercase tracking-wider">Export Report (Phase 4)</p>
+           <p className="text-xs text-on-surface-variant uppercase tracking-wider">Export Sitrep</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 min-h-[320px]">
         <div className="glass-elevated p-5 rounded-xl border border-primary/10 flex flex-col">
-          <h3 className="font-bold text-lg mb-6 text-on-surface">Event Distribution by Category</h3>
+          <h3 className="font-bold text-lg mb-6 text-on-surface">Hazard Distribution by Category</h3>
           <div className="flex-1 min-h-[250px]">
              {loading && events.length === 0 ? <p className="text-center mt-10 text-on-surface-variant">Loading...</p> : (
                <ResponsiveContainer width="100%" height="100%">
@@ -78,7 +78,7 @@ export const AnalyticsView = () => {
         </div>
 
         <div className="glass-elevated p-5 rounded-xl border border-primary/10 flex flex-col">
-          <h3 className="font-bold text-lg mb-6 text-on-surface">Live Threat Severities</h3>
+          <h3 className="font-bold text-lg mb-6 text-on-surface">Road-Access Threat Severities</h3>
           <div className="flex-1 min-h-[250px]">
              {loading && events.length === 0 ? <p className="text-center mt-10 text-on-surface-variant">Loading...</p> : (
                <ResponsiveContainer width="100%" height="100%">

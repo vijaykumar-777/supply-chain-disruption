@@ -1,0 +1,31 @@
+name,district,lat,lon,type,capacity_persons,available_trucks,fuel_stock_L,contact,notes
+KSNDMC State EOC,Bengaluru Urban,13.1007,77.5863,state_eoc,500,10,50000,080-67355000,Primary state coordination centre
+Mangaluru Fire Station HQ,Dakshina Kannada,12.8716,74.8420,fire_station,200,6,15000,0824-2440101,Covers coastal DK
+Mangaluru District Warehouse,Dakshina Kannada,12.9141,74.8560,warehouse,1000,12,30000,0824-2220000,NDRF prepositioned stocks
+Madikeri District Control Room,Kodagu,12.4244,75.7382,district_eoc,150,4,10000,08272-228901,High priority Kodagu
+Madikeri Zonal Hospital,Kodagu,12.4232,75.7399,hospital,300,2,5000,08272-228803,Only major hospital in Kodagu
+Kushalnagar Relief Camp,Kodagu,12.4587,75.9623,relief_camp,500,3,8000,08276-272244,Cauvery river bridge access
+Hassan District Warehouse,Hassan,13.0068,76.1004,warehouse,800,8,20000,08172-268900,Covers Hassan-Sakleshpur corridor
+Shivamogga District EOC,Shivamogga,13.9299,75.5681,district_eoc,300,8,20000,08182-227910,Malenadu hub
+Shivamogga Government Hospital,Shivamogga,13.9349,75.5603,hospital,500,3,8000,08182-227500,Major referral hospital
+Sagara Taluk Warehouse,Shivamogga,14.1679,75.0234,warehouse,400,4,10000,08183-222444,Covers Sagara-Siddapura
+Sirsi Taluk Office Store,Uttara Kannada,14.6202,74.8300,warehouse,350,4,8000,08384-236200,Covers Sirsi-Yellapur
+Karwar District Warehouse,Uttara Kannada,14.8013,74.1288,warehouse,600,6,15000,08382-226600,Coastal Uttara Kannada
+Honnavar Relief Hub,Uttara Kannada,14.2799,74.4439,warehouse,300,3,7000,08387-220300,Mid-coastal hub
+Udupi District Warehouse,Udupi,13.3409,74.7421,warehouse,500,6,12000,0820-2520200,Coastal Udupi
+Dharwad District Warehouse,Dharwad,15.4589,75.0078,warehouse,600,8,18000,0836-2447700,North KA corridor
+Belagavi District EOC,Belagavi,15.8497,74.4977,district_eoc,400,10,25000,0831-2405100,Krishna basin hub
+Vijayapura District Warehouse,Vijayapura,16.8302,75.7100,warehouse,500,6,15000,08352-250200,Bhima-Krishna risk zone
+Bagalkot District Store,Bagalkot,16.1691,75.6615,warehouse,400,5,12000,08354-235500,Ghataprabha basin
+Raichur District Warehouse,Raichur,16.2120,77.3566,warehouse,500,6,15000,08532-220501,Tungabhadra hub
+Kalburgi District EOC,Kalburgi,17.3297,76.8200,district_eoc,400,7,18000,08472-276200,North-east KA hub
+Yadgir District Warehouse,Yadgir,16.7630,77.1380,warehouse,300,4,8000,08473-252300,Bhima basin risk
+Mysuru District Warehouse,Mysuru,12.2958,76.6394,warehouse,700,10,20000,0821-2420000,South KA hub
+Chamarajanagara Relief Store,Chamarajanagara,11.9261,76.9434,warehouse,250,3,7000,08226-222300,Tribal areas access
+Chikkamagaluru District Store,Chikkamagaluru,13.3161,75.7720,warehouse,350,4,10000,08262-230900,Coffee belt; ghat access
+Davanagere District Warehouse,Davanagere,14.4644,75.9218,warehouse,500,7,15000,08192-230500,Central KA hub
+Ballari District Warehouse,Ballari,15.1394,76.9214,warehouse,400,5,12000,08392-270500,Tungabhadra
+Koppal District Store,Koppal,15.3508,76.1547,warehouse,300,4,8000,08539-220200,Moderate risk
+Gadag District Store,Gadag,15.4315,75.6249,warehouse,300,4,8000,08372-234200,Malaprabha risk
+Haveri District Store,Haveri,14.7953,75.4011,warehouse,350,5,10000,08375-230600,Varada river risk
+Tumakuru District Warehouse,Tumakuru,13.3379,77.1173,warehouse,450,6,12000,0816-2272200,SE corridor hub

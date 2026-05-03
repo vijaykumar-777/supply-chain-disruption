@@ -26,13 +26,13 @@ export const AIAssistantView = () => {
 
     const ids = new Set(routeNodes.map(node => node.id));
     const preferredSource =
-      routeNodes.find(node => node.id === "PORT_SHANGHAI")?.id ??
-      routeNodes.find(node => node.id === "NODE_LOC_SHANGHAI")?.id ??
+      routeNodes.find(node => node.id === "HUB_BENGALURU")?.id ??
+      routeNodes.find(node => node.name.toLowerCase().includes("relief hub"))?.id ??
       routeNodes[0]?.id ??
       "";
     const preferredTarget =
-      routeNodes.find(node => node.id === "PORT_LA")?.id ??
-      routeNodes.find(node => node.id === "NODE_LOC_LOS_ANGELES")?.id ??
+      routeNodes.find(node => node.id === "VILLAGE_BHAGAMANDALA")?.id ??
+      routeNodes.find(node => node.labels.includes("Village"))?.id ??
       routeNodes.find(node => node.id !== preferredSource)?.id ??
       routeNodes[0]?.id ??
       "";
@@ -101,8 +101,8 @@ export const AIAssistantView = () => {
             <Bot className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-on-surface">Atlas AI Strategist</h2>
-            <p className="text-sm text-on-surface-variant">Llama-3 powered supply chain resolution</p>
+            <h2 className="text-2xl font-bold text-on-surface">Relief Route Advisor</h2>
+            <p className="text-sm text-on-surface-variant">Grounded response planning for Karnataka flood and landslide logistics</p>
           </div>
         </div>
         {step > 1 && (
@@ -115,9 +115,9 @@ export const AIAssistantView = () => {
       {/* Progress Steps */}
       <div className="flex items-center justify-between mt-2 mb-2 px-4">
         {[
-          { num: 1, label: "Select Disruption" },
-          { num: 2, label: "Simulate Impact" },
-          { num: 3, label: "Generate Strategy" },
+          { num: 1, label: "Select Hazard" },
+          { num: 2, label: "Simulate Route" },
+          { num: 3, label: "Generate Action" },
           { num: 4, label: "Review & Rate" }
         ].map((s, i) => (
           <div key={s.num} className="flex flex-col items-center gap-2 relative flex-1">
@@ -134,7 +134,7 @@ export const AIAssistantView = () => {
       <div className="flex flex-col gap-6 pb-10">
         {/* STEP 1: Select Event */}
         <div className={cn("glass-elevated p-6 rounded-xl border border-primary/20 transition-all", step > 1 && "opacity-40 grayscale pointer-events-none")}>
-          <h3 className="text-xl font-bold mb-4 flex items-center gap-2"><AlertTriangle className="w-5 h-5 text-tertiary" /> Step 1: Target Active Disruption</h3>
+          <h3 className="text-xl font-bold mb-4 flex items-center gap-2"><AlertTriangle className="w-5 h-5 text-tertiary" /> Step 1: Target Active Hazard</h3>
           
           {eventsLoading && events.length === 0 ? (
             <div className="text-center p-6 text-on-surface-variant">
@@ -162,7 +162,7 @@ export const AIAssistantView = () => {
           
             <div className="mt-6 flex flex-wrap gap-4 items-end border-t border-white/10 pt-6">
             <div className="flex-1 min-w-[150px]">
-              <label className="text-xs text-on-surface-variant uppercase mb-2 block font-semibold">Route Source Node</label>
+              <label className="text-xs text-on-surface-variant uppercase mb-2 block font-semibold">Relief Hub / Start</label>
               <select value={sourceNode} onChange={e => setSourceNode(e.target.value)} className="w-full bg-surface border border-white/10 rounded-lg p-2.5 text-sm focus:border-primary focus:outline-none text-on-surface" disabled={nodesLoading || routeNodes.length === 0}>
                 {routeNodes.length === 0 ? (
                   <option value="">{nodesLoading ? "Loading nodes..." : "No nodes available"}</option>
@@ -177,7 +177,7 @@ export const AIAssistantView = () => {
             </div>
             <ArrowRight className="w-5 h-5 text-on-surface-variant mb-3 hidden md:block" />
             <div className="flex-1 min-w-[150px]">
-              <label className="text-xs text-on-surface-variant uppercase mb-2 block font-semibold">Route Target Node</label>
+              <label className="text-xs text-on-surface-variant uppercase mb-2 block font-semibold">Village / Destination</label>
               <select value={targetNode} onChange={e => setTargetNode(e.target.value)} className="w-full bg-surface border border-white/10 rounded-lg p-2.5 text-sm focus:border-primary focus:outline-none text-on-surface" disabled={nodesLoading || routeNodes.length === 0}>
                 {routeNodes.length === 0 ? (
                   <option value="">{nodesLoading ? "Loading nodes..." : "No nodes available"}</option>
@@ -195,12 +195,12 @@ export const AIAssistantView = () => {
               onClick={handleRunSimulation}
               className="bg-primary text-white px-6 py-2.5 rounded-lg font-bold flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-primary/80 transition shadow-lg shadow-primary/20"
             >
-              Analyze Route Impact <ChevronRight className="w-4 h-4" />
+              Analyze Relief Route <ChevronRight className="w-4 h-4" />
             </button>
           </div>
           {nodesSource === "live" && (
             <div className="mt-3 text-xs text-on-surface-variant">
-              Route IDs are loaded from the live supply chain graph, so only valid Neo4j nodes are selectable.
+              Route IDs are loaded from the live relief graph, so only valid Neo4j nodes are selectable.
             </div>
           )}
         </div>
@@ -208,27 +208,27 @@ export const AIAssistantView = () => {
         {/* STEP 2: Simulation Results */}
         {step >= 2 && (
           <div className={cn("glass-elevated p-6 rounded-xl border border-primary/20 transition-all", step > 3 && "opacity-40 grayscale pointer-events-none")}>
-            <h3 className="text-xl font-bold mb-4 flex items-center gap-2"><Play className="w-5 h-5 text-primary" /> Step 2: Impact Simulation</h3>
+            <h3 className="text-xl font-bold mb-4 flex items-center gap-2"><Play className="w-5 h-5 text-primary" /> Step 2: Blocked-Road Simulation</h3>
             {simul.loading ? (
                <div className="flex gap-4 text-primary p-6 bg-primary/5 rounded-xl border border-primary/20 items-center justify-center">
                  <RefreshCw className="w-6 h-6 animate-spin" /> 
                  <div>
-                   <div className="font-bold">Running Monte Carlo simulation...</div>
+                   <div className="font-bold">Running route disruption simulation...</div>
                    <div className="text-sm opacity-70">Analyzing route from {sourceNode} → {targetNode}</div>
                  </div>
                </div>
             ) : simData ? (
                <div className="bg-surface/50 border border-white/10 rounded-xl p-5">
                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                   <div><div className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Base Duration</div><div className="text-xl font-bold text-on-surface mt-1">{simData.baseDuration.toFixed(1)} days</div></div>
-                   <div><div className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Mean Delay</div><div className="text-xl font-bold text-error mt-1">+{simData.meanDelay.toFixed(1)} days</div></div>
-                   <div><div className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">P95 Delay (Worst)</div><div className="text-xl font-bold text-error mt-1">+{simData.p95Delay.toFixed(1)} days</div></div>
+                   <div><div className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Base Travel Time</div><div className="text-xl font-bold text-on-surface mt-1">{simData.baseDuration.toFixed(1)} days</div></div>
+                   <div><div className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Expected Delay</div><div className="text-xl font-bold text-error mt-1">+{simData.meanDelay.toFixed(1)} days</div></div>
+                   <div><div className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Worst Case</div><div className="text-xl font-bold text-error mt-1">+{simData.p95Delay.toFixed(1)} days</div></div>
                    <div><div className="text-xs text-on-surface-variant uppercase tracking-wider font-semibold">Risk Score</div><div className="text-xl font-bold text-tertiary mt-1">{(simData.riskScore * 100).toFixed(0)}%</div></div>
                  </div>
                  {step === 3 && (
                    <div className="mt-6 border-t border-white/10 pt-6 flex justify-end">
                      <button onClick={handleGetRecommendation} className="bg-primary text-white px-6 py-2.5 rounded-lg font-bold flex items-center gap-2 hover:bg-primary/80 transition shadow-lg shadow-primary/20">
-                       Generate AI Mitigation Strategy <Bot className="w-4 h-4" />
+                       Generate Relief Action Plan <Bot className="w-4 h-4" />
                      </button>
                    </div>
                  )}
@@ -242,11 +242,11 @@ export const AIAssistantView = () => {
         {/* STEP 3 & 4: AI Recommendation */}
         {step >= 4 && (
           <div className="glass-elevated p-6 rounded-xl border border-primary/50 shadow-[0_0_30px_rgba(59,130,246,0.15)] bg-gradient-to-br from-surface to-primary/5">
-             <h3 className="text-xl font-bold mb-4 flex items-center gap-2"><Bot className="w-6 h-6 text-primary" /> Step 3: AI Mitigation Strategy</h3>
+             <h3 className="text-xl font-bold mb-4 flex items-center gap-2"><Bot className="w-6 h-6 text-primary" /> Step 3: Grounded Relief Action Plan</h3>
              {recomm.loading ? (
                 <div className="flex flex-col gap-3 text-primary p-6 bg-primary/5 rounded-xl border border-primary/20 items-center justify-center">
                   <Bot className="w-10 h-10 animate-bounce" />
-                  <div className="font-bold">Llama-3 is analyzing the supply chain network...</div>
+                  <div className="font-bold">Llama-3 is analyzing the relief network...</div>
                   <div className="text-sm opacity-70">Synthesizing alternatives for {targetNode}</div>
                 </div>
              ) : recomm.result ? (

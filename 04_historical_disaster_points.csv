@@ -1,0 +1,31 @@
+location_name,district,lat,lon,event_type,date,severity,road_blocked,casualties,duration_days,source
+Shiradi Ghat (NH48/SH47),Hassan-DK,12.9100,75.6900,landslide,2018-08-15,extreme,yes,3,12,KSDMA 2018 report
+Bhagamandala,Kodagu,12.3897,75.5331,flood,2018-08-16,extreme,yes,5,45,KSNDMC 2018
+Napoklu Bridge,Kodagu,12.3547,75.6892,bridge_failure,2018-08-17,extreme,yes,0,8,KSDMA 2018
+Kushalanagar-Madikeri road,Kodagu,12.4400,75.7800,landslide,2018-08-16,high,yes,2,6,KSDMA 2018
+Agumbe Ghat,Shivamogga,13.5029,75.0965,landslide,2019-08-08,extreme,yes,1,10,KSNDMC 2019
+Thirthahalli bridge,Shivamogga,13.6921,75.2455,flood,2019-08-10,high,yes,0,5,KSNDMC 2019
+Hosanagara,Shivamogga,13.7091,75.0498,flood,2019-08-09,high,no,0,4,KSNDMC 2019
+Sringeri,Chikkamagaluru,13.4178,75.2547,flood,2019-08-11,high,yes,1,6,KSNDMC 2019
+Kalasa-Mudigere road,Chikkamagaluru,13.2066,75.5281,landslide,2019-08-12,extreme,yes,2,9,KSDMA 2019
+Uppinangadi,Dakshina Kannada,12.8396,75.2682,flood,2019-08-13,high,yes,0,5,KSNDMC 2019
+Vitla Bridge,Dakshina Kannada,12.7526,75.2261,flood,2019-08-14,high,yes,0,3,KSNDMC 2019
+Sullia,Dakshina Kannada,12.5620,75.3836,landslide,2019-08-15,high,yes,2,7,KSDMA 2019
+Yellapur-Sirsi road,Uttara Kannada,14.9617,74.7094,landslide,2020-08-05,high,yes,0,5,KSNDMC 2020
+Honnavar coastal area,Uttara Kannada,14.2799,74.4441,flood,2020-08-18,high,no,0,3,KSNDMC 2020
+Byndoor,Udupi,13.8641,74.6601,flood,2020-08-19,high,yes,1,4,KSNDMC 2020
+Ghataprabha bridge Raybag,Belagavi,16.4957,74.7700,flood,2019-08-04,extreme,yes,0,8,KSDMA 2019
+Almatti backwater zone,Bagalkot,16.3200,75.8900,flood,2019-08-06,extreme,no,0,12,KSDMA 2019
+Raichur-Sindhanur low-lying,Raichur,16.0600,76.7500,flood,2019-08-07,high,no,0,6,KSNDMC 2019
+Shorapur-Krishna river,Yadgir,16.5197,76.7595,flood,2020-10-16,high,no,0,7,KSNDMC 2020
+Govindapura landslide,Kodagu,12.4800,75.7500,landslide,2020-08-14,extreme,yes,6,14,KSDMA 2020
+NH66 Padil-Bantwal,Dakshina Kannada,12.8500,74.9200,landslide,2020-08-20,high,yes,0,3,KSNDMC 2020
+Sakleshpur ghat,Hassan,12.9431,75.7836,landslide,2022-07-30,high,yes,1,4,KSDMA 2022
+Hebri-Karkala road,Udupi,13.4707,75.0524,landslide,2022-08-02,high,yes,0,3,KSNDMC 2022
+Jog area Sharavathi,Shivamogga,14.2236,74.7970,flood,2022-08-10,high,no,0,5,KSNDMC 2022
+Belagavi urban flood,Belagavi,15.8497,74.4977,urban_flood,2021-10-12,high,no,0,4,KSNDMC 2021
+Mangaluru Netravathi,Dakshina Kannada,12.8716,74.8420,flood,2022-07-20,medium,no,0,2,KSNDMC 2022
+Suntikoppa road,Kodagu,12.5107,75.7987,landslide,2023-07-18,high,yes,0,3,KSDMA 2023
+Alur-Hassan road,Hassan,12.9722,75.9706,landslide,2023-07-22,high,yes,1,5,KSDMA 2023
+Kodagu-Mysuru SH17,Mysuru,12.2958,76.1000,flood,2023-08-05,medium,no,0,2,KSNDMC 2023
+Kumta-Honnavar coastal,Uttara Kannada,14.4275,74.4124,coastal_flood,2023-06-08,medium,no,0,2,KSNDMC 2023

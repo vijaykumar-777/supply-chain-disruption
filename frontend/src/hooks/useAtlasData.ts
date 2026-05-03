@@ -15,6 +15,8 @@ import {
   CompanyIntelSearchResponse,
   CompanyIntelSourceStatusItem,
   APILink,
+  ReliefReferenceData,
+  LiveDisastersResponse,
 } from "../services/api";
 
 // ─── useMetrics ───────────────────────────────────────────────────────────────
@@ -81,6 +83,32 @@ export function useEvents(pollMs = 15000) {
   }, [fetch]);
 
   return { events, loading, refresh: fetch, ingestLiveSignals, source };  // Fix #10
+}
+
+export function useLiveDisasters(pollMs = 120000) {
+  const [data, setData] = useState<LiveDisastersResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetch = useCallback(async () => {
+    try {
+      setError(null);
+      const response = await api.getLiveDisasters();
+      startTransition(() => setData(response));
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetch();
+    const id = setInterval(fetch, pollMs);
+    return () => clearInterval(id);
+  }, [fetch, pollMs]);
+
+  return { data, loading, error, refresh: fetch };
 }
 
 // ─── useGraphNodes ────────────────────────────────────────────────────────────
@@ -286,6 +314,7 @@ export function useSupplyChainMonitor(pollMs = 30000) {
   const [report, setReport] = useState<SupplyChainReport | null>(null);
   const [template, setTemplate] = useState<SupplyChainTemplate | null>(null);
   const [snapshots, setSnapshots] = useState<SupplyChainSnapshotSummary[]>([]);
+  const [referenceData, setReferenceData] = useState<ReliefReferenceData | null>(null);
   const [loading, setLoading] = useState(false);
   const [bootLoading, setBootLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -296,9 +325,11 @@ export function useSupplyChainMonitor(pollMs = 30000) {
         api.getSupplyChainTemplate(),
         api.listSupplyChainSnapshots(),
       ]);
+      const reference = await api.getReliefReferenceData();
       startTransition(() => {
         setTemplate(templateData);
         setSnapshots(snapshotsData.snapshots);
+        setReferenceData(reference);
       });
     } catch (e: any) {
       setError(e.message);
@@ -369,6 +400,33 @@ export function useSupplyChainMonitor(pollMs = 30000) {
     }
   }, []);
 
+  const loadReferenceNetwork = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await api.loadReliefReferenceNetwork();
+      startTransition(() => {
+        setReport(data);
+        setSnapshots(prev => [
+          {
+            snapshot_id: data.snapshot_id,
+            file_name: data.file_name,
+            uploaded_at: data.uploaded_at,
+            route_count: data.metrics.total_routes,
+            last_checked_at: data.last_checked_at,
+          },
+          ...prev.filter(item => item.snapshot_id !== data.snapshot_id),
+        ]);
+      });
+      return data;
+    } catch (e: any) {
+      setError(e.message);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     loadTemplateAndSnapshots();
   }, [loadTemplateAndSnapshots]);
@@ -387,11 +445,13 @@ export function useSupplyChainMonitor(pollMs = 30000) {
     report,
     template,
     snapshots,
+    referenceData,
     loading,
     bootLoading,
     error,
     uploadFile,
     refresh,
     loadSnapshot,
+    loadReferenceNetwork,
   };
 }

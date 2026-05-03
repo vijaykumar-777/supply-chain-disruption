@@ -1,12 +1,12 @@
 """
-ATLAS AI — FastAPI Backend
-Bridges the Python prediction/AI engine with the React frontend.
+ReliefRoute Karnataka - FastAPI backend.
+Bridges weather, graph routing, and relief logistics workflows with the React frontend.
 """
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from fastapi import FastAPI, HTTPException, BackgroundTasks, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, field_validator
 from typing import List, Optional
@@ -20,49 +20,84 @@ logger = logging.getLogger(__name__)
 
 from src.monitoring.supply_chain_monitor import SupplyChainMonitor
 from src.ingestion.company_intelligence import CompanyIntelligenceService
+from src.config import ATLAS_MODE
+from src.relief.reference_data import load_reference_data, road_network_bytes
+from src.relief.live_disasters import collect_live_disasters
 
-app = FastAPI(title="ATLAS AI API", version="1.1", description="Supply Chain Intelligence Backend")
+app = FastAPI(
+    title="ReliefRoute Karnataka API",
+    version="2.0",
+    description="Flood and landslide relief logistics backend for Karnataka",
+)
 monitor_service = SupplyChainMonitor()
 company_intelligence_service = CompanyIntelligenceService()
 
-# ─── Demo Data (Fallback for Initial UX) ────────────────────────────────────
+# ─── Explicit Demo Data (Only used when ATLAS_MODE=demo) ─────────────────────
 
 DEMO_EVENTS = [
     {
-        "id": "gdelt-001",
-        "title": "Port Congestion in Hamburg",
-        "category": "Logistics",
-        "severity": 0.8,
-        "timestamp": (datetime.datetime.now() - datetime.timedelta(hours=2)).isoformat(),
-        "locations": ["Hamburg, Germany"],
-        "description": "Significant vessel backlog at Hamburg terminal affecting European logistics routes.",
-        "type": "critical"
-    },
-    {
-        "id": "gdelt-002",
-        "title": "Semiconductor Supply Warning",
-        "category": "Trade",
-        "severity": 0.6,
-        "timestamp": (datetime.datetime.now() - datetime.timedelta(hours=5)).isoformat(),
-        "locations": ["Taiwan", "South Korea"],
-        "description": "Production slowdown reported in major fab facilities due to power grid maintenance.",
-        "type": "warning"
-    },
-    {
-        "id": "weather-003",
-        "title": "Severe Storm Risk: East Coast",
+        "id": "rain-kodagu-001",
+        "title": "Very Heavy Rainfall Alert: Kodagu Ghats",
         "category": "Weather",
-        "severity": 0.75,
+        "severity": 0.86,
+        "timestamp": (datetime.datetime.now() - datetime.timedelta(hours=2)).isoformat(),
+        "locations": ["Madikeri", "Kodagu", "Western Ghats"],
+        "description": "Sustained rainfall over steep ghat roads raises landslide and waterlogging risk on relief access routes.",
+        "type": "critical",
+    },
+    {
+        "id": "landslide-shiradi-002",
+        "title": "Landslide Watch: Shiradi Ghat Section",
+        "category": "Landslide",
+        "severity": 0.74,
+        "timestamp": (datetime.datetime.now() - datetime.timedelta(hours=5)).isoformat(),
+        "locations": ["Sakleshpur", "Shiradi Ghat", "Hassan"],
+        "description": "Slope instability may block the main road corridor between Hassan and Mangaluru relief staging areas.",
+        "type": "critical",
+    },
+    {
+        "id": "flood-udupi-003",
+        "title": "Coastal Waterlogging Risk: Udupi District",
+        "category": "Flood",
+        "severity": 0.62,
         "timestamp": (datetime.datetime.now() - datetime.timedelta(hours=1)).isoformat(),
-        "locations": ["Savannah, GA", "Charleston, SC"],
-        "description": "Flash flooding risk for major coastal logistics hubs.",
-        "type": "critical"
-    }
+        "locations": ["Udupi", "Kundapura", "Coastal Karnataka"],
+        "description": "Low-lying roads near coastal settlements may slow last-mile relief truck movement.",
+        "type": "warning",
+    },
 ]
 
-DEMO_NODES = 142  # Static count for fallback
+DEMO_RELIEF_NODES = [
+    {"id": "HUB_BENGALURU", "name": "Bengaluru Relief Hub", "labels": ["ReliefHub"], "lat": 12.9716, "lon": 77.5946, "country": "Karnataka", "resilience_score": 0.92},
+    {"id": "HUB_MANGALURU", "name": "Mangaluru Coastal Hub", "labels": ["ReliefHub"], "lat": 12.9141, "lon": 74.8560, "country": "Karnataka", "resilience_score": 0.78},
+    {"id": "TOWN_MADIKERI", "name": "Madikeri", "labels": ["Town"], "lat": 12.4244, "lon": 75.7382, "country": "Karnataka", "resilience_score": 0.46},
+    {"id": "VILLAGE_BHAGAMANDALA", "name": "Bhagamandala", "labels": ["Village"], "lat": 12.3861, "lon": 75.5291, "country": "Karnataka", "resilience_score": 0.32},
+    {"id": "TOWN_SAKLESHPUR", "name": "Sakleshpur", "labels": ["Town"], "lat": 12.9442, "lon": 75.7848, "country": "Karnataka", "resilience_score": 0.41},
+    {"id": "VILLAGE_KOLLUR", "name": "Kollur", "labels": ["Village"], "lat": 13.8667, "lon": 74.8167, "country": "Karnataka", "resilience_score": 0.37},
+    {"id": "TOWN_UDUPI", "name": "Udupi", "labels": ["Town"], "lat": 13.3409, "lon": 74.7421, "country": "Karnataka", "resilience_score": 0.55},
+]
+
+DEMO_RELIEF_LINKS = [
+    {"source_id": "HUB_BENGALURU", "target_id": "TOWN_SAKLESHPUR", "rel_type": "RELIEF_ROAD"},
+    {"source_id": "TOWN_SAKLESHPUR", "target_id": "HUB_MANGALURU", "rel_type": "RELIEF_ROAD"},
+    {"source_id": "TOWN_SAKLESHPUR", "target_id": "TOWN_MADIKERI", "rel_type": "GHAT_ROAD"},
+    {"source_id": "TOWN_MADIKERI", "target_id": "VILLAGE_BHAGAMANDALA", "rel_type": "VILLAGE_ACCESS"},
+    {"source_id": "HUB_MANGALURU", "target_id": "TOWN_UDUPI", "rel_type": "COASTAL_ROAD"},
+    {"source_id": "TOWN_UDUPI", "target_id": "VILLAGE_KOLLUR", "rel_type": "VILLAGE_ACCESS"},
+]
+
+DEMO_NODES = len(DEMO_RELIEF_NODES)
 
 OPERATIONAL_NODE_WHERE = "NOT n:Event AND NOT n:Filing AND NOT n:Ticker AND NOT n:Regulator AND NOT n:Country"
+_runtime_mode = ATLAS_MODE
+
+
+def is_demo_mode() -> bool:
+    return _runtime_mode == "demo"
+
+
+def current_mode() -> str:
+    return _runtime_mode
 
 # ─── Fix #3: Harden CORS — environment-driven allowlist ─────────────────────
 ALLOWED_ORIGINS = os.getenv(
@@ -188,6 +223,18 @@ class FeedbackRequest(BaseModel):
         return v
 
 
+class ModeRequest(BaseModel):
+    mode: str
+
+    @field_validator("mode")
+    @classmethod
+    def mode_must_be_valid(cls, v):
+        mode = str(v).strip().lower()
+        if mode not in {"live", "demo"}:
+            raise ValueError("mode must be either 'live' or 'demo'")
+        return mode
+
+
 class CompanyImportSelection(BaseModel):
     lei: Optional[str] = None
     cik: Optional[str] = None
@@ -239,15 +286,39 @@ def health_check():
             pass
     return {
         "status": "ok",
-        "service": "ATLAS AI API",
+        "service": "ReliefRoute Karnataka API",
+        "mode": current_mode(),
         "neo4j": neo4j_status,
         "timestamp": datetime.datetime.now().isoformat(),
     }
 
 
+@app.get("/api/mode")
+def get_mode():
+    return {
+        "mode": current_mode(),
+        "source_policy": "demo and live are mutually exclusive; demo data is only returned in demo mode",
+    }
+
+
+@app.post("/api/mode")
+def set_mode(req: ModeRequest):
+    global _runtime_mode
+    _runtime_mode = req.mode
+    _neo4j_cache.update(client=None, healthy=False, last_check=0.0, last_error="")
+    return {
+        "mode": current_mode(),
+        "source_policy": "demo and live are mutually exclusive; demo data is only returned in demo mode",
+    }
+
+
 @app.get("/api/events")
 def get_events(category: Optional[str] = None, severity_min: Optional[float] = None, location: Optional[str] = None):
-    """Return all disruption events from live data sources only."""
+    """Return active flood, landslide, and road-disruption events.
+
+    Live mode never silently substitutes demo data. Demo data is returned only
+    when ATLAS_MODE=demo so dashboards can clearly label synthetic scenarios.
+    """
     client, err = get_neo4j_client()
     source = "live"
     events = []
@@ -278,17 +349,18 @@ def get_events(category: Optional[str] = None, severity_min: Optional[float] = N
                         "description": f"Disruption: {record['category']} affecting {', '.join(locs)}",
                     })
             
-            # Implementation Fix #11: Fallback to demo events if DB is empty
-            if not events:
-                logger.info("Neo4j is empty of events. Using Fallback Demo Data.")
+            if not events and is_demo_mode():
+                logger.info("Neo4j is empty of events. Using explicit demo relief events.")
                 events = list(DEMO_EVENTS)
-                source = "fallback (no live records)"
+                source = "demo"
         finally:
             client.close()
     else:
         source = "unavailable"
-        logger.info("No live event data available: %s. Using Fallback Demo Data.", err)
-        events = list(DEMO_EVENTS)
+        logger.info("No live event data available: %s", err)
+        if is_demo_mode():
+            events = list(DEMO_EVENTS)
+            source = "demo"
 
     # Apply filters
     if category and category.lower() != "all":
@@ -303,7 +375,7 @@ def get_events(category: Optional[str] = None, severity_min: Optional[float] = N
 
 @app.get("/api/graph/nodes")
 def get_graph_nodes():
-    """Return all supply chain nodes and links from live data sources only."""
+    """Return relief hubs, settlements, road points, and road links."""
     client, err = get_neo4j_client()
     source = "live"
 
@@ -382,6 +454,13 @@ def get_graph_nodes():
     else:
         source = "unavailable"
         logger.info("No live graph nodes available: %s", err)
+        if is_demo_mode():
+            return {
+                "nodes": DEMO_RELIEF_NODES,
+                "links": DEMO_RELIEF_LINKS,
+                "count": len(DEMO_RELIEF_NODES),
+                "source": "demo",
+            }
         return {"nodes": [], "links": [], "count": 0, "source": source}
 
 
@@ -400,15 +479,14 @@ def get_dashboard_metrics():
                     f"MATCH (n) WHERE {OPERATIONAL_NODE_WHERE} RETURN count(n) as c"
                 ).single()["c"]
 
-            # Fix #11: Fallback if DB connects but has no events
-            if event_count == 0:
-                logger.info("Metrics: Empty DB. Using fallback counts.")
+            if event_count == 0 and is_demo_mode():
+                logger.info("Metrics: Empty DB. Using explicit demo relief counts.")
                 return {
                     "total_active_events": len(DEMO_EVENTS),
                     "high_risk_nodes": len([e for e in DEMO_EVENTS if e["type"] == "critical"]),
                     "monitored_nodes": node_count if node_count > 0 else DEMO_NODES,
                     "weather_alerts": 1,
-                    "source": "fallback (empty db)",
+                    "source": "demo",
                 }
 
             return {
@@ -422,11 +500,19 @@ def get_dashboard_metrics():
             client.close()
     else:
         source = "unavailable"
+        if is_demo_mode():
+            return {
+                "total_active_events": len(DEMO_EVENTS),
+                "high_risk_nodes": len([e for e in DEMO_EVENTS if e["type"] == "critical"]),
+                "monitored_nodes": DEMO_NODES,
+                "weather_alerts": 2,
+                "source": "demo",
+            }
         return {
-            "total_active_events": len(DEMO_EVENTS),
-            "high_risk_nodes": len([e for e in DEMO_EVENTS if e["type"] == "critical"]),
-            "monitored_nodes": DEMO_NODES,
-            "weather_alerts": 1,
+            "total_active_events": 0,
+            "high_risk_nodes": 0,
+            "monitored_nodes": 0,
+            "weather_alerts": 0,
             "source": source,  # Fix #10
         }
 
@@ -444,9 +530,9 @@ def run_simulation(req: SimulateRequest):
 
             # Fix #2: Validate source/target exist in the graph
             if req.source not in sc_network.graph:
-                raise HTTPException(status_code=400, detail=f"Source node '{req.source}' not found in the supply chain network")
+                raise HTTPException(status_code=400, detail=f"Source node '{req.source}' not found in the relief logistics network")
             if req.target not in sc_network.graph:
-                raise HTTPException(status_code=400, detail=f"Target node '{req.target}' not found in the supply chain network")
+                raise HTTPException(status_code=400, detail=f"Target node '{req.target}' not found in the relief logistics network")
 
             try:
                 optimal_path = sc_network.find_alternative_route(req.source, req.target)
@@ -476,8 +562,62 @@ def run_simulation(req: SimulateRequest):
         except Exception as e:
             logger.error(f"Simulation error: {e}")
             raise HTTPException(status_code=500, detail=str(e))
+    elif is_demo_mode():
+        import networkx as nx
+
+        graph = nx.DiGraph()
+        for node in DEMO_RELIEF_NODES:
+            graph.add_node(node["id"], **node)
+        for link in DEMO_RELIEF_LINKS:
+            graph.add_edge(link["source_id"], link["target_id"], weight=1.0, rel_type=link["rel_type"])
+            graph.add_edge(link["target_id"], link["source_id"], weight=1.15, rel_type=link["rel_type"])
+
+        if req.source not in graph:
+            raise HTTPException(status_code=400, detail=f"Source node '{req.source}' not found in the relief logistics network")
+        if req.target not in graph:
+            raise HTTPException(status_code=400, detail=f"Target node '{req.target}' not found in the relief logistics network")
+
+        disrupted_lookup = {item.lower() for item in req.disrupted_nodes}
+        disrupted_node_ids = [
+            node["id"]
+            for node in DEMO_RELIEF_NODES
+            if any(term in node["name"].lower() or node["name"].lower() in term for term in disrupted_lookup)
+        ]
+
+        try:
+            optimal_path = nx.shortest_path(graph, source=req.source, target=req.target, weight="weight")
+        except nx.NetworkXNoPath:
+            raise HTTPException(status_code=404, detail=f"No relief route found from '{req.source}' to '{req.target}'")
+
+        safe_graph = graph.copy()
+        safe_graph.remove_nodes_from([node_id for node_id in disrupted_node_ids if node_id not in {req.source, req.target}])
+        try:
+            alternative_path = nx.shortest_path(safe_graph, source=req.source, target=req.target, weight="weight")
+        except (nx.NetworkXNoPath, nx.NodeNotFound):
+            alternative_path = []
+
+        disrupted_penalty = max(len(disrupted_node_ids), 1 if req.disrupted_nodes else 0)
+        mean_days = round(max(len(optimal_path) - 1, 1) * (1.2 + 0.35 * disrupted_penalty), 2)
+        return {
+            "optimal_route": optimal_path,
+            "alternative_route": alternative_path,
+            "simulation": {
+                "iterations": req.iterations,
+                "mean_days": mean_days,
+                "p50_days": round(mean_days * 0.88, 2),
+                "p95_days": round(mean_days * 1.65, 2),
+                "max_risk_days": round(mean_days * 2.1, 2),
+                "std_dev": round(mean_days * 0.22, 2),
+            },
+            "source": "demo",
+            "explanation": {
+                "triggered_by": req.disrupted_nodes,
+                "blocked_nodes": disrupted_node_ids,
+                "assumption": "Demo mode uses fixed Karnataka relief corridors and deterministic rainfall disruption penalties.",
+            },
+        }
     else:
-        raise HTTPException(status_code=503, detail="Live supply chain graph is unavailable. Load real graph data into Neo4j before running simulations.")
+        raise HTTPException(status_code=503, detail="Live relief logistics graph is unavailable. Load real road, hub, and village data into Neo4j before running simulations.")
 
 
 @app.post("/api/recommend")
@@ -528,7 +668,7 @@ def trigger_event_ingestion():
     try:
         snapshots = monitor_service.list_snapshots()
         if not snapshots:
-            raise HTTPException(status_code=400, detail="No supply chain data available for alert context. Please upload network data first.")
+            raise HTTPException(status_code=400, detail="No relief road network available for alert context. Please upload network data first.")
             
         latest_snapshot_id = snapshots[0]["snapshot_id"]
         snapshot = monitor_service.load_snapshot(latest_snapshot_id)
@@ -622,16 +762,57 @@ def import_company_intelligence_bulk(req: CompanyBulkImportRequest):
 
 
 @app.get("/api/supply-chain/template")
+@app.get("/api/relief/template")
 def get_supply_chain_template():
     return monitor_service.template()
 
 
+@app.get("/api/relief/reference-data")
+def get_relief_reference_data():
+    return load_reference_data()
+
+
+@app.post("/api/relief/load-reference")
+def load_relief_reference_network():
+    original_geocode = monitor_service._geocode_location
+    original_gdelt = monitor_service._fetch_gdelt_alerts
+    original_weather = monitor_service._fetch_weather_alerts
+    try:
+        monitor_service._geocode_location = lambda *_args, **_kwargs: None
+        monitor_service._fetch_gdelt_alerts = lambda _snapshot: []
+        monitor_service._fetch_weather_alerts = lambda _snapshot: []
+        snapshot = monitor_service.parse_upload("01_road_network.csv", road_network_bytes())
+        return monitor_service.build_report(snapshot)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="01_road_network.csv was not found in the project root")
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Reference relief network load failed: {e}")
+        raise HTTPException(status_code=500, detail="Failed to load reference relief road network")
+    finally:
+        monitor_service._geocode_location = original_geocode
+        monitor_service._fetch_gdelt_alerts = original_gdelt
+        monitor_service._fetch_weather_alerts = original_weather
+
+
+@app.get("/api/disasters/live")
+def get_live_disasters():
+    try:
+        return collect_live_disasters()
+    except Exception as e:
+        logger.error(f"Live disaster aggregation failed: {e}")
+        raise HTTPException(status_code=503, detail="Failed to collect live disaster alerts")
+
+
 @app.get("/api/supply-chain/snapshots")
+@app.get("/api/relief/snapshots")
 def list_supply_chain_snapshots():
     return {"snapshots": monitor_service.list_snapshots()}
 
 
 @app.post("/api/supply-chain/upload")
+@app.post("/api/relief/upload")
 async def upload_supply_chain_file(request: Request):
     filename = request.headers.get("x-filename", "")
     if not filename:
@@ -644,16 +825,17 @@ async def upload_supply_chain_file(request: Request):
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        logger.error(f"Supply-chain upload failed: {e}")
-        raise HTTPException(status_code=500, detail="Failed to process uploaded supply-chain file")
+        logger.error(f"Relief network upload failed: {e}")
+        raise HTTPException(status_code=500, detail="Failed to process uploaded relief road network file")
 
 
 @app.get("/api/supply-chain/snapshots/{snapshot_id}")
+@app.get("/api/relief/snapshots/{snapshot_id}")
 def get_supply_chain_snapshot(snapshot_id: str, refresh: bool = True):
     try:
         snapshot = monitor_service.load_snapshot(snapshot_id)
     except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Supply-chain snapshot not found")
+        raise HTTPException(status_code=404, detail="Relief network snapshot not found")
 
     if not refresh and snapshot.get("latest_report"):
         return snapshot["latest_report"]
@@ -661,8 +843,8 @@ def get_supply_chain_snapshot(snapshot_id: str, refresh: bool = True):
     try:
         return monitor_service.build_report(snapshot)
     except Exception as e:
-        logger.error(f"Supply-chain refresh failed: {e}")
-        raise HTTPException(status_code=500, detail="Failed to refresh supply-chain monitoring report")
+        logger.error(f"Relief network refresh failed: {e}")
+        raise HTTPException(status_code=500, detail="Failed to refresh relief logistics report")
 
 
 # ─── Entry Point ──────────────────────────────────────────────────────────────

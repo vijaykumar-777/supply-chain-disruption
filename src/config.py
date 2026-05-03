@@ -9,13 +9,17 @@ logger = logging.getLogger(__name__)
 
 # ─── Environment Mode ─────────────────────────────────────────────────────────
 ATLAS_ENV = os.getenv("ATLAS_ENV", "development")
+ATLAS_MODE = os.getenv("ATLAS_MODE", "live").strip().lower()
+if ATLAS_MODE not in {"live", "demo"}:
+    logger.warning("Invalid ATLAS_MODE=%s. Falling back to live mode.", ATLAS_MODE)
+    ATLAS_MODE = "live"
 
 # OpenWeatherMap API Key
 OPENWEATHERMAP_API_KEY = os.getenv("OPENWEATHERMAP_API_KEY")
-NOMINATIM_USER_AGENT = os.getenv("NOMINATIM_USER_AGENT", "atlas-ai-supply-monitor/1.0")
+NOMINATIM_USER_AGENT = os.getenv("NOMINATIM_USER_AGENT", "reliefroute-karnataka/1.0")
 SEC_API_USER_AGENT = os.getenv(
     "SEC_API_USER_AGENT",
-    "atlas-ai/1.0 (supply-chain-intel; admin@localhost)"
+    "reliefroute-karnataka/1.0 (disaster-relief-logistics; admin@localhost)"
 )
 
 # ─── Neo4j Database Settings (Fix #3: no insecure fallback in production) ────

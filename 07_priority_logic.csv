@@ -1,0 +1,9 @@
+factor,weight_pct,description,source,scoring_method
+cutoff_risk,25,Probability of road access being cut off during event,KSDMA historical data,"very_high=100, high=75, medium=50, low=25"
+population,20,Total population of village/town,Census 2011 + KSDMA,Normalized 0-100 over state range
+medical_need,20,Presence of chronic illness; dialysis patients; pregnant women; disabilities,District health surveys,"high=100, medium=60, low=30"
+hospital_access_km,15,Distance to nearest functional hospital,District health data,Score = max(0; 100 - distance_km*2)
+elderly_pct,10,Percentage of population above 60 years,Census 2011 ward data,elderly_pct * 1.5 (capped at 100)
+priority_override,10,Manually set by District Collector or DDMA during active event,DDMA real-time input,"critical=100, high=75, medium=50, low=25"
+rainfall_exceedance,0,Live multiplier: if rainfall > red alert threshold multiply total score by 1.5,KSNDMC live feed,Applied at runtime from rainfall data
+dam_proximity,0,If within 5km of dam or reservoir with high water level add 20pts,CWC data,Binary: yes=+20pts no=+0pts

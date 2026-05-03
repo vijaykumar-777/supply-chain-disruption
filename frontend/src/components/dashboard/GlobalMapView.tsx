@@ -30,24 +30,25 @@ export const GlobalMapView = () => {
     })();
   }, []);
 
-  // Nodes that have lat/lon coordinates from Neo4j
+  // Relief nodes that have lat/lon coordinates from Neo4j or explicit demo mode.
   const geoNodes = nodes.filter(n => n.lat != null && n.lon != null);
+  const sourceLabel = dataSource === "live" ? "Live from Neo4j" : dataSource === "demo" ? "Demo Karnataka Scenario" : "Neo4j unavailable";
 
   return (
     <div className="h-full w-full flex flex-col gap-4">
       <div className="flex justify-between items-center mb-2">
         <div>
-          <h2 className="text-2xl font-bold text-on-surface">Global Supply Chain Network</h2>
+          <h2 className="text-2xl font-bold text-on-surface">Karnataka Disaster Relief Network</h2>
           <p className="text-on-surface-variant text-sm">
-            {loading ? "Loading live data..." : `${geoNodes.length} nodes · ${links.length} trade routes · ${events.length} active disruptions — ${dataSource === "live" ? "Live from Neo4j" : "Neo4j unavailable"}`}
+            {loading ? "Loading relief map data..." : `${geoNodes.length} points · ${links.length} road segments · ${events.length} active hazards - ${sourceLabel}`}
           </p>
         </div>
       </div>
 
       <div className="flex-1 w-full rounded-2xl overflow-hidden glass-elevated border border-primary/20 relative">
         <MapContainer
-          center={[20, 0]}
-          zoom={2}
+          center={[13.4, 75.4]}
+          zoom={7}
           className="h-full w-full"
           zoomControl={false}
         >
@@ -56,7 +57,7 @@ export const GlobalMapView = () => {
             url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
           />
 
-          {/* ── Supply Chain Links (Edges) ── */}
+          {/* Relief road links */}
           {links.map((link, idx) => {
             const sourceNode = geoNodes.find(n => n.id === link.source_id);
             const targetNode = geoNodes.find(n => n.id === link.target_id);
@@ -68,25 +69,25 @@ export const GlobalMapView = () => {
                 color="#7dd3fc"
                 weight={1.5}
                 opacity={0.3}
-                dashArray={link.rel_type === "TRADE_ROUTE" ? "5, 5" : undefined}
+                dashArray={link.rel_type.includes("GHAT") ? "5, 5" : undefined}
               />
             );
           })}
 
-          {/* ── Supply Chain Nodes (real lat/lon) ── */}
+          {/* Relief hubs, towns, villages, and road points */}
           {geoNodes.map(node => {
-            const isCompany = node.labels.includes("Company");
-            const nodeColor = isCompany ? "#c084fc" : "#7dd3fc"; // Purple for company, blue for location
+            const isHub = node.labels.includes("ReliefHub") || node.name.toLowerCase().includes("hub");
+            const nodeColor = isHub ? "#10b981" : node.labels.includes("Village") ? "#f59e0b" : "#7dd3fc";
             
             return (
               <CircleMarker
                 key={node.id}
                 center={[node.lat!, node.lon!]}
-                radius={isCompany ? 3.5 : 4}
+                radius={isHub ? 6 : 4}
                 fillColor={nodeColor}
                 color={nodeColor}
-                fillOpacity={isCompany ? 0.9 : 0.6}
-                weight={isCompany ? 1.5 : 1}
+                fillOpacity={isHub ? 0.9 : 0.65}
+                weight={isHub ? 1.5 : 1}
               >
                 <Tooltip permanent={false} direction="top">
                   <span className="text-xs font-bold">{node.name}</span>
@@ -95,15 +96,15 @@ export const GlobalMapView = () => {
                   <div className="space-y-1 text-sm bg-surface p-1">
                     <div className="font-bold text-lg text-primary">{node.name}</div>
                     <div className="text-xs font-mono bg-on-surface/5 p-1 rounded inline-block">{node.labels.join(', ')}</div>
-                    {node.country && <div className="text-xs mt-1">🌍 {node.country}</div>}
-                    {isCompany && <div className="text-xs mt-1 text-tertiary">🏢 Entity</div>}
+                    {node.country && <div className="text-xs mt-1">{node.country}</div>}
+                    {isHub && <div className="text-xs mt-1 text-success">Relief staging hub</div>}
                   </div>
                 </Popup>
               </CircleMarker>
             );
           })}
 
-          {/* ── Disruption Events (linked to location coords) ── */}
+          {/* Hazards linked to nearby relief locations */}
           {events.map(event => {
             // Find a node matching one of this event's locations
             const matchNode = geoNodes.find(n =>
@@ -126,7 +127,7 @@ export const GlobalMapView = () => {
                   color="transparent"
                   fillOpacity={0.9}
                 >
-                  <Popup>
+                <Popup>
                     <div className="space-y-1 min-w-[200px]">
                       <div className="font-bold text-sm">{event.title}</div>
                       <div className="text-xs text-gray-500">{event.category}</div>
@@ -143,9 +144,9 @@ export const GlobalMapView = () => {
         {!loading && geoNodes.length === 0 && (
           <div className="absolute inset-0 z-[900] flex items-center justify-center bg-background/55 backdrop-blur-sm">
             <div className="max-w-md rounded-2xl border border-white/10 bg-surface/90 p-5 text-center">
-              <p className="text-lg font-semibold text-on-surface">No live graph data available</p>
+              <p className="text-lg font-semibold text-on-surface">No relief graph data available</p>
               <p className="mt-2 text-sm text-on-surface-variant">
-                Import real supply chain routes into Neo4j to populate the global map with nodes and disruption overlays.
+                Load road, hub, and village data into Neo4j or set ATLAS_MODE=demo to inspect the Karnataka scenario.
               </p>
             </div>
           </div>
@@ -154,13 +155,14 @@ export const GlobalMapView = () => {
         {/* Legend */}
         <div className="absolute bottom-6 right-6 z-[1000] glass p-4 rounded-xl border border-white/10 shadow-2xl space-y-2">
           <h4 className="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-2">Legend</h4>
-          <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#c084fc]/90 border border-[#c084fc]" /><span className="text-xs text-on-surface">Company Node</span></div>
-          <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#7dd3fc]/50 border border-[#7dd3fc]" /><span className="text-xs text-on-surface">Location Node</span></div>
+          <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#10b981]/90 border border-[#10b981]" /><span className="text-xs text-on-surface">Relief Hub</span></div>
+          <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#f59e0b]/70 border border-[#f59e0b]" /><span className="text-xs text-on-surface">Village</span></div>
+          <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#7dd3fc]/50 border border-[#7dd3fc]" /><span className="text-xs text-on-surface">Town / Road Point</span></div>
           <div className="flex items-center gap-2">
-            <div className="w-3 border-t-2 border-[#7dd3fc]/40" /><span className="text-xs text-on-surface">Trade Route</span>
+            <div className="w-3 border-t-2 border-[#7dd3fc]/40" /><span className="text-xs text-on-surface">Road Segment</span>
           </div>
           <div className="h-[1px] w-full bg-white/10 my-1"></div>
-          <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#ff3366]/70" /><span className="text-xs text-on-surface">Critical Disruption</span></div>
+          <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#ff3366]/70" /><span className="text-xs text-on-surface">Critical Hazard</span></div>
           <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#ffaa00]/70" /><span className="text-xs text-on-surface">Warning</span></div>
           <div className="flex items-center gap-2"><span className="w-3 h-3 rounded-full bg-[#00dd99]/70" /><span className="text-xs text-on-surface">Low Impact</span></div>
         </div>

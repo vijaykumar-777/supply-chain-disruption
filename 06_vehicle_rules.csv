@@ -1,0 +1,9 @@
+vehicle_type,max_load_tonnes,avg_speed_kmph_plain,avg_speed_kmph_ghat,fuel_efficiency_kmpl,min_road_type,cannot_use_roads,notes
+Heavy Truck (10T+),12,60,25,4,NH,MDR;forest_road;flooded_road,Cannot use ghat MDR; needs NH or SH
+Medium Truck (5-10T),8,65,35,5,SH,forest_road;flooded_road,Can use NH/SH; restricted MDR in ghats
+Light Truck (2-5T),4,70,45,8,MDR,flooded_road,Most versatile; can do most MDR
+Mini Truck (1-2T),2,65,50,10,MDR,none,Good for last-mile; all roads except submerged
+Bolero/Pickup (<1T),0.8,75,55,12,village_road,none,Best for remote village access
+Ambulance,0.5,80,50,10,MDR,submerged_road,Priority clearance; carries 2-4 patients
+Boat (rescue),0,15,NA,3,water,road,Used only in flooded zones; Sharavathi/Cauvery
+Helicopter (NDRF),3,150,120,2,air,weather_restricted,Used for critical cutoff zones; 2hr radius

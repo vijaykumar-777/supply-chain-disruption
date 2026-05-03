@@ -1,0 +1,50 @@
+from,to,road_name,distance_km,road_type,travel_time_min,notes
+Mangaluru,Udupi,NH66,58,NH,70,Coastal highway; flood risk near Mulki bridge
+Udupi,Karwar,NH66,116,NH,140,Coastal; landslide risk near Honnavar ghat
+Mangaluru,Madikeri,SH88,135,SH,210,Western Ghat road; high landslide risk Jul-Sep
+Madikeri,Virajpet,SH88,34,SH,50,Ghat road; frequently blocked Aug-Sep
+Madikeri,Kushalnagar,MDR,31,MDR,50,Flat terrain; bridges flood-prone
+Kushalnagar,Hassan,NH275,90,NH,100,Relatively safe NH
+Hassan,Sakleshpur,SH47,55,SH,80,Ghat section; landslide prone
+Sakleshpur,Mangaluru,SH47,145,SH,210,Shiradi Ghat; very high landslide risk
+Shivamogga,Sagara,NH169,57,NH,75,Malenadu; river flooding near Varada
+Sagara,Siddapura,SH24,38,SH,60,Hill road; moderate landslide risk
+Siddapura,Sirsi,SH24,33,SH,50,Moderate risk; forest road
+Sirsi,Karwar,NH206,96,NH,130,Ghat road; landslide risk Jul-Sep
+Dharwad,Karwar,NH748,162,NH,180,Mixed terrain; safer NH
+Belagavi,Dharwad,NH48,75,NH,80,Flat; Krishna basin flooding risk
+Belagavi,Vijayapura,NH218,175,NH,190,North KA; dam release flood risk
+Vijayapura,Bagalkot,NH218,75,NH,85,Flat; Ghataprabha basin risk
+Bagalkot,Gadag,SH20,90,SH,110,Moderate; river crossing risk
+Raichur,Koppal,NH150A,65,NH,75,Flat; Tungabhadra risk
+Raichur,Kalburgi,NH150,97,NH,110,Flat terrain; seasonal flooding
+Kalburgi,Yadgir,NH150,72,NH,80,Flat; Bhima basin flooding
+Yadgir,Raichur,SH35,85,SH,100,Flat; seasonal river flooding
+Mysuru,Chamarajanagara,NH766,60,NH,70,Flat; low risk
+Mysuru,Hassan,NH275,117,NH,130,Mix terrain; moderate risk
+Mysuru,Madikeri,SH17,120,SH,160,Ghat access; moderate landslide risk
+Bengaluru,Shivamogga,NH373,275,NH,280,Long NH; safe except Bhadravati bridge
+Bengaluru,Hassan,NH273,185,NH,200,Relatively safe
+Bengaluru,Mysuru,NH275,145,NH,150,Safe 4-lane expressway
+Chikkamagaluru,Mangaluru,NH173,155,NH,200,Coffee belt; ghat risk near Bisile
+Chikkamagaluru,Shivamogga,NH373,70,NH,90,Bhadra river crossing risk
+Udupi,Shivamogga,SH57,130,SH,175,Kollur ghat; landslide risk
+Karwar,Goa_Border,NH66,62,NH,75,Coastal; cyclone risk
+Haveri,Dharwad,SH26,90,SH,100,Flat; safe
+Davanagere,Shivamogga,NH169,68,NH,80,Flat to moderate; Bhadra risk
+Tumakuru,Bengaluru,NH48,72,NH,75,4-lane expressway; safe
+Mandya,Mysuru,NH275,45,NH,50,Flat; KRS backwater risk
+Mandya,Hassan,SH49,120,SH,140,Moderate; river crossings
+Chikkaballapur,Bengaluru,NH648,60,NH,65,Safe
+Kolar,Bengaluru,NH648,75,NH,80,Safe
+Ballari,Koppal,NH67,85,NH,95,Tungabhadra risk
+Ballari,Raichur,NH50,113,NH,125,Flat; seasonal
+Bidar,Kalburgi,NH50,98,NH,110,North KA; safe NH
+Madikeri,Gonikoppal,MDR,22,MDR,40,Kodagu valley; high flood risk
+Gonikoppal,Virajpet,MDR,18,MDR,30,Kodagu; flood prone Aug
+Virajpet,Ponnampet,MDR,24,MDR,40,Kodagu; landslide risk
+Ponnampet,Kerala_Border,MDR,28,MDR,45,Kodagu-Kerala border; very high risk
+Sagara,Jog_Falls,MDR,18,MDR,30,Tourist road; moderate risk
+Honnavar,Kumta,NH66,35,NH,45,Coastal; cyclone flood risk
+Kumta,Ankola,NH66,22,NH,30,Coastal; moderate
+Ankola,Karwar,NH66,40,NH,50,Coastal; cyclone risk

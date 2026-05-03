@@ -1,0 +1,50 @@
+name,district,taluk,lat,lon,population,priority,medical_need,cutoff_risk,elderly_pct,hospital_access_km,notes
+Bhagamandala,Kodagu,Madikeri,12.3897,75.5331,4200,critical,high,very_high,22,48,Triveni Sangama; completely isolated in floods
+Napoklu,Kodagu,Madikeri,12.3547,75.6892,2800,critical,high,very_high,25,35,Harangi river; road washed out annually
+Ammatti,Kodagu,Virajpet,12.1883,75.8697,1800,critical,medium,high,20,45,Border village; tribal community
+Srimangala,Kodagu,Virajpet,12.1123,75.7853,3200,high,medium,high,18,38,Kodagu-Kerala border; flood risk
+Ponnampet,Kodagu,Virajpet,12.1456,75.9381,12000,high,high,medium,15,25,Major town; river crossing risk
+Gonikoppal,Kodagu,Virajpet,12.1792,75.8483,9500,high,medium,medium,14,30,River flood prone
+Suntikoppa,Kodagu,Madikeri,12.5107,75.7987,6800,high,medium,high,17,32,Cauvery tributary; landslide prone
+Alur,Hassan,Alur,12.9722,75.9706,8000,high,medium,high,16,40,Ghat section; bridge risk
+Sakleshpur,Hassan,Sakleshpur,12.9431,75.7836,18000,high,high,medium,13,25,Hemavathi river; Shiradi ghat
+Holenarasipur,Hassan,Holenarasipur,13.0018,76.2425,32000,medium,medium,low,12,20,Market town; relatively safe
+Kalasa,Chikkamagaluru,Mudigere,13.2066,75.5281,4500,critical,high,very_high,24,60,Bhadra river; deep forest
+Sringeri,Chikkamagaluru,Sringeri,13.4178,75.2547,7500,high,high,high,19,35,Tunga river; annual flood
+Kuppalli,Chikkamagaluru,Thirthahalli,13.8102,75.3516,2400,high,medium,high,21,50,Remote village; Kuppalli hills
+Agumbe,Shivamogga,Thirthahalli,13.5029,75.0965,1800,high,medium,very_high,20,55,Highest rainfall in India; road washed out
+Thirthahalli,Shivamogga,Thirthahalli,13.6921,75.2455,18000,high,medium,medium,15,30,Tunga river; major ghat town
+Hosanagara,Shivamogga,Hosanagara,13.7091,75.0498,9500,high,medium,high,16,40,Sharavathi basin
+Jog Falls,Shivamogga,Sagara,14.2236,74.7970,3200,medium,low,medium,14,45,Tourist area; Sharavathi dam release risk
+Siddapura,Uttara Kannada,Siddapura,14.3537,74.8900,12000,high,medium,medium,13,30,Forest zone; moderate risk
+Yellapur,Uttara Kannada,Yellapur,14.9617,74.7094,11000,high,medium,high,15,45,Kali river tributary
+Mundgod,Uttara Kannada,Mundgod,14.9706,75.0346,16000,medium,medium,low,12,35,Flat terrain; safer
+Haliyal,Uttara Kannada,Haliyal,15.3294,74.7601,20000,medium,medium,low,11,25,Kali basin; moderate
+Ankola,Uttara Kannada,Ankola,14.6640,74.3030,18000,medium,medium,medium,13,20,Coastal; cyclone risk
+Kumta,Uttara Kannada,Kumta,14.4275,74.4124,25000,medium,high,medium,14,22,Coastal; Aganashini river
+Honnavar,Uttara Kannada,Honnavar,14.2799,74.4441,35000,medium,high,medium,12,18,Coastal major town
+Uppinangadi,Dakshina Kannada,Puttur,12.8396,75.2682,9800,high,medium,high,17,32,Nethravathi river; annual flood
+Sullia,Dakshina Kannada,Sullia,12.5620,75.3836,28000,high,medium,high,15,35,River confluence; high risk
+Vitla,Dakshina Kannada,Bantwal,12.7526,75.2261,8200,high,medium,high,16,40,Nethravathi tributary
+Puttur,Dakshina Kannada,Puttur,12.7567,75.2029,52000,medium,high,low,11,15,DK district major town
+Byndoor,Udupi,Kundapura,13.8641,74.6601,12000,high,medium,high,18,35,Coastal; Chakra river
+Kundapura,Udupi,Kundapura,13.6284,74.6881,42000,medium,high,medium,12,15,Coastal hub; tidal flooding
+Hebri,Udupi,Karkala,13.4707,75.0524,8500,high,medium,high,17,40,Sauparnika river; landslide prone
+Karkala,Udupi,Karkala,13.2090,74.9817,28000,medium,medium,low,12,20,Moderate risk
+Mudigere,Chikkamagaluru,Mudigere,13.1268,75.6304,12000,high,medium,high,16,30,Coffee belt; landslide
+Kallidkurichi,Belagavi,Chikkodi,16.3877,74.6089,9800,medium,medium,medium,14,30,Krishna flooding
+Raybag,Belagavi,Raybag,16.4957,74.7700,18000,medium,medium,medium,13,25,Ghataprabha
+Athani,Belagavi,Athani,16.7276,75.0614,35000,medium,medium,low,11,20,Flat; KA-MH border
+Sindagi,Vijayapura,Sindagi,16.9187,76.2350,28000,medium,medium,low,10,30,Bhima basin
+Muddebihal,Vijayapura,Muddebihal,16.3380,76.1344,22000,medium,medium,low,10,35,Bhima tributary
+Badami,Bagalkot,Badami,15.9142,75.6782,30000,medium,medium,low,12,25,Ghataprabha river
+Hungund,Bagalkot,Hungund,16.0602,76.0553,22000,medium,medium,low,11,30,Moderate risk
+Manvi,Raichur,Manvi,15.9974,76.9889,32000,medium,medium,low,12,25,Tungabhadra risk
+Deodurga,Raichur,Deodurga,16.4250,77.1240,18000,medium,medium,low,13,35,Moderate risk
+Shorapur,Yadgir,Shorapur,16.5197,76.7595,42000,medium,medium,low,11,30,Krishna river flood risk
+Gurmitkal,Yadgir,Gurmitkal,16.8683,77.4042,15000,medium,medium,medium,13,40,Remote; moderate risk
+Chintamani,Chikkaballapur,Chintamani,13.3999,78.0579,52000,low,medium,low,10,20,Low risk area
+Kollegal,Chamarajanagara,Kollegal,12.1523,77.1128,38000,medium,medium,low,13,35,Forest area; moderate
+Gundlupet,Chamarajanagara,Gundlupet,11.8125,76.6914,22000,medium,medium,low,14,40,Tiger reserve buffer; tribal
+Piriyapatna,Mysuru,Piriyapatna,12.3394,76.1029,22000,medium,medium,low,12,30,Moderate; Lakshmana Tirtha
+K R Nagar,Mysuru,KR Nagar,12.4210,76.1760,18000,medium,medium,low,11,28,Hemavathi basin

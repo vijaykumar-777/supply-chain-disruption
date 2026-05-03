@@ -243,3 +243,24 @@ class TestAPIResponseMetadata:
         assert response["monitored_nodes"] == 0
         assert response["weather_alerts"] == 0
         assert response["source"] == "unavailable"
+
+    def test_demo_mode_returns_demo_events_only_when_selected(self, monkeypatch):
+        import src.api.main as api_main
+
+        monkeypatch.setattr(api_main, "_runtime_mode", "demo")
+        monkeypatch.setattr(api_main, "get_neo4j_client", lambda: (None, "neo4j offline"))
+
+        response = api_main.get_events()
+
+        assert response["count"] == len(api_main.DEMO_EVENTS)
+        assert response["source"] == "demo"
+
+    def test_mode_endpoint_switches_runtime_mode(self, monkeypatch):
+        import src.api.main as api_main
+
+        monkeypatch.setattr(api_main, "_runtime_mode", "live")
+
+        response = api_main.set_mode(api_main.ModeRequest(mode="demo"))
+
+        assert response["mode"] == "demo"
+        assert api_main.current_mode() == "demo"

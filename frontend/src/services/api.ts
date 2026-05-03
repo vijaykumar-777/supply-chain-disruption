@@ -29,6 +29,24 @@ export interface APIEvent {
   description: string;
 }
 
+export interface LiveDisasterAlert extends APIEvent {
+  source: string;
+  url?: string | null;
+  confidence?: number;
+}
+
+export interface LiveDisastersResponse {
+  alerts: LiveDisasterAlert[];
+  count: number;
+  source_status: Record<string, { enabled: boolean; live: boolean; error?: string | null; queries?: number }>;
+  coverage: {
+    places_tracked: number;
+    places_sample: string[];
+    disaster_terms: string[];
+    policy: string;
+  };
+}
+
 export interface APINode {
   id: string;
   name: string;
@@ -46,7 +64,13 @@ export interface APILink {
 }
 
 // Fix #10: source metadata type
-export type DataSource = "live" | "unavailable";
+export type DataSource = "live" | "demo" | "unavailable";
+export type AppMode = "live" | "demo";
+
+export interface ModeResponse {
+  mode: AppMode;
+  source_policy: string;
+}
 
 export interface CompanyIntelSourceStatusItem {
   enabled: boolean;
@@ -228,6 +252,12 @@ export interface SupplyChainSnapshotSummary {
   last_checked_at?: string;
 }
 
+export interface ReliefReferenceData {
+  counts: Record<string, number>;
+  files: Record<string, string>;
+  datasets: Record<string, Array<Record<string, string>>>;
+}
+
 export interface SupplyChainReport {
   snapshot_id: string;
   file_name: string;
@@ -258,9 +288,20 @@ export interface SupplyChainReport {
 export const api = {
   health: () => request<{ status: string }>("/health"),
 
+  getMode: () => request<ModeResponse>("/api/mode"),
+
+  setMode: (mode: AppMode) =>
+    request<ModeResponse>("/api/mode", {
+      method: "POST",
+      body: JSON.stringify({ mode }),
+    }),
+
   // Fix #10: response now includes source field
   getEvents: () =>
     request<{ events: APIEvent[]; count: number; source?: DataSource }>("/api/events"),
+
+  getLiveDisasters: () =>
+    request<LiveDisastersResponse>("/api/disasters/live"),
 
   ingestEvents: () =>
     request<{ success: boolean; inserted_events: number; source_status: any }>("/api/ingest/events", {
@@ -327,13 +368,21 @@ export const api = {
     }),
 
   getSupplyChainTemplate: () =>
-    request<SupplyChainTemplate>("/api/supply-chain/template"),
+    request<SupplyChainTemplate>("/api/relief/template"),
+
+  getReliefReferenceData: () =>
+    request<ReliefReferenceData>("/api/relief/reference-data"),
+
+  loadReliefReferenceNetwork: () =>
+    request<SupplyChainReport>("/api/relief/load-reference", {
+      method: "POST",
+    }),
 
   listSupplyChainSnapshots: () =>
-    request<{ snapshots: SupplyChainSnapshotSummary[] }>("/api/supply-chain/snapshots"),
+    request<{ snapshots: SupplyChainSnapshotSummary[] }>("/api/relief/snapshots"),
 
   uploadSupplyChainFile: (file: File) => {
-    return request<SupplyChainReport>("/api/supply-chain/upload", {
+    return request<SupplyChainReport>("/api/relief/upload", {
       method: "POST",
       body: file,
       headers: {
@@ -344,5 +393,5 @@ export const api = {
   },
 
   getSupplyChainSnapshot: (snapshotId: string, refresh = true) =>
-    request<SupplyChainReport>(`/api/supply-chain/snapshots/${snapshotId}?refresh=${refresh ? "true" : "false"}`),
+    request<SupplyChainReport>(`/api/relief/snapshots/${snapshotId}?refresh=${refresh ? "true" : "false"}`),
 };

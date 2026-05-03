@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { AlertTriangle, Info, CloudRain, Search, RefreshCw, Download } from "lucide-react";
+import { AlertTriangle, Info, Search, RefreshCw } from "lucide-react";
 import { useEvents } from "../../hooks/useAtlasData";
 import { cn } from "../../lib/utils";
 import { APIEvent } from "../../services/api";
@@ -38,9 +38,9 @@ export const LiveFeedView = () => {
     <div className="h-full flex flex-col gap-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-on-surface">Live Disruption Feed</h2>
+          <h2 className="text-2xl font-bold text-on-surface">Flood, Landslide, And Road Hazard Feed</h2>
           <p className="text-sm text-on-surface-variant">
-            {source === "live" ? "Real-time supply chain event monitoring from Neo4j" : "No live event stream is currently available"}
+            {source === "live" ? "Live hazards stored in Neo4j" : source === "demo" ? "Demo Karnataka disaster scenario" : "No live hazard stream is currently available"}
           </p>
         </div>
         <div className="flex gap-2">
@@ -59,7 +59,7 @@ export const LiveFeedView = () => {
           <Search className="w-4 h-4 text-on-surface-variant mr-2 opacity-50" />
           <input 
             type="text" 
-            placeholder="Search events or locations..."
+            placeholder="Search hazards, roads, or villages..."
             className="bg-transparent border-none focus:outline-none text-sm w-full text-on-surface"
             value={search}
             onChange={e => setSearch(e.target.value)}
@@ -86,7 +86,7 @@ export const LiveFeedView = () => {
 
       <div className="flex-1 overflow-y-auto space-y-4 pr-2 no-scrollbar">
         {loading && events.length === 0 && <p className="text-on-surface-variant text-center p-10">Loading active events...</p>}
-        {!loading && filteredEvents.length === 0 && <p className="text-on-surface-variant text-center p-10">No events found matching criteria.</p>}
+        {!loading && filteredEvents.length === 0 && <p className="text-on-surface-variant text-center p-10">No hazards found matching criteria.</p>}
         
         {filteredEvents.map(event => {
           const cls = SEVERITY_CLASSES[event.type] || SEVERITY_CLASSES.info;
