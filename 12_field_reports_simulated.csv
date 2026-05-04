@@ -1,0 +1,11 @@
+report_id,reported_by,role,location,district,lat,lon,report_type,message,severity,reported_at,confidence,provenance
+FR-001,DDMA Kodagu,control_room,Bhagamandala,Kodagu,12.3897,75.5331,access_cutoff,Main approach road submerged near low bridge; small vehicles not advised,critical,2026-05-04T07:05:00+05:30,0.82,simulated
+FR-002,Police Wireless Madikeri,police,Madikeri-Gonikoppal road,Kodagu,12.3000,75.8400,road_blocked,Tree fall and mud blocking one lane; JCB requested,critical,2026-05-04T07:30:00+05:30,0.78,simulated
+FR-003,Fire Station Mangaluru,fire_service,Mulki bridge,Dakshina Kannada,13.0910,74.7930,waterlogging,Water level rising near bridge approach; monitoring needed,warning,2026-05-04T07:45:00+05:30,0.72,simulated
+FR-004,ASHA Worker Napoklu,health_worker,Napoklu,Kodagu,12.3547,75.6892,medical_need,Two dialysis patients need transport before evening,critical,2026-05-04T08:10:00+05:30,0.74,simulated
+FR-005,PWD Hassan,pwd,Shiradi Ghat,Hassan,12.9100,75.6900,landslide_watch,Fresh debris on shoulder; traffic moving slowly,warning,2026-05-04T08:20:00+05:30,0.69,simulated
+FR-006,Gram Panchayat Kollur,local_admin,Kollur,Udupi,13.8667,74.8167,food_shortage,Relief camp requests 800 additional food packets,warning,2026-05-04T08:45:00+05:30,0.66,simulated
+FR-007,Forest Checkpost Ponnampet,forest,Ponnampet-Kerala border,Kodagu,12.0605,75.7985,road_blocked,Narrow road blocked by tree fall; pickup only after clearance,critical,2026-05-04T08:55:00+05:30,0.81,simulated
+FR-008,Taluk Office Sagara,local_admin,Jog Falls road,Shivamogga,14.2298,74.8120,road_access,Heavy rain but route still passable for light trucks,info,2026-05-04T09:05:00+05:30,0.61,simulated
+FR-009,Karwar Marine Police,police,Honnavar coast,Uttara Kannada,14.2799,74.4439,coastal_flood,Low-lying coastal road has standing water; avoid heavy trucks,warning,2026-05-04T09:20:00+05:30,0.71,simulated
+FR-010,CWC Placeholder Desk,water_authority,Vijayapura-Bagalkot belt,Vijayapura,16.8302,75.7100,dam_release_watch,Reservoir discharge advisory would be ingested here when API key/feed is configured,warning,2026-05-04T09:30:00+05:30,0.55,simulated

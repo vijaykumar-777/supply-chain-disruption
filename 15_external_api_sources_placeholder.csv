@@ -1,0 +1,21 @@
+source_name,data_type,env_var,auth_type,status,purpose,notes
+OpenWeatherMap,current_weather,OPENWEATHERMAP_API_KEY,api_key,placeholder,Live weather at villages and road points,Already supported by backend when key is set
+IMD Alerts,official_weather_alerts,IMD_API_KEY,api_key_or_feed_url,placeholder,Official rain and cyclone alerts,Add key/feed URL when available
+KSNDMC Rainfall,station_rainfall,KSNDMC_API_KEY,api_key_or_feed_url,placeholder,Karnataka station rainfall and warnings,Needed for district rainfall thresholds
+KSDMA Bulletins,official_disaster_bulletins,KSDMA_API_KEY,api_key_or_feed_url,placeholder,Official disaster bulletins and district alerts,Preferred source for confirmed incidents
+CWC FloodWatch,river_and_dam_alerts,CWC_API_KEY,api_key_or_feed_url,placeholder,River flood forecasts and dam discharge warnings,Needed for Krishna/Cauvery/Tungabhadra belts
+GDELT,news_alerts,GDELT_NO_KEY,public_api,available_but_rate_limited,News-derived disaster signals,Used now; may rate limit
+Google News RSS,news_alerts,GOOGLE_NEWS_RSS_ENABLED,no_key_rss,enabled_by_default,Karnataka-specific news search RSS,No API key; broad but unofficial RSS search interface
+Bing News RSS,news_alerts,BING_NEWS_RSS_ENABLED,no_key_rss,enabled_by_default,Karnataka-specific news search RSS,No API key; broad but best-effort RSS search interface
+PIB RSS,official_press_releases,PIB_RSS_URL,no_key_rss,enabled_by_default,Government press releases relevant to Karnataka and disaster response,Official RSS feed; filter keeps only Karnataka disaster items
+NewsAPI,news_alerts,NEWSAPI_KEY,api_key,placeholder,Backup news search for local disaster terms,Optional fallback if GDELT is rate-limited
+NewsData.io,news_alerts,NEWSDATA_API_KEY,api_key,placeholder,India/Karnataka news search with language and country filters,Free tier available; delayed/limited by plan
+TheNewsAPI,news_alerts,THENEWSAPI_TOKEN,api_token,placeholder,Worldwide news search with locale/language filters,Free plan available; useful cross-check source
+Mediastack,news_alerts,MEDIASTACK_API_KEY,api_key,placeholder,Worldwide live/historical news with country/language filters,Free tier available with delay/limits
+GNews,news_alerts,GNEWS_API_KEY,api_key,placeholder,Google-News-like article search API,Free tier is limited but useful for extra coverage
+World News API,news_alerts,WORLDNEWSAPI_KEY,api_key,placeholder,Global news search with source-country filters,Free plan available; optional extra layer
+FreeNewsApi.io,news_alerts,FREENEWSAPI_KEY,api_key,placeholder,Generous free global news API with country/language/text filters,Free API; endpoint may need adjustment if docs change
+The Guardian Open Platform,news_alerts,GUARDIAN_API_KEY,api_key,placeholder,Guardian article search for India/Karnataka disaster coverage,Free developer key; not local-first but useful for international coverage
+Mapbox,base_maps,MAPBOX_API_KEY,api_key,placeholder,Optional map tiles and geocoding,Current app uses Leaflet/OpenStreetMap
+OSRM,road_routing,OSRM_BASE_URL,url,placeholder,Real route paths and travel times,Use public/self-hosted endpoint
+Nominatim,geocoding,NOMINATIM_USER_AGENT,user_agent,configured,Coordinate lookup for missing places,Use sparingly and cache results

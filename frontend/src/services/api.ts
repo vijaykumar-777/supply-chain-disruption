@@ -31,6 +31,9 @@ export interface APIEvent {
 
 export interface LiveDisasterAlert extends APIEvent {
   source: string;
+  sources?: string[];
+  duplicate_count?: number;
+  evidence_urls?: string[];
   url?: string | null;
   confidence?: number;
 }
@@ -38,11 +41,16 @@ export interface LiveDisasterAlert extends APIEvent {
 export interface LiveDisastersResponse {
   alerts: LiveDisasterAlert[];
   count: number;
-  source_status: Record<string, { enabled: boolean; live: boolean; error?: string | null; queries?: number }>;
+  raw_count?: number;
+  duplicate_count?: number;
+  source_status: Record<string, { enabled: boolean; live: boolean; error?: string | null; queries?: number; returned?: number }>;
   coverage: {
     places_tracked: number;
     places_sample: string[];
     disaster_terms: string[];
+    news_lookback_days?: number;
+    news_sources?: string[];
+    deduplication_policy?: string;
     policy: string;
   };
 }
@@ -256,6 +264,14 @@ export interface ReliefReferenceData {
   counts: Record<string, number>;
   files: Record<string, string>;
   datasets: Record<string, Array<Record<string, string>>>;
+  provenance?: Record<string, string>;
+  required_live_integrations?: Array<{
+    name: string;
+    env_vars: string[];
+    purpose: string;
+    required_for_mvp: boolean;
+  }>;
+  coverage_places?: string[];
 }
 
 export interface SupplyChainReport {

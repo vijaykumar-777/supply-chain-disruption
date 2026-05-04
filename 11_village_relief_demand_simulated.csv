@@ -1,0 +1,26 @@
+village,district,taluk,people_affected,food_packets_needed,water_litres_needed,medical_kits_needed,evacuation_required,priority_score,nearest_hub,provenance
+Bhagamandala,Kodagu,Madikeri,3100,3100,9300,85,yes,96,Madikeri District Control Room,simulated
+Napoklu,Kodagu,Madikeri,2200,2200,6600,70,yes,94,Madikeri District Control Room,simulated
+Ammatti,Kodagu,Virajpet,1300,1300,3900,45,partial,82,Madikeri District Control Room,simulated
+Srimangala,Kodagu,Virajpet,2100,2100,6300,55,partial,80,Madikeri District Control Room,simulated
+Ponnampet,Kodagu,Virajpet,6400,6400,19200,130,no,76,Madikeri District Control Room,simulated
+Gonikoppal,Kodagu,Virajpet,4800,4800,14400,110,no,72,Madikeri District Control Room,simulated
+Suntikoppa,Kodagu,Madikeri,3900,3900,11700,90,partial,78,Kushalnagar Relief Camp,simulated
+Kollur,Udupi,Kundapura,2600,2600,7800,60,partial,74,Udupi District Warehouse,simulated
+Kundapura Lowlands,Udupi,Kundapura,5200,5200,15600,90,no,68,Udupi District Warehouse,simulated
+Agumbe,Shivamogga,Thirthahalli,2800,2800,8400,70,partial,86,Shivamogga District EOC,simulated
+Thirthahalli,Shivamogga,Thirthahalli,4200,4200,12600,95,no,72,Shivamogga District EOC,simulated
+Hosanagara,Shivamogga,Hosanagara,3600,3600,10800,80,partial,75,Sagara Taluk Warehouse,simulated
+Siddapura,Uttara Kannada,Siddapura,3400,3400,10200,70,partial,73,Sirsi Taluk Office Store,simulated
+Honnavar Coast,Uttara Kannada,Honnavar,4600,4600,13800,75,no,66,Karwar District Warehouse,simulated
+Kumta Coast,Uttara Kannada,Kumta,3900,3900,11700,65,no,64,Karwar District Warehouse,simulated
+Sakleshpur Rural,Hassan,Sakleshpur,3100,3100,9300,70,partial,79,Hassan District Warehouse,simulated
+Alur,Hassan,Alur,2300,2300,6900,45,no,61,Hassan District Warehouse,simulated
+Nippani Lowlands,Belagavi,Nippani,5200,5200,15600,80,partial,70,Belagavi District EOC,simulated
+Muddebihal,Vijayapura,Muddebihal,4700,4700,14100,75,no,68,Vijayapura District Warehouse,simulated
+Raichur Riverbank,Raichur,Raichur,5800,5800,17400,95,partial,76,Raichur District Warehouse,simulated
+Yadgir Bhima Belt,Yadgir,Yadgir,5100,5100,15300,85,partial,74,Raichur District Warehouse,simulated
+Mandya Cauvery Belt,Mandya,Mandya,4500,4500,13500,70,no,62,Mysuru District Warehouse,simulated
+Chamarajanagara Tribal Belt,Chamarajanagara,Kollegal,2700,2700,8100,65,partial,77,Mysuru District Warehouse,simulated
+Kolar Tank Belt,Kolar,Kolar,1900,1900,5700,35,no,55,KSNDMC State EOC,simulated
+Ballari Tungabhadra Belt,Ballari,Ballari,4200,4200,12600,70,no,63,Raichur District Warehouse,simulated

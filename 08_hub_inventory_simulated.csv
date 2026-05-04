@@ -1,0 +1,31 @@
+hub_name,district,item_category,item_name,unit,available_qty,reserved_qty,reorder_level,last_updated,provenance
+KSNDMC State EOC,Bengaluru Urban,coordination,satellite phones,units,42,8,15,2026-05-04T08:00:00+05:30,simulated
+KSNDMC State EOC,Bengaluru Urban,medical,trauma kits,kits,350,40,100,2026-05-04T08:00:00+05:30,simulated
+KSNDMC State EOC,Bengaluru Urban,food,dry ration packs,packs,12000,1500,4000,2026-05-04T08:00:00+05:30,simulated
+Mangaluru District Warehouse,Dakshina Kannada,food,dry ration packs,packs,8500,900,2500,2026-05-04T08:00:00+05:30,simulated
+Mangaluru District Warehouse,Dakshina Kannada,water,drinking water bottles,litres,42000,6000,15000,2026-05-04T08:00:00+05:30,simulated
+Mangaluru District Warehouse,Dakshina Kannada,medical,first aid kits,kits,900,120,300,2026-05-04T08:00:00+05:30,simulated
+Mangaluru Fire Station HQ,Dakshina Kannada,rescue,life jackets,units,240,40,80,2026-05-04T08:00:00+05:30,simulated
+Mangaluru Fire Station HQ,Dakshina Kannada,rescue,inflatable boats,units,12,3,4,2026-05-04T08:00:00+05:30,simulated
+Madikeri District Control Room,Kodagu,food,dry ration packs,packs,4200,650,1500,2026-05-04T08:00:00+05:30,simulated
+Madikeri District Control Room,Kodagu,medical,essential medicine kits,kits,520,85,180,2026-05-04T08:00:00+05:30,simulated
+Madikeri District Control Room,Kodagu,shelter,tarpaulin sheets,units,1800,250,600,2026-05-04T08:00:00+05:30,simulated
+Madikeri Zonal Hospital,Kodagu,medical,oxygen cylinders,units,72,18,30,2026-05-04T08:00:00+05:30,simulated
+Madikeri Zonal Hospital,Kodagu,medical,iv fluids,litres,1400,240,500,2026-05-04T08:00:00+05:30,simulated
+Kushalnagar Relief Camp,Kodagu,shelter,blankets,units,2400,300,800,2026-05-04T08:00:00+05:30,simulated
+Kushalnagar Relief Camp,Kodagu,water,water purification tablets,tablets,18000,2200,6000,2026-05-04T08:00:00+05:30,simulated
+Hassan District Warehouse,Hassan,food,dry ration packs,packs,6500,800,2200,2026-05-04T08:00:00+05:30,simulated
+Hassan District Warehouse,Hassan,rescue,ropes and harness kits,kits,130,20,45,2026-05-04T08:00:00+05:30,simulated
+Shivamogga District EOC,Shivamogga,food,dry ration packs,packs,7000,950,2500,2026-05-04T08:00:00+05:30,simulated
+Shivamogga District EOC,Shivamogga,rescue,chainsaws,units,26,5,8,2026-05-04T08:00:00+05:30,simulated
+Sagara Taluk Warehouse,Shivamogga,shelter,tarpaulin sheets,units,950,120,350,2026-05-04T08:00:00+05:30,simulated
+Sirsi Taluk Office Store,Uttara Kannada,food,dry ration packs,packs,3800,500,1500,2026-05-04T08:00:00+05:30,simulated
+Karwar District Warehouse,Uttara Kannada,water,drinking water bottles,litres,26000,3500,9000,2026-05-04T08:00:00+05:30,simulated
+Karwar District Warehouse,Uttara Kannada,rescue,life jackets,units,180,30,60,2026-05-04T08:00:00+05:30,simulated
+Udupi District Warehouse,Udupi,food,dry ration packs,packs,5200,650,1800,2026-05-04T08:00:00+05:30,simulated
+Udupi District Warehouse,Udupi,medical,first aid kits,kits,620,80,220,2026-05-04T08:00:00+05:30,simulated
+Belagavi District EOC,Belagavi,water,drinking water bottles,litres,30000,4000,10000,2026-05-04T08:00:00+05:30,simulated
+Vijayapura District Warehouse,Vijayapura,food,dry ration packs,packs,4800,550,1700,2026-05-04T08:00:00+05:30,simulated
+Raichur District Warehouse,Raichur,shelter,blankets,units,1900,240,700,2026-05-04T08:00:00+05:30,simulated
+Mysuru District Warehouse,Mysuru,medical,essential medicine kits,kits,760,90,260,2026-05-04T08:00:00+05:30,simulated
+Bengaluru Urban Logistics Yard,Bengaluru Urban,fuel,diesel,litres,85000,12000,30000,2026-05-04T08:00:00+05:30,simulated

@@ -1,0 +1,26 @@
+vehicle_id,home_hub,district,vehicle_type,max_load_tonnes,status,current_location,driver_team,available_from,provenance
+KA-RLF-001,KSNDMC State EOC,Bengaluru Urban,Heavy Truck (10T+),12,available,Bengaluru,Team Alpha,2026-05-04T08:00:00+05:30,simulated
+KA-RLF-002,KSNDMC State EOC,Bengaluru Urban,Heavy Truck (10T+),12,available,Bengaluru,Team Bravo,2026-05-04T08:00:00+05:30,simulated
+KA-RLF-003,Bengaluru Urban Logistics Yard,Bengaluru Urban,Medium Truck (5-10T),8,en_route,Hassan,Team Charlie,2026-05-04T12:30:00+05:30,simulated
+KA-RLF-004,Mangaluru District Warehouse,Dakshina Kannada,Medium Truck (5-10T),8,available,Mangaluru,Team Delta,2026-05-04T08:00:00+05:30,simulated
+KA-RLF-005,Mangaluru District Warehouse,Dakshina Kannada,Light Truck (2-5T),4,available,Mangaluru,Team Echo,2026-05-04T08:00:00+05:30,simulated
+KA-RLF-006,Mangaluru Fire Station HQ,Dakshina Kannada,Bolero/Pickup (<1T),0.8,available,Mangaluru,Team Fire-1,2026-05-04T08:00:00+05:30,simulated
+KA-RLF-007,Madikeri District Control Room,Kodagu,Light Truck (2-5T),4,available,Madikeri,Team Kodagu-1,2026-05-04T08:00:00+05:30,simulated
+KA-RLF-008,Madikeri District Control Room,Kodagu,Mini Truck (1-2T),2,available,Madikeri,Team Kodagu-2,2026-05-04T08:00:00+05:30,simulated
+KA-RLF-009,Madikeri Zonal Hospital,Kodagu,Ambulance,0.5,available,Madikeri,Medical Team 1,2026-05-04T08:00:00+05:30,simulated
+KA-RLF-010,Kushalnagar Relief Camp,Kodagu,Mini Truck (1-2T),2,maintenance,Kushalnagar,Team Kodagu-3,2026-05-05T09:00:00+05:30,simulated
+KA-RLF-011,Hassan District Warehouse,Hassan,Medium Truck (5-10T),8,available,Hassan,Team Hassan-1,2026-05-04T08:00:00+05:30,simulated
+KA-RLF-012,Hassan District Warehouse,Hassan,Light Truck (2-5T),4,available,Sakleshpur,Team Hassan-2,2026-05-04T09:30:00+05:30,simulated
+KA-RLF-013,Shivamogga District EOC,Shivamogga,Medium Truck (5-10T),8,available,Shivamogga,Team Malenadu-1,2026-05-04T08:00:00+05:30,simulated
+KA-RLF-014,Shivamogga District EOC,Shivamogga,Light Truck (2-5T),4,en_route,Sagara,Team Malenadu-2,2026-05-04T11:45:00+05:30,simulated
+KA-RLF-015,Sagara Taluk Warehouse,Shivamogga,Bolero/Pickup (<1T),0.8,available,Sagara,Team Sagara-1,2026-05-04T08:00:00+05:30,simulated
+KA-RLF-016,Sirsi Taluk Office Store,Uttara Kannada,Light Truck (2-5T),4,available,Sirsi,Team UK-1,2026-05-04T08:00:00+05:30,simulated
+KA-RLF-017,Karwar District Warehouse,Uttara Kannada,Medium Truck (5-10T),8,available,Karwar,Team UK-2,2026-05-04T08:00:00+05:30,simulated
+KA-RLF-018,Karwar District Warehouse,Uttara Kannada,Boat (rescue),0,available,Karwar,Marine Team 1,2026-05-04T08:00:00+05:30,simulated
+KA-RLF-019,Udupi District Warehouse,Udupi,Light Truck (2-5T),4,available,Udupi,Team Udupi-1,2026-05-04T08:00:00+05:30,simulated
+KA-RLF-020,Udupi District Warehouse,Udupi,Bolero/Pickup (<1T),0.8,available,Kundapura,Team Udupi-2,2026-05-04T08:00:00+05:30,simulated
+KA-RLF-021,Belagavi District EOC,Belagavi,Heavy Truck (10T+),12,available,Belagavi,Team North-1,2026-05-04T08:00:00+05:30,simulated
+KA-RLF-022,Vijayapura District Warehouse,Vijayapura,Medium Truck (5-10T),8,available,Vijayapura,Team North-2,2026-05-04T08:00:00+05:30,simulated
+KA-RLF-023,Raichur District Warehouse,Raichur,Light Truck (2-5T),4,available,Raichur,Team Tungabhadra-1,2026-05-04T08:00:00+05:30,simulated
+KA-RLF-024,Mysuru District Warehouse,Mysuru,Medium Truck (5-10T),8,available,Mysuru,Team Cauvery-1,2026-05-04T08:00:00+05:30,simulated
+KA-RLF-025,KSNDMC State EOC,Bengaluru Urban,Helicopter (NDRF),3,standby,Bengaluru,Air Team 1,2026-05-04T10:00:00+05:30,simulated

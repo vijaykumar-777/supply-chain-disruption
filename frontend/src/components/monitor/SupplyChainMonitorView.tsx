@@ -148,6 +148,12 @@ export const SupplyChainMonitorView = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const latestReport = deferredReport ?? report;
+  const provenanceValues: string[] = referenceData?.provenance ? Object.values(referenceData.provenance) : [];
+  const provenanceSummary = provenanceValues.reduce<Record<string, number>>((acc, value) => {
+    acc[value] = (acc[value] ?? 0) + 1;
+    return acc;
+  }, {});
+  const requiredFeeds = referenceData?.required_live_integrations ?? [];
 
   const onUpload = async () => {
     if (!selectedFile) return;
@@ -222,7 +228,7 @@ export const SupplyChainMonitorView = () => {
                   <div className="flex-1">
                     <h3 className="text-lg font-bold text-success">Karnataka reference data found</h3>
                     <p className="mt-1 text-sm text-on-surface-variant">
-                      Loaded CSVs include roads, hubs, at-risk villages, historical disaster points, rainfall thresholds, vehicle rules, and priority scoring.
+                      Loaded CSVs include roads, hubs, at-risk villages, historical disasters, rainfall thresholds, vehicle rules, simulated inventory, truck fleet, blocked roads, field reports, rescue teams, and API placeholders.
                     </p>
                     <div className="mt-4 grid grid-cols-2 gap-2 text-xs sm:grid-cols-3">
                       {Object.entries(referenceData.counts).map(([name, count]) => (
@@ -232,6 +238,26 @@ export const SupplyChainMonitorView = () => {
                         </div>
                       ))}
                     </div>
+                    <div className="mt-4 grid gap-2 text-xs sm:grid-cols-3">
+                      {Object.entries(provenanceSummary).map(([label, count]) => (
+                        <div key={label} className="rounded-lg border border-white/10 bg-black/10 px-3 py-2">
+                          <p className="font-bold text-on-surface">{count}</p>
+                          <p className="mt-1 capitalize text-on-surface-variant">{label.replaceAll("_", " ")}</p>
+                        </div>
+                      ))}
+                    </div>
+                    {requiredFeeds.length > 0 && (
+                      <div className="mt-4 rounded-xl border border-white/10 bg-black/10 p-3">
+                        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-on-surface-variant">Live feeds to configure later</p>
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {requiredFeeds.map((feed) => (
+                            <span key={feed.name} className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-on-surface-variant">
+                              {feed.name}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                     <button
                       type="button"
                       onClick={loadReferenceNetwork}

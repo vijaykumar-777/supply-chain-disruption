@@ -1,0 +1,16 @@
+road_type,condition,heavy_truck_allowed,medium_truck_allowed,light_truck_allowed,pickup_allowed,ambulance_allowed,boat_required,speed_multiplier,provenance
+NH,normal,yes,yes,yes,yes,yes,no,1.00,simulated
+SH,normal,yes,yes,yes,yes,yes,no,0.85,simulated
+MDR,normal,no,limited,yes,yes,yes,no,0.70,simulated
+village_road,normal,no,no,limited,yes,limited,no,0.55,simulated
+NH,waterlogging,limited,yes,yes,yes,yes,no,0.55,simulated
+SH,waterlogging,no,limited,yes,yes,yes,no,0.45,simulated
+MDR,waterlogging,no,no,limited,yes,limited,no,0.30,simulated
+village_road,waterlogging,no,no,no,limited,no,maybe,0.20,simulated
+NH,landslide_debris,no,limited,limited,yes,limited,no,0.35,simulated
+SH,landslide_debris,no,no,limited,yes,limited,no,0.25,simulated
+MDR,landslide_debris,no,no,no,limited,no,no,0.15,simulated
+village_road,submerged,no,no,no,no,no,yes,0.00,simulated
+forest_road,tree_fall,no,no,limited,limited,no,no,0.20,simulated
+ghat_road,heavy_rain,no,limited,yes,yes,yes,no,0.40,simulated
+ghat_road,red_alert,no,no,limited,limited,limited,no,0.25,simulated

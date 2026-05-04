@@ -39,6 +39,7 @@ export const LiveDisastersView = () => {
 
   const criticalCount = alerts.filter((alert) => alert.type === "critical").length;
   const warningCount = alerts.filter((alert) => alert.type === "warning").length;
+  const activeSources = data ? sourceStatusEntries(data.source_status).filter(([, status]) => status.live).length : 0;
 
   return (
     <div className="space-y-6">
@@ -46,7 +47,7 @@ export const LiveDisastersView = () => {
         <div>
           <h2 className="text-2xl font-bold text-on-surface">Live Disaster Alerts</h2>
           <p className="mt-1 max-w-3xl text-sm text-on-surface-variant">
-            Broad scan across Karnataka disaster terms, Western Ghats/coastal districts, road names, and at-risk villages. This is designed for early warning coverage, not certified incident confirmation.
+            Karnataka-specific scan across official alerts, free news APIs, Google/Bing RSS, district names, road names, and at-risk villages. Duplicate stories are collapsed before display.
           </p>
         </div>
         <button
@@ -74,8 +75,8 @@ export const LiveDisastersView = () => {
           <p className="mt-3 text-3xl font-black text-warning">{warningCount}</p>
         </div>
         <div className="glass rounded-xl p-5">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-on-surface-variant">Places Tracked</p>
-          <p className="mt-3 text-3xl font-black text-primary">{data?.coverage.places_tracked ?? 0}</p>
+          <p className="text-[11px] uppercase tracking-[0.2em] text-on-surface-variant">Active Sources</p>
+          <p className="mt-3 text-3xl font-black text-primary">{activeSources}</p>
         </div>
       </div>
 
@@ -104,13 +105,23 @@ export const LiveDisastersView = () => {
 
         {data && (
           <div className="mt-4 grid gap-3 md:grid-cols-2">
-            {sourceStatusEntries(data.source_status).map(([source, status]) => (
-              <div key={source} className={cn("rounded-xl border p-4", status.live ? "border-success/20 bg-success/10 text-success" : "border-warning/20 bg-warning/10 text-warning")}>
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em]">{source}</p>
-                <p className="mt-2 text-sm font-semibold">{status.live ? "Live" : "Unavailable or partial"}</p>
-                <p className="mt-1 text-xs opacity-80">{status.error ?? `${status.queries ?? 0} query batch(es) checked.`}</p>
-              </div>
-            ))}
+            {sourceStatusEntries(data.source_status).map(([source, status]) => {
+              const tone = status.live
+                ? "border-success/20 bg-success/10 text-success"
+                : status.enabled
+                  ? "border-warning/20 bg-warning/10 text-warning"
+                  : "border-white/10 bg-white/5 text-on-surface-variant";
+              const label = status.live ? "Live" : status.enabled ? "Configured, unavailable or partial" : "Not configured";
+              return (
+                <div key={source} className={cn("rounded-xl border p-4", tone)}>
+                  <p className="text-[11px] font-bold uppercase tracking-[0.2em]">{source}</p>
+                  <p className="mt-2 text-sm font-semibold">{label}</p>
+                  <p className="mt-1 text-xs opacity-80">
+                    {status.error ?? `${status.queries ?? 0} query batch(es), ${status.returned ?? 0} Karnataka match(es).`}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
@@ -138,6 +149,11 @@ export const LiveDisastersView = () => {
                       <span className={cn("rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em]", tone)}>{alert.type}</span>
                       <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-on-surface-variant">{alert.category}</span>
                       <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-on-surface-variant">{alert.source}</span>
+                      {(alert.duplicate_count ?? 1) > 1 && (
+                        <span className="rounded-full border border-success/15 bg-success/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-success">
+                          {alert.duplicate_count} sources
+                        </span>
+                      )}
                     </div>
                     <h3 className="mt-3 text-lg font-bold">{alert.title}</h3>
                     <p className="mt-1 text-sm text-on-surface-variant">{alert.description}</p>
@@ -164,8 +180,13 @@ export const LiveDisastersView = () => {
       </div>
 
       {data && (
-        <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-xs leading-5 text-on-surface-variant">
-          {data.coverage.policy}
+        <div className="space-y-2 rounded-xl border border-white/10 bg-white/5 p-4 text-xs leading-5 text-on-surface-variant">
+          <p>{data.coverage.policy}</p>
+          <p>{data.coverage.deduplication_policy}</p>
+          <p>
+            Raw matches: {data.raw_count ?? alerts.length} | Duplicates collapsed: {data.duplicate_count ?? 0} | Places tracked: {data.coverage.places_tracked}
+            {data.coverage.news_lookback_days ? ` | Lookback: ${data.coverage.news_lookback_days} days` : ""}
+          </p>
         </div>
       )}
     </div>

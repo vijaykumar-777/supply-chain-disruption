@@ -1,0 +1,11 @@
+incident_id,road_name,from,to,district,status,reason,severity,reported_at,expected_clearance_hours,source,provenance
+BR-001,SH47,Sakleshpur,Mangaluru,Hassan-Dakshina Kannada,blocked,minor landslide debris near Shiradi Ghat,critical,2026-05-04T06:40:00+05:30,14,simulated_pwd_control_room,simulated
+BR-002,SH88,Madikeri,Virajpet,Kodagu,at_risk,slope movement reported after heavy overnight rain,warning,2026-05-04T07:10:00+05:30,8,simulated_ddma_field_unit,simulated
+BR-003,MDR,Madikeri,Gonikoppal,Kodagu,blocked,culvert overflow and tree fall,critical,2026-05-04T07:35:00+05:30,10,simulated_police_wireless,simulated
+BR-004,NH66,Honnavar,Kumta,Uttara Kannada,at_risk,coastal waterlogging near low bridge,warning,2026-05-04T07:50:00+05:30,5,simulated_pwd_control_room,simulated
+BR-005,SH57,Udupi,Shivamogga,Udupi-Shivamogga,at_risk,ghat visibility poor and shoulder erosion,warning,2026-05-04T08:05:00+05:30,6,simulated_ddma_field_unit,simulated
+BR-006,NH169,Shivamogga,Sagara,Shivamogga,open_with_caution,waterlogging near Varada crossing,info,2026-05-04T08:20:00+05:30,4,simulated_pwd_control_room,simulated
+BR-007,NH275,Madikeri,Kushalnagar,Kodagu,at_risk,Cauvery tributary rising near bridge,warning,2026-05-04T08:30:00+05:30,7,simulated_ddma_field_unit,simulated
+BR-008,MDR,Ponnampet,Kerala_Border,Kodagu,blocked,tree fall and slush on narrow road,critical,2026-05-04T08:45:00+05:30,12,simulated_forest_checkpoint,simulated
+BR-009,NH150,Kalburgi,Yadgir,Kalburgi-Yadgir,open_with_caution,localized flooding in low-lying stretch,info,2026-05-04T09:00:00+05:30,3,simulated_pwd_control_room,simulated
+BR-010,NH218,Vijayapura,Bagalkot,Vijayapura-Bagalkot,at_risk,dam discharge advisory downstream,warning,2026-05-04T09:15:00+05:30,9,simulated_cwc_placeholder,simulated

@@ -1,0 +1,13 @@
+team_id,team_name,agency,base_hub,district,team_type,members,equipment,status,current_assignment,provenance
+RT-001,NDRF Bengaluru Forward Team,NDRF,KSNDMC State EOC,Bengaluru Urban,urban_search_rescue,28,cutters;ropes;medical kits,standby,none,simulated
+RT-002,SDRF Kodagu Alpha,SDRF,Madikeri District Control Room,Kodagu,landslide_response,18,ropes;stretchers;chainsaw,deployed,Madikeri-Gonikoppal clearance,simulated
+RT-003,SDRF Kodagu Bravo,SDRF,Kushalnagar Relief Camp,Kodagu,flood_rescue,16,life jackets;inflatable boat,available,none,simulated
+RT-004,Mangaluru Fire Rescue 1,Fire Service,Mangaluru Fire Station HQ,Dakshina Kannada,water_rescue,14,boat;life jackets;pump,deployed,Mulki bridge watch,simulated
+RT-005,Udupi Coastal Rescue,Fire Service,Udupi District Warehouse,Udupi,water_rescue,12,boat;ropes;first aid,available,none,simulated
+RT-006,Shivamogga Malenadu Team,SDRF,Shivamogga District EOC,Shivamogga,landslide_response,16,ropes;chainsaw;portable lights,available,none,simulated
+RT-007,Karwar Marine Unit,Police,Karwar District Warehouse,Uttara Kannada,marine_rescue,10,boat;life jackets;radio,deployed,Honnavar coast patrol,simulated
+RT-008,Hassan Ghat Clearance Team,PWD,Hassan District Warehouse,Hassan,road_clearance,22,JCB;tipper;chainsaw,deployed,Shiradi Ghat debris,simulated
+RT-009,Belagavi Flood Response,SDRF,Belagavi District EOC,Belagavi,flood_rescue,18,boat;life jackets;medical kits,standby,none,simulated
+RT-010,Raichur River Response,SDRF,Raichur District Warehouse,Raichur,flood_rescue,15,boat;ropes;first aid,available,none,simulated
+RT-011,Mysuru Cauvery Team,Fire Service,Mysuru District Warehouse,Mysuru,flood_rescue,12,boat;pump;first aid,available,none,simulated
+RT-012,Air Recon Team,NDRF,KSNDMC State EOC,Bengaluru Urban,aerial_recon,6,helicopter;thermal camera,standby,weather clearance pending,simulated
