@@ -427,6 +427,19 @@ export function useSupplyChainMonitor(pollMs = 30000) {
     }
   }, []);
 
+  const seedReferenceGraph = useCallback(async (clearExisting = false) => {
+    setLoading(true);
+    setError(null);
+    try {
+      return await api.seedReliefReferenceGraph(clearExisting);
+    } catch (e: any) {
+      setError(e.message);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     loadTemplateAndSnapshots();
   }, [loadTemplateAndSnapshots]);
@@ -453,5 +466,6 @@ export function useSupplyChainMonitor(pollMs = 30000) {
     refresh,
     loadSnapshot,
     loadReferenceNetwork,
+    seedReferenceGraph,
   };
 }

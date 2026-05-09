@@ -13,7 +13,7 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple
 import networkx as nx
 import requests
 
-from src.config import NOMINATIM_USER_AGENT, OPENWEATHERMAP_API_KEY, RAW_DATA_DIR
+from src.config import NOMINATIM_USER_AGENT, OPENWEATHERMAP_API_KEY, OSRM_BASE_URL, RAW_DATA_DIR
 
 logger = logging.getLogger(__name__)
 
@@ -160,7 +160,7 @@ def _clean_key(value: str) -> str:
 
 
 def _norm_lookup(value: str) -> str:
-    return re.sub(r"[^a-z0-9]+", " ", value.lower()).strip()
+    return re.sub(r"[^a-z0-9]+", " ", str(value or "").lower()).strip()
 
 
 def _dedupe_preserve(values: Iterable[str]) -> List[str]:
@@ -180,6 +180,7 @@ class SupplyChainMonitor:
     def __init__(self, storage_dir: str = SUPPLY_CHAIN_DATA_DIR, weather_api_key: Optional[str] = None):
         self.storage_dir = storage_dir
         self.weather_api_key = weather_api_key or OPENWEATHERMAP_API_KEY
+        self.osrm_base_url = OSRM_BASE_URL
         self.geocode_cache_path = os.path.join(os.path.dirname(self.storage_dir), "geocode_cache.json")
         self.geocode_headers = {"User-Agent": NOMINATIM_USER_AGENT}
         os.makedirs(self.storage_dir, exist_ok=True)
@@ -346,6 +347,14 @@ class SupplyChainMonitor:
             route_name = normalized.get("route_name") or f"{origin} to {destination}"
             origin_lat, origin_lon = self._resolve_coordinates(origin, normalized.get("origin_lat"), normalized.get("origin_lon"))
             destination_lat, destination_lon = self._resolve_coordinates(destination, normalized.get("destination_lat"), normalized.get("destination_lon"))
+            distance_km = normalized.get("distance_km")
+            travel_time_min = normalized.get("travel_time_min")
+            osrm_profile = None
+            if self.osrm_base_url and all(value is not None for value in (origin_lat, origin_lon, destination_lat, destination_lon)):
+                osrm_profile = self._fetch_osrm_route(origin_lat, origin_lon, destination_lat, destination_lon)
+                if osrm_profile:
+                    distance_km = f"{osrm_profile['distance_km']:.1f}"
+                    travel_time_min = f"{osrm_profile['duration_min']:.0f}"
 
             routes.append(
                 {
@@ -359,9 +368,11 @@ class SupplyChainMonitor:
                     "transport_mode": transport_mode,
                     "criticality": criticality,
                     "route_name": route_name,
-                    "distance_km": normalized.get("distance_km"),
-                    "travel_time_min": normalized.get("travel_time_min"),
+                    "distance_km": distance_km,
+                    "travel_time_min": travel_time_min,
                     "notes": normalized.get("notes"),
+                    "route_geometry": osrm_profile.get("geometry") if osrm_profile else None,
+                    "route_geometry_source": "osrm" if osrm_profile else "reference",
                     "origin_lat": origin_lat,
                     "origin_lon": origin_lon,
                     "destination_lat": destination_lat,
@@ -725,14 +736,25 @@ class SupplyChainMonitor:
 
         bump(0.38, "origin match", route["origin"])
         bump(0.38, "destination match", route["destination"])
+        bump(0.34, "road segment match", route["route_name"])
         bump(0.3, "supplier match", route["source_company"])
         bump(0.3, "buyer match", route["target_company"])
         bump(0.18, "material match", route["material"])
+
+        route_notes = _norm_lookup(route.get("notes", ""))
+        if route_notes and any(token in haystack for token in route_notes.split() if len(token) >= 5):
+            score += 0.08
+            reasons.append("route risk note overlap")
 
         mode_keywords = TRANSPORT_KEYWORDS.get(route["transport_mode"], [])
         if any(keyword in haystack for keyword in mode_keywords):
             score += 0.12
             reasons.append(f"transport mode signal: {route['transport_mode']}")
+
+        road_terms = ["landslide", "flood", "waterlogging", "bridge", "closure", "blocked", "ghat"]
+        if route["transport_mode"] in {"truck", "road"} and any(term in haystack for term in road_terms):
+            score += 0.1
+            reasons.append("road disruption category signal")
 
         return min(score, 1.0), reasons
 
@@ -945,6 +967,12 @@ class SupplyChainMonitor:
         return min(extra_distance_ratio * 0.15, 0.15)
 
     def _route_distance_km(self, route: Dict[str, Any]) -> Optional[float]:
+        try:
+            if route.get("distance_km"):
+                return float(route["distance_km"])
+        except (TypeError, ValueError):
+            pass
+
         coords = (
             route.get("origin_lat"),
             route.get("origin_lon"),
@@ -966,6 +994,31 @@ class SupplyChainMonitor:
             + math.cos(lat1_rad) * math.cos(lat2_rad) * math.sin(dlon / 2) ** 2
         )
         return 2 * radius_km * math.asin(math.sqrt(a))
+
+    def _fetch_osrm_route(self, lat1: float, lon1: float, lat2: float, lon2: float) -> Optional[Dict[str, Any]]:
+        if not self.osrm_base_url:
+            return None
+        base = self.osrm_base_url.rstrip("/")
+        url = f"{base}/route/v1/driving/{lon1},{lat1};{lon2},{lat2}"
+        try:
+            response = requests.get(
+                url,
+                params={"overview": "simplified", "geometries": "geojson", "alternatives": "false", "steps": "false"},
+                timeout=8,
+            )
+            response.raise_for_status()
+            payload = response.json()
+            route = (payload.get("routes") or [None])[0]
+            if not route:
+                return None
+            return {
+                "distance_km": float(route.get("distance", 0) or 0) / 1000,
+                "duration_min": float(route.get("duration", 0) or 0) / 60,
+                "geometry": route.get("geometry"),
+            }
+        except Exception as exc:
+            logger.info("OSRM route enrichment failed for %s,%s -> %s,%s: %s", lat1, lon1, lat2, lon2, exc)
+            return None
 
     def _load_geocode_cache(self) -> Dict[str, List[float]]:
         if not os.path.exists(self.geocode_cache_path):

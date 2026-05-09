@@ -1,0 +1,76 @@
+hospital_id,hospital_name,district,latitude,longitude,capacity,available_beds,trauma_level,oxygen_available,emergency_contact
+HOSP_001,"Private Hospital City Hospital, Ramanagara",Bengaluru Urban,13.095642,77.781789,283,117,Level 1,Yes,+91 919 788 2863
+HOSP_002,"Government, Bangalore North",Bengaluru Urban,12.751105,77.608154,225,144,Level 1,Yes,+91 801 660 7085
+HOSP_003,"Primary Health Center, Anekal",Bengaluru Urban,13.162556,77.511978,477,244,Level 1,Yes,+91 924 658 1250
+HOSP_004,"District, Anekal",Bengaluru Urban,13.104089,77.703916,260,85,Level 1,No,+91 843 898 6343
+HOSP_005,"District, Bangalore South",Bengaluru Urban,12.844963,77.647644,74,41,Level 1,Yes,+91 832 459 2552
+HOSP_006,"Medical College Neurology Institute, Bengaluru",Bengaluru Urban,12.90143,77.493142,434,366,Level 3,Yes,+91 895 759 5888
+HOSP_007,"Medical College Rehabilitation Center, Bangalore South",Bengaluru Urban,13.112686,77.488146,289,149,Level 1,Yes,+91 804 699 1546
+HOSP_008,"District, Yelahanka",Bengaluru Urban,13.110873,77.800447,343,242,Level 1,Yes,+91 954 650 4626
+HOSP_009,"Mission Hospital Nephrology Center, Bangalore North",Bengaluru Urban,13.183071,77.7031,165,108,Level 2,No,+91 831 251 7569
+HOSP_010,"General Hospital Infectious Disease Hospital, Anekal",Bengaluru Urban,12.95424,77.709682,417,233,Level 2,Yes,+91 855 902 3885
+HOSP_011,"Medical College Blood Bank Center, Bengaluru",Bengaluru Urban,12.921727,77.491533,167,76,Level 1,Yes,+91 810 470 2417
+HOSP_012,"District, Bangalore North",Bengaluru Urban,13.142657,77.825417,491,361,Level 2,Yes,+91 964 248 1833
+HOSP_013,"Community Health Center, Bangalore South",Bengaluru Urban,12.741772,77.543732,150,48,Level 2,No,+91 995 412 6358
+HOSP_014,"Charitable Hospital City Hospital, Ramanagara",Bengaluru Urban,13.066696,77.433504,477,413,Level 1,No,+91 986 894 7546
+HOSP_015,"Primary Health Center, Bengaluru",Bengaluru Urban,13.083079,77.543423,106,58,Level 1,Yes,+91 865 961 4303
+HOSP_016,"Charitable Hospital Regional Hospital, Mysuru",Mysuru,12.415089,76.601077,315,165,Level 1,Yes,+91 904 243 8480
+HOSP_017,"Medical College Memorial Hospital, Nanjangud",Mysuru,12.206667,76.393476,398,153,Level 3,No,+91 943 141 8090
+HOSP_018,"Government, Tirumakudal",Mysuru,12.085645,76.807841,369,246,Level 3,No,+91 892 496 7378
+HOSP_019,"General Hospital Dialysis Center, Hunsur",Mysuru,12.152112,76.511684,200,148,Level 2,No,+91 868 865 8771
+HOSP_020,"Private Hospital Multi-Specialty Hospital, Hunsur",Mysuru,12.299108,76.559825,499,378,Level 3,Yes,+91 955 758 4864
+HOSP_021,"District, Narasanagara",Mysuru,12.395786,76.798039,205,76,Level 2,Yes,+91 830 214 6596
+HOSP_022,"Private Hospital Multi-Specialty Hospital, Narasanagara",Mysuru,12.187686,76.588381,303,202,Level 3,Yes,+91 931 268 9733
+HOSP_023,"Mission Hospital Referral Hospital, Narasanagara",Mysuru,12.328225,76.610167,177,134,Level 3,No,+91 900 427 2454
+HOSP_024,"Community Health Center, KRS",Mysuru,12.414051,76.458387,129,78,Level 2,No,+91 850 758 4343
+HOSP_025,"Community Health Center, Hunsur",Mysuru,12.471665,76.582906,359,246,Level 1,Yes,+91 866 621 2776
+HOSP_026,"Mission Hospital Memorial Hospital, Gadag",Hubballi,15.605609,75.279991,93,53,Level 2,Yes,+91 804 740 4643
+HOSP_027,"General Hospital Nephrology Center, Koppal",Hubballi,15.439907,74.941075,495,354,Level 5,No,+91 879 394 2147
+HOSP_028,"Community Health Center, Hubballi",Hubballi,15.134533,75.292258,176,111,Level 2,No,+91 946 791 7300
+HOSP_029,"Charitable Hospital Orthopedic Center, Hosdurga",Hubballi,15.383916,75.008091,207,124,Level 1,No,+91 863 721 5248
+HOSP_030,"General Hospital City Hospital, Hosdurga",Hubballi,15.229968,75.352,79,28,Level 5,Yes,+91 899 464 3248
+HOSP_031,"Community Health Center, Hubballi",Hubballi,15.608458,74.985124,262,138,Level 2,Yes,+91 858 292 4007
+HOSP_032,"Mission Hospital Trauma Center, Koppal",Hubballi,15.278853,75.171349,133,64,Level 5,Yes,+91 819 457 6314
+HOSP_033,"General Hospital Teaching Hospital, Dharwad",Hubballi,15.359051,75.207388,477,379,Level 2,Yes,+91 864 757 7048
+HOSP_034,"Community Health Center, Belagavi",Belagavi,15.729314,74.631592,428,290,Level 4,No,+91 837 419 8029
+HOSP_035,"Government, Khanapur",Belagavi,16.015399,74.628451,76,62,Level 1,Yes,+91 988 734 6778
+HOSP_036,"Community Health Center, Belagavi",Belagavi,15.666679,74.259288,390,283,Level 4,Yes,+91 857 611 9751
+HOSP_037,"Government, Gokak",Belagavi,15.796602,74.550371,472,170,Level 4,Yes,+91 916 715 7072
+HOSP_038,"Private Hospital Referral Hospital, Ramdurg",Belagavi,15.974001,74.62891,432,314,Level 1,Yes,+91 837 633 9516
+HOSP_039,"Government, Gokak",Belagavi,15.912005,74.499726,57,36,Level 2,Yes,+91 853 577 8286
+HOSP_040,"Taluk Hospital, Ramdurg",Belagavi,15.748944,74.74671,170,89,Level 3,Yes,+91 991 934 9233
+HOSP_041,"Taluk Hospital, Ramdurg",Belagavi,15.605492,74.686023,108,84,Level 1,Yes,+91 824 759 8303
+HOSP_042,"Government, Mangaluru",Mangaluru,12.688525,74.727945,103,35,Level 2,No,+91 886 710 8017
+HOSP_043,"District, Sullia",Mangaluru,13.117618,74.895726,365,320,Level 3,Yes,+91 964 976 7773
+HOSP_044,"Taluk Hospital, Mangaluru",Mangaluru,12.888002,74.705198,424,295,Level 3,Yes,+91 852 209 5508
+HOSP_045,"Community Health Center, Puttur",Mangaluru,12.736844,75.103521,296,125,Level 3,No,+91 965 275 1274
+HOSP_046,"Primary Health Center, Karkala",Mangaluru,12.895278,74.620699,276,176,Level 2,Yes,+91 932 263 8779
+HOSP_047,"District, Sullia",Mangaluru,12.780197,74.721662,275,124,Level 3,Yes,+91 943 328 7514
+HOSP_048,"Primary Health Center, Bantwal",Mangaluru,13.013578,74.618703,107,60,Level 3,Yes,+91 852 538 7897
+HOSP_049,"Charitable Hospital Dialysis Center, Hosanagara",Shivamogga,13.906319,75.809918,435,343,Level 2,No,+91 811 100 8195
+HOSP_050,"Mission Hospital Rehabilitation Center, Sorab",Shivamogga,13.799976,75.387266,424,234,Level 2,Yes,+91 928 679 5335
+HOSP_051,"Private Hospital Geriatric Care, Sagar",Shivamogga,13.77289,75.743713,178,154,Level 1,Yes,+91 977 298 7843
+HOSP_052,"Private Hospital Dialysis Center, Tirthahalli",Shivamogga,13.972386,75.330548,409,319,Level 5,Yes,+91 823 254 6507
+HOSP_053,"General Hospital Memorial Hospital, Sorab",Shivamogga,13.941255,75.644453,101,49,Level 2,Yes,+91 886 776 6828
+HOSP_054,"Private Hospital Teaching Hospital, Hosanagara",Shivamogga,13.880105,75.36037,488,392,Level 4,Yes,+91 808 997 6031
+HOSP_055,"Community Health Center, Kurugodu",Ballari,15.385497,76.906286,192,72,Level 4,Yes,+91 897 472 7630
+HOSP_056,"Charitable Hospital Mental Health Center, Ballari",Ballari,15.214906,76.961636,415,208,Level 3,Yes,+91 878 465 6481
+HOSP_057,"Primary Health Center, Ballari",Ballari,14.996969,77.007518,444,370,Level 4,Yes,+91 991 156 3794
+HOSP_058,"General Hospital Teaching Hospital, Kurugodu",Ballari,15.048073,77.120868,453,198,Level 4,Yes,+91 920 655 5818
+HOSP_059,"District, Sandur",Ballari,15.380637,76.882395,270,173,Level 2,Yes,+91 895 536 2792
+HOSP_060,"Medical College Orthopedic Center, Kurugodu",Ballari,15.242861,76.972276,250,224,Level 5,Yes,+91 884 865 3042
+HOSP_061,"Primary Health Center, Davanagere",Davanagere,14.576365,76.040063,80,41,Level 3,Yes,+91 925 239 2336
+HOSP_062,"Primary Health Center, Jagalur",Davanagere,14.236853,76.153559,392,314,Level 3,No,+91 917 263 8161
+HOSP_063,"Primary Health Center, Honnali",Davanagere,14.425918,75.963715,199,178,Level 2,Yes,+91 970 760 3198
+HOSP_064,"Medical College Geriatric Care, Jagalur",Davanagere,14.402383,75.811504,310,252,Level 1,Yes,+91 858 468 3120
+HOSP_065,"General Hospital Research Hospital, Honnali",Davanagere,14.486869,75.887916,390,302,Level 4,Yes,+91 864 462 8992
+HOSP_066,"Private Hospital Neurology Institute, Tiptur",Tumakuru,13.536895,77.14922,275,138,Level 3,Yes,+91 801 921 9511
+HOSP_067,"Community Health Center, Chiknayakanhalli",Tumakuru,13.13013,76.87177,162,58,Level 3,Yes,+91 884 550 8591
+HOSP_068,"Taluk Hospital, Tiptur",Tumakuru,13.443558,76.878016,75,48,Level 4,Yes,+91 921 242 1953
+HOSP_069,"District, Sira",Tumakuru,13.586276,77.002222,65,21,Level 3,Yes,+91 991 479 7890
+HOSP_070,"Taluk Hospital, Sira",Tumakuru,13.312862,77.295321,97,35,Level 5,Yes,+91 892 486 3418
+HOSP_071,"Charitable Hospital MRI Center, Kalaburagi",Kalaburagi,17.353564,76.729455,215,153,Level 5,Yes,+91 834 152 1266
+HOSP_072,"Medical College Trauma Center, Chitapur",Kalaburagi,17.23136,76.742735,50,18,Level 5,Yes,+91 944 294 3020
+HOSP_073,"General Hospital Trauma Center, Chitapur",Kalaburagi,17.576614,76.7261,454,270,Level 1,Yes,+91 814 897 5195
+HOSP_074,"Taluk Hospital, Chitapur",Kalaburagi,17.143426,76.996524,227,75,Level 3,No,+91 800 881 3235
+HOSP_075,"Private Hospital Memorial Hospital, Chitapur",Kalaburagi,17.203441,76.827354,268,240,Level 3,Yes,+91 953 528 9384

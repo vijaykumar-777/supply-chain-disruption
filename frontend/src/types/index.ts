@@ -1,4 +1,4 @@
-export type View = "dashboard" | "monitor" | "global-map" | "live-disasters" | "live-feed" | "analytics" | "ai-assistant";
+export type View = "dashboard" | "monitor" | "global-map" | "live-disasters" | "live-feed" | "analytics" | "ai-assistant" | "hospital-network";
 
 export interface Event {
   id: number;

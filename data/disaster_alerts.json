@@ -1,0 +1,136 @@
+[
+  {
+    "alert_id": "ALERT_ACD4C9B4",
+    "disaster_type": "bridge_collapse",
+    "district": "Belagavi",
+    "location_name": "Ramdurg",
+    "latitude": 15.942049,
+    "longitude": 74.487576,
+    "severity": 0.92,
+    "affected_radius_km": 4,
+    "blocked_routes": [
+      "State Highway 12 near Ramdurg"
+    ],
+    "timestamp": "2026-05-08T06:26:48.686716",
+    "is_active": true,
+    "description": "Critical: Bridge collapse near Ramdurg. Road blocked for 4km stretch. Diversion routes being arranged. Heavy vehicles advised to avoid."
+  },
+  {
+    "alert_id": "ALERT_8A4C73DE",
+    "disaster_type": "landslide",
+    "district": "Shivamogga",
+    "location_name": "Tirthahalli",
+    "latitude": 13.830472,
+    "longitude": 75.470976,
+    "severity": 0.64,
+    "affected_radius_km": 13,
+    "blocked_routes": [
+      "State Highway 3 near Tirthahalli"
+    ],
+    "timestamp": "2026-05-08T16:26:48.686770",
+    "is_active": true,
+    "description": "Moderate landslide activity detected near Tirthahalli. Unstable slopes within 13km zone. Road clearance in progress."
+  },
+  {
+    "alert_id": "ALERT_10E9F48F",
+    "disaster_type": "fire",
+    "district": "Mysuru",
+    "location_name": "Hunsur",
+    "latitude": 12.357254,
+    "longitude": 76.677329,
+    "severity": 0.76,
+    "affected_radius_km": 13,
+    "blocked_routes": [
+      "State Highway 1 near Hunsur",
+      "State Highway 3 near Hunsur",
+      "NH-48 near Hunsur"
+    ],
+    "timestamp": "2026-05-07T15:26:48.686788",
+    "is_active": true,
+    "description": "Severe fire incident at Hunsur. Fire spreading within 13km area. Multiple fire units deployed."
+  },
+  {
+    "alert_id": "ALERT_73B87D00",
+    "disaster_type": "bridge_collapse",
+    "district": "Hubballi",
+    "location_name": "Koppal",
+    "latitude": 15.274861,
+    "longitude": 75.070406,
+    "severity": 0.72,
+    "affected_radius_km": 5,
+    "blocked_routes": [
+      "NH-73 near Koppal",
+      "Mangalore-Hubballi Road near Koppal"
+    ],
+    "timestamp": "2026-05-08T01:26:48.686797",
+    "is_active": true,
+    "description": "Critical: Bridge collapse near Koppal. Road blocked for 5km stretch. Diversion routes being arranged. Heavy vehicles advised to avoid."
+  },
+  {
+    "alert_id": "ALERT_B626E067",
+    "disaster_type": "landslide",
+    "district": "Bengaluru Urban",
+    "location_name": "Mysore Road",
+    "latitude": 12.919756,
+    "longitude": 77.654648,
+    "severity": 0.61,
+    "affected_radius_km": 9,
+    "blocked_routes": [
+      "NH-52 near Mysore Road",
+      "NH-276 near Mysore Road"
+    ],
+    "timestamp": "2026-05-07T18:26:48.686807",
+    "is_active": true,
+    "description": "Moderate landslide activity detected near Mysore Road. Unstable slopes within 9km zone. Road clearance in progress."
+  },
+  {
+    "alert_id": "ALERT_DCE94DF2",
+    "disaster_type": "fire",
+    "district": "Shivamogga",
+    "location_name": "Tirthahalli",
+    "latitude": 13.969725,
+    "longitude": 75.655372,
+    "severity": 0.47,
+    "affected_radius_km": 7,
+    "blocked_routes": [
+      "NH-234 near Tirthahalli",
+      "Mangalore-Hubballi Road near Tirthahalli",
+      "NH-234 near Tirthahalli"
+    ],
+    "timestamp": "2026-05-08T10:26:48.686815",
+    "is_active": true,
+    "description": "Minor fire incident at Tirthahalli. Fire spreading within 7km area. Multiple fire units deployed."
+  },
+  {
+    "alert_id": "ALERT_4A15DA68",
+    "disaster_type": "bridge_collapse",
+    "district": "Shivamogga",
+    "location_name": "Shikarpur",
+    "latitude": 13.985148,
+    "longitude": 75.645366,
+    "severity": 0.75,
+    "affected_radius_km": 5,
+    "blocked_routes": [
+      "State Highway 7 near Shikarpur"
+    ],
+    "timestamp": "2026-05-08T14:26:48.686822",
+    "is_active": true,
+    "description": "Critical: Bridge collapse near Shikarpur. Road blocked for 5km stretch. Diversion routes being arranged. Heavy vehicles advised to avoid."
+  },
+  {
+    "alert_id": "ALERT_64127EE6",
+    "disaster_type": "flood",
+    "district": "Kalaburagi",
+    "location_name": "Kalaburagi City",
+    "latitude": 17.391309,
+    "longitude": 76.920939,
+    "severity": 0.76,
+    "affected_radius_km": 28,
+    "blocked_routes": [
+      "NH-234 near Kalaburagi City"
+    ],
+    "timestamp": "2026-05-08T17:26:48.686829",
+    "is_active": true,
+    "description": "Severe flooding reported in Kalaburagi City. Water levels affecting area within 28km radius. Emergency services on standby."
+  }
+]

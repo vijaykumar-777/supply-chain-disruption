@@ -274,6 +274,15 @@ export interface ReliefReferenceData {
   coverage_places?: string[];
 }
 
+export interface ReliefGraphSeedResult {
+  success: boolean;
+  seeded_reference_nodes: number;
+  seeded_route_relationships: number;
+  neo4j_nodes: number;
+  neo4j_routes: number;
+  source: string;
+}
+
 export interface SupplyChainReport {
   snapshot_id: string;
   file_name: string;
@@ -394,6 +403,15 @@ export const api = {
       method: "POST",
     }),
 
+  seedReliefReferenceGraph: (clear_existing = false) =>
+    request<ReliefGraphSeedResult>("/api/relief/seed-reference-graph", {
+      method: "POST",
+      body: JSON.stringify({ clear_existing }),
+    }),
+
+  exportSupplyChainReportUrl: (snapshotId: string, format: "json" | "csv" = "csv") =>
+    `${BASE_URL}/api/relief/snapshots/${encodeURIComponent(snapshotId)}/export?format=${format}`,
+
   listSupplyChainSnapshots: () =>
     request<{ snapshots: SupplyChainSnapshotSummary[] }>("/api/relief/snapshots"),
 
@@ -410,4 +428,162 @@ export const api = {
 
   getSupplyChainSnapshot: (snapshotId: string, refresh = true) =>
     request<SupplyChainReport>(`/api/relief/snapshots/${snapshotId}?refresh=${refresh ? "true" : "false"}`),
+
+  // Hospital Network APIs
+  getHospitals: (params?: { district?: string; min_beds?: number; trauma_level?: string; has_oxygen?: boolean }) => {
+    const queryParams = new URLSearchParams();
+    if (params?.district) queryParams.set("district", params.district);
+    if (params?.min_beds) queryParams.set("min_beds", params.min_beds.toString());
+    if (params?.trauma_level) queryParams.set("trauma_level", params.trauma_level);
+    if (params?.has_oxygen !== undefined) queryParams.set("has_oxygen", params.has_oxygen.toString());
+    const query = queryParams.toString();
+    return request<{ hospitals: Hospital[]; count: number }>(`/api/hospitals${query ? `?${query}` : ""}`);
+  },
+
+  getHospital: (hospitalId: string) =>
+    request<{ hospital: Hospital; nearby_hospitals: Hospital[]; nearby_count: number }>(`/api/hospitals/${hospitalId}`),
+
+  getRoutes: (params?: { hospital_id?: string; blocked_only?: boolean }) => {
+    const queryParams = new URLSearchParams();
+    if (params?.hospital_id) queryParams.set("hospital_id", params.hospital_id);
+    if (params?.blocked_only) queryParams.set("blocked_only", "true");
+    const query = queryParams.toString();
+    return request<{ routes: Route[]; count: number }>(`/api/routes${query ? `?${query}` : ""}`);
+  },
+
+  getAlerts: (params?: { active_only?: boolean; disaster_type?: string; district?: string }) => {
+    const queryParams = new URLSearchParams();
+    if (params?.active_only !== undefined) queryParams.set("active_only", params.active_only.toString());
+    if (params?.disaster_type) queryParams.set("disaster_type", params.disaster_type);
+    if (params?.district) queryParams.set("district", params.district);
+    const query = queryParams.toString();
+    return request<{ alerts: DisasterAlert[]; count: number }>(`/api/alerts${query ? `?${query}` : ""}`);
+  },
+
+  recalculateHospitalRoutes: () =>
+    request<{ success: boolean; total_routes: number; blocked_routes: number; affected_routes: number; active_alerts: number }>(
+      "/api/recalculate-routes",
+      { method: "POST" }
+    ),
+
+  optimizeRoute: (sourceHospitalId: string, targetHospitalId: string, strategy: string = "shortest") =>
+    request<RouteOptimizationResult>("/api/optimize-route", {
+      method: "POST",
+      body: JSON.stringify({ source_hospital_id: sourceHospitalId, target_hospital_id: targetHospitalId, strategy }),
+    }),
+
+  aiRouteAnalysis: (sourceHospitalId: string, targetHospitalId: string, includeAlternatives: boolean = true) =>
+    request<AIRouteAnalysisResult>("/api/ai-route-analysis", {
+      method: "POST",
+      body: JSON.stringify({ source_hospital_id: sourceHospitalId, target_hospital_id: targetHospitalId, include_alternatives: includeAlternatives }),
+    }),
+
+  getNetworkSummary: () => request<NetworkSummary>("/api/network-summary"),
 };
+
+// Hospital Network Types
+export interface Hospital {
+  hospital_id: string;
+  hospital_name: string;
+  district: string;
+  latitude: number;
+  longitude: number;
+  capacity: number;
+  available_beds: number;
+  trauma_level: string;
+  oxygen_available: boolean;
+  emergency_contact: string;
+}
+
+export interface Route {
+  source_id: string;
+  source_name: string;
+  source_district: string;
+  target_id: string;
+  target_name: string;
+  target_district: string;
+  distance_km: number;
+  estimated_time: number;
+  road_status: string;
+  risk_score: number;
+  blocked: boolean;
+  danger_level: number;
+  route_type?: string;
+  affected_by: Array<{
+    alert_id: string;
+    disaster_type: string;
+    severity: number;
+    radius_km: number;
+    location: string;
+  }>;
+}
+
+export interface DisasterAlert {
+  alert_id: string;
+  disaster_type: string;
+  district: string;
+  location_name: string;
+  latitude: number;
+  longitude: number;
+  severity: number;
+  affected_radius_km: number;
+  blocked_routes: string[];
+  timestamp: string;
+  is_active: boolean;
+  description: string;
+}
+
+export interface RouteOptimizationResult {
+  path: string[];
+  path_details: Array<{
+    hospital_id: string;
+    hospital_name: string;
+    district: string;
+    available_beds: number;
+    oxygen_available: boolean;
+    is_priority?: boolean;
+  }>;
+  segments?: Array<{
+    source_id: string;
+    target_id: string;
+    distance_km: number;
+    estimated_time: number;
+    road_status: string;
+    risk_score: number;
+    blocked: boolean;
+    danger_level: number;
+    affected_by: Route["affected_by"];
+  }>;
+  strategy: string;
+  total_distance_km: number;
+  total_time_minutes: number;
+  max_danger_level: number;
+  blocked_segments?: number;
+  num_hops: number;
+}
+
+export interface AIRouteAnalysisResult {
+  analysis: string;
+  context: {
+    source: { name: string; district: string; beds: number; oxygen: boolean };
+    target: { name: string; district: string; beds: number; oxygen: boolean };
+    optimal_route: RouteOptimizationResult;
+    alternatives: RouteOptimizationResult[];
+    active_alerts: DisasterAlert[];
+    blocked_routes: number;
+  };
+  recommendation: RouteOptimizationResult;
+  alternatives: RouteOptimizationResult[];
+}
+
+export interface NetworkSummary {
+  total_hospitals: number;
+  total_routes: number;
+  blocked_routes: number;
+  total_available_beds: number;
+  total_capacity: number;
+  beds_occupancy_pct: number;
+  hospitals_with_oxygen: number;
+  active_alerts: number;
+  district_breakdown: Record<string, { count: number; beds: number }>;
+}

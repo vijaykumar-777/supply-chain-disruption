@@ -3,6 +3,7 @@ import {
   AlertTriangle,
   CheckCircle2,
   DatabaseZap,
+  Download,
   FileUp,
   LoaderCircle,
   MapPinned,
@@ -14,6 +15,7 @@ import {
 } from "lucide-react";
 import { useSupplyChainMonitor } from "../../hooks/useAtlasData";
 import { cn } from "../../lib/utils";
+import { api } from "../../services/api";
 import type { SupplyChainAlert, SupplyChainImpactLink, SupplyChainReport, SupplyChainSourceStatusItem } from "../../services/api";
 
 const STATUS_CLASSES: Record<string, string> = {
@@ -143,9 +145,10 @@ const ImpactCard = ({ link }: { link: SupplyChainImpactLink }) => {
 };
 
 export const SupplyChainMonitorView = () => {
-  const { report, template, snapshots, referenceData, loading, bootLoading, error, uploadFile, refresh, loadSnapshot, loadReferenceNetwork } = useSupplyChainMonitor();
+  const { report, template, snapshots, referenceData, loading, bootLoading, error, uploadFile, refresh, loadSnapshot, loadReferenceNetwork, seedReferenceGraph } = useSupplyChainMonitor();
   const deferredReport = useDeferredValue(report);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [seedMessage, setSeedMessage] = useState<string | null>(null);
 
   const latestReport = deferredReport ?? report;
   const provenanceValues: string[] = referenceData?.provenance ? Object.values(referenceData.provenance) : [];
@@ -158,6 +161,19 @@ export const SupplyChainMonitorView = () => {
   const onUpload = async () => {
     if (!selectedFile) return;
     await uploadFile(selectedFile);
+  };
+
+  const onSeedGraph = async () => {
+    setSeedMessage(null);
+    const result = await seedReferenceGraph(false);
+    if (result) {
+      setSeedMessage(`${result.neo4j_nodes} nodes and ${result.neo4j_routes} routes available in Neo4j`);
+    }
+  };
+
+  const onExport = (format: "csv" | "json") => {
+    if (!latestReport?.snapshot_id) return;
+    window.open(api.exportSupplyChainReportUrl(latestReport.snapshot_id, format), "_blank", "noreferrer");
   };
 
   return (
@@ -267,6 +283,16 @@ export const SupplyChainMonitorView = () => {
                       {loading ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <DatabaseZap className="h-4 w-4" />}
                       Load Reference Road Network
                     </button>
+                    <button
+                      type="button"
+                      onClick={onSeedGraph}
+                      disabled={loading}
+                      className="ml-2 mt-4 inline-flex items-center justify-center gap-2 rounded-xl border border-success/25 bg-success/10 px-4 py-2 text-sm font-bold text-success transition-all disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      {loading ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <DatabaseZap className="h-4 w-4" />}
+                      Seed Neo4j Graph
+                    </button>
+                    {seedMessage && <p className="mt-2 text-xs text-success">{seedMessage}</p>}
                   </div>
                 </div>
               </div>
@@ -348,6 +374,22 @@ export const SupplyChainMonitorView = () => {
                     >
                       <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
                       Refresh Alerts
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onExport("csv")}
+                      className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-on-surface-variant transition-colors hover:border-primary/25 hover:text-primary"
+                    >
+                      <Download className="h-4 w-4" />
+                      Export CSV
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onExport("json")}
+                      className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-bold text-on-surface-variant transition-colors hover:border-primary/25 hover:text-primary"
+                    >
+                      <Download className="h-4 w-4" />
+                      Export JSON
                     </button>
                   </div>
 

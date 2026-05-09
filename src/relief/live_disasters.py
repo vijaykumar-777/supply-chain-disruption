@@ -1,4 +1,6 @@
 import datetime as dt
+import csv
+import io
 import re
 import urllib.parse
 import uuid
@@ -397,6 +399,30 @@ def _parse_rss_items(xml_text: str) -> List[Dict[str, Any]]:
     return items
 
 
+def _parse_csv_items(text: str) -> List[Dict[str, Any]]:
+    rows = list(csv.DictReader(io.StringIO(text)))
+    return [dict(row) for row in rows]
+
+
+def _parse_feed_response(response: requests.Response) -> List[Dict[str, Any]]:
+    content_type = response.headers.get("content-type", "").lower()
+    text = response.content.decode("utf-8-sig", errors="replace")
+    if "json" in content_type:
+        return _feed_items(response.json())
+    if "csv" in content_type or text.lstrip().lower().startswith(("district,", "date,", "timestamp,", "title,")):
+        return _parse_csv_items(text)
+    if "xml" in content_type or "<rss" in text[:500].lower() or "<feed" in text[:500].lower():
+        return _parse_rss_items(text)
+    try:
+        return _feed_items(response.json())
+    except ValueError:
+        pass
+    try:
+        return _parse_rss_items(text)
+    except Exception:
+        return [{"title": "Official disaster bulletin", "description": text[:700], "published_at": _utc_now()}]
+
+
 def _news_alert_from_item(source: str, item: Dict[str, Any], places: List[str], confidence: float) -> Dict[str, Any] | None:
     if not _news_relevant(item, places):
         return None
@@ -482,7 +508,7 @@ def _configured_json_feed_alerts(
     places: List[str],
     confidence: float,
 ) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
-    status = {"enabled": bool(feed_url), "live": False, "queries": 0, "error": None}
+    status = {"enabled": bool(feed_url), "live": False, "queries": 0, "returned": 0, "error": None}
     if not feed_url:
         status["error"] = f"{source.upper()} feed URL is not set"
         return [], status
@@ -496,11 +522,12 @@ def _configured_json_feed_alerts(
         status["queries"] = 1
         response = requests.get(feed_url, headers=headers, timeout=10)
         response.raise_for_status()
-        try:
-            payload = response.json()
-        except ValueError:
-            payload = [{"title": f"{source.upper()} bulletin", "description": response.text[:500]}]
-        alerts = [_alert_from_feed_item(source, item, places, confidence) for item in _feed_items(payload)]
+        alerts = []
+        for item in _parse_feed_response(response):
+            alert = _alert_from_feed_item(source, item, places, confidence)
+            if _karnataka_relevant(f"{alert['title']} {alert['description']} {' '.join(alert.get('locations', []))}", places):
+                alerts.append(alert)
+        status["returned"] = len(alerts)
         status["live"] = True
         return alerts, status
     except Exception as exc:

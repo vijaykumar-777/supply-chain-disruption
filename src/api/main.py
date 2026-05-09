@@ -6,7 +6,7 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, field_validator
 from typing import List, Optional
@@ -14,6 +14,7 @@ import uuid
 import datetime
 import logging
 import time
+import requests
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -23,6 +24,7 @@ from src.ingestion.company_intelligence import CompanyIntelligenceService
 from src.config import ATLAS_MODE
 from src.relief.reference_data import load_reference_data, road_network_bytes
 from src.relief.live_disasters import collect_live_disasters
+from src.relief.neo4j_seed import seed_reference_graph
 
 app = FastAPI(
     title="ReliefRoute Karnataka API",
@@ -271,6 +273,10 @@ class CompanyBulkImportRequest(BaseModel):
         if not cleaned:
             raise ValueError("At least one company name is required")
         return cleaned
+
+
+class SeedReferenceRequest(BaseModel):
+    clear_existing: bool = False
 
 
 # ─── Endpoints ────────────────────────────────────────────────────────────────
@@ -796,6 +802,92 @@ def load_relief_reference_network():
         monitor_service._fetch_weather_alerts = original_weather
 
 
+@app.post("/api/relief/seed-reference-graph")
+def seed_reference_relief_graph(req: SeedReferenceRequest):
+    client, err = get_neo4j_client()
+    if not client:
+        raise HTTPException(status_code=503, detail=f"Neo4j is unavailable: {err}")
+
+    try:
+        result = seed_reference_graph(client, clear_existing=req.clear_existing)
+        _neo4j_cache.update(client=None, healthy=False, last_check=0.0, last_error="")
+        return result
+    except Exception as e:
+        logger.error(f"Reference graph seed failed: {e}")
+        raise HTTPException(status_code=500, detail="Failed to seed Neo4j with reference relief graph")
+    finally:
+        try:
+            client.close()
+        except Exception:
+            pass
+
+
+@app.get("/api/relief/snapshots/{snapshot_id}/export")
+def export_supply_chain_snapshot(snapshot_id: str, format: str = "json"):
+    try:
+        snapshot = monitor_service.load_snapshot(snapshot_id)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Relief network snapshot not found")
+
+    report = snapshot.get("latest_report") or monitor_service.build_report(snapshot)
+    export_format = format.strip().lower()
+    filename_base = f"reliefroute-{snapshot_id}"
+    if export_format == "json":
+        import json
+        return Response(
+            content=json.dumps(report, indent=2),
+            media_type="application/json",
+            headers={"Content-Disposition": f'attachment; filename="{filename_base}.json"'},
+        )
+    if export_format != "csv":
+        raise HTTPException(status_code=400, detail="format must be json or csv")
+
+    import csv
+    import io
+
+    output = io.StringIO()
+    writer = csv.DictWriter(
+        output,
+        fieldnames=[
+            "route_id",
+            "route_name",
+            "status",
+            "risk_score",
+            "source",
+            "target",
+            "origin",
+            "destination",
+            "priority",
+            "matched_alerts",
+            "downstream_settlements",
+            "alternative_route",
+        ],
+    )
+    writer.writeheader()
+    for link in report.get("impacted_links", []):
+        writer.writerow(
+            {
+                "route_id": link.get("route_id"),
+                "route_name": link.get("route_name"),
+                "status": link.get("status"),
+                "risk_score": link.get("risk_score"),
+                "source": link.get("source_company"),
+                "target": link.get("target_company"),
+                "origin": link.get("origin"),
+                "destination": link.get("destination"),
+                "priority": link.get("criticality"),
+                "matched_alerts": " | ".join(alert.get("alert_title", "") for alert in link.get("matched_alerts", [])),
+                "downstream_settlements": " | ".join(link.get("downstream_companies", [])),
+                "alternative_route": (link.get("alternative_route") or {}).get("summary"),
+            }
+        )
+    return Response(
+        content=output.getvalue(),
+        media_type="text/csv",
+        headers={"Content-Disposition": f'attachment; filename="{filename_base}.csv"'},
+    )
+
+
 @app.get("/api/disasters/live")
 def get_live_disasters():
     try:
@@ -845,6 +937,255 @@ def get_supply_chain_snapshot(snapshot_id: str, refresh: bool = True):
     except Exception as e:
         logger.error(f"Relief network refresh failed: {e}")
         raise HTTPException(status_code=500, detail="Failed to refresh relief logistics report")
+
+
+# ─── Hospital Network Endpoints ───────────────────────────────────────────────
+
+from src.relief.hospital_network import hospital_network_service
+
+class RouteOptimizationRequest(BaseModel):
+    source_hospital_id: str
+    target_hospital_id: str
+    strategy: Optional[str] = "shortest"  # shortest, fastest, safest
+
+    @field_validator("source_hospital_id", "target_hospital_id")
+    @classmethod
+    def hospital_id_must_not_be_empty(cls, v):
+        if not v or not str(v).strip():
+            raise ValueError("hospital ID must not be empty")
+        return str(v).strip()
+
+    @field_validator("strategy", mode="before")
+    @classmethod
+    def validate_strategy(cls, v):
+        v = str(v or "shortest").strip().lower()
+        allowed = {"shortest", "fastest", "safest"}
+        if v not in allowed:
+            raise ValueError(f"strategy must be one of: {', '.join(allowed)}")
+        return v
+
+class AIRouteAnalysisRequest(BaseModel):
+    source_hospital_id: str
+    target_hospital_id: str
+    include_alternatives: Optional[bool] = True
+
+    @field_validator("source_hospital_id", "target_hospital_id")
+    @classmethod
+    def hospital_id_must_not_be_empty(cls, v):
+        if not v or not str(v).strip():
+            raise ValueError("hospital ID must not be empty")
+        return str(v).strip()
+
+
+@app.get("/api/hospitals")
+def list_hospitals(
+    district: Optional[str] = None,
+    min_beds: Optional[int] = None,
+    trauma_level: Optional[str] = None,
+    has_oxygen: Optional[bool] = None
+):
+    """List all hospitals in Karnataka with optional filters"""
+    hospitals = hospital_network_service.get_hospitals(district=district, min_beds=min_beds)
+
+    # Additional filters
+    if trauma_level:
+        hospitals = [h for h in hospitals if h.get("trauma_level") == trauma_level]
+    if has_oxygen is not None:
+        hospitals = [h for h in hospitals if h.get("oxygen_available") == has_oxygen]
+
+    return {
+        "hospitals": hospitals,
+        "count": len(hospitals),
+        "filters": {"district": district, "min_beds": min_beds, "trauma_level": trauma_level, "has_oxygen": has_oxygen}
+    }
+
+
+@app.get("/api/hospitals/{hospital_id}")
+def get_hospital(hospital_id: str):
+    """Get details of a specific hospital"""
+    hospital = hospital_network_service.get_hospital_by_id(hospital_id)
+    if not hospital:
+        raise HTTPException(status_code=404, detail=f"Hospital {hospital_id} not found")
+
+    # Get nearby hospitals
+    nearby = hospital_network_service.get_nearby_hospitals(hospital_id, max_distance_km=80)
+
+    return {
+        "hospital": hospital,
+        "nearby_hospitals": nearby[:5],
+        "nearby_count": len(nearby)
+    }
+
+
+@app.get("/api/routes")
+def list_routes(hospital_id: Optional[str] = None, blocked_only: bool = False):
+    """List hospital network routes/edges"""
+    routes = hospital_network_service.get_routes(hospital_id=hospital_id)
+
+    if blocked_only:
+        routes = [r for r in routes if r.get("blocked", False)]
+
+    return {
+        "routes": routes,
+        "count": len(routes),
+        "filters": {"hospital_id": hospital_id, "blocked_only": blocked_only}
+    }
+
+
+@app.post("/api/recalculate-routes")
+def recalculate_routes():
+    """Recalculate hospital route danger/blocked status from active disaster alerts."""
+    summary = hospital_network_service.refresh()
+    return {
+        "success": True,
+        **summary,
+    }
+
+
+@app.get("/api/alerts")
+def list_alerts(active_only: bool = True, disaster_type: Optional[str] = None, district: Optional[str] = None):
+    """List disaster alerts"""
+    alerts = hospital_network_service.get_alerts(active_only=active_only)
+
+    if disaster_type:
+        alerts = [a for a in alerts if a.get("disaster_type") == disaster_type]
+    if district:
+        alerts = [a for a in alerts if a.get("district") == district]
+
+    return {
+        "alerts": alerts,
+        "count": len(alerts),
+        "filters": {"active_only": active_only, "disaster_type": disaster_type, "district": district}
+    }
+
+
+@app.post("/api/optimize-route")
+def optimize_route(req: RouteOptimizationRequest):
+    """Optimize route between two hospitals using shortest path algorithms"""
+    result = hospital_network_service.optimize_route(
+        source=req.source_hospital_id,
+        target=req.target_hospital_id,
+        strategy=req.strategy
+    )
+
+    if "error" in result:
+        raise HTTPException(status_code=404, detail=result.get("error"))
+
+    return result
+
+
+@app.post("/api/ai-route-analysis")
+def ai_route_analysis(req: AIRouteAnalysisRequest):
+    """AI-powered route analysis using Ollama"""
+    source_hosp = hospital_network_service.get_hospital_by_id(req.source_hospital_id)
+    target_hosp = hospital_network_service.get_hospital_by_id(req.target_hospital_id)
+
+    if not source_hosp:
+        raise HTTPException(status_code=404, detail=f"Source hospital {req.source_hospital_id} not found")
+    if not target_hosp:
+        raise HTTPException(status_code=404, detail=f"Target hospital {req.target_hospital_id} not found")
+
+    hospital_network_service.refresh()
+
+    # Get current routes and active alerts
+    alerts = hospital_network_service.get_alerts(active_only=True)
+    routes = hospital_network_service.get_routes(recalculate=False)
+
+    # Get the optimal route
+    optimal_route = hospital_network_service.optimize_route(
+        source=req.source_hospital_id,
+        target=req.target_hospital_id,
+        strategy="safest"
+    )
+
+    if "error" in optimal_route:
+        raise HTTPException(status_code=404, detail=optimal_route.get("error"))
+
+    # Get alternative routes if requested
+    alternatives = hospital_network_service.get_alternative_routes(
+        req.source_hospital_id,
+        req.target_hospital_id,
+        limit=3,
+    ) if req.include_alternatives else []
+
+    # Prepare context for AI
+    context = {
+        "source": {
+            "name": source_hosp["hospital_name"],
+            "district": source_hosp["district"],
+            "beds": source_hosp["available_beds"],
+            "oxygen": source_hosp["oxygen_available"]
+        },
+        "target": {
+            "name": target_hosp["hospital_name"],
+            "district": target_hosp["district"],
+            "beds": target_hosp["available_beds"],
+            "oxygen": target_hosp["oxygen_available"]
+        },
+        "optimal_route": optimal_route,
+        "alternatives": alternatives,
+        "active_alerts": alerts,
+        "blocked_routes": len([r for r in routes if r.get("blocked", False)])
+    }
+
+    # Try to get AI recommendation
+    try:
+        from src.ai.ollama_client import AIAdvisor
+        advisor = AIAdvisor()
+        ai_analysis = advisor.generate_route_analysis(
+            source_hospital=source_hosp,
+            target_hospital=target_hosp,
+            recommended_route=optimal_route,
+            alternatives=alternatives,
+            active_alerts=alerts,
+            blocked_routes=context["blocked_routes"],
+        )
+    except Exception as e:
+        logger.warning(f"AI analysis failed: {e}")
+        ai_analysis = "AI analysis unavailable"
+
+    return {
+        "analysis": ai_analysis,
+        "context": context,
+        "recommendation": optimal_route,
+        "alternatives": alternatives,
+    }
+
+
+@app.get("/api/network-summary")
+def get_network_summary():
+    """Get summary statistics of the hospital network"""
+    hospitals = hospital_network_service.hospitals
+    routes = hospital_network_service.get_routes() if hospital_network_service.graph else []
+    alerts = hospital_network_service.get_alerts(active_only=True)
+
+    # Calculate stats
+    total_beds = sum(h.get("available_beds", 0) for h in hospitals)
+    total_capacity = sum(h.get("capacity", 0) for h in hospitals)
+    hospitals_with_oxygen = sum(1 for h in hospitals if h.get("oxygen_available", False))
+
+    blocked_routes = len([r for r in routes if r.get("blocked", False)])
+
+    # District breakdown
+    by_district = {}
+    for h in hospitals:
+        d = h["district"]
+        if d not in by_district:
+            by_district[d] = {"count": 0, "beds": 0}
+        by_district[d]["count"] += 1
+        by_district[d]["beds"] += h.get("available_beds", 0)
+
+    return {
+        "total_hospitals": len(hospitals),
+        "total_routes": len(routes),
+        "blocked_routes": blocked_routes,
+        "total_available_beds": total_beds,
+        "total_capacity": total_capacity,
+        "beds_occupancy_pct": round((total_beds / total_capacity * 100), 1) if total_capacity > 0 else 0,
+        "hospitals_with_oxygen": hospitals_with_oxygen,
+        "active_alerts": len(alerts),
+        "district_breakdown": by_district
+    }
 
 
 # ─── Entry Point ──────────────────────────────────────────────────────────────
